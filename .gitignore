@@ -1,2 +1,6 @@
 # macos cache file
 .DS_Store
+
+# vscode settings folder
+# the settings are personal
+.vscode/
