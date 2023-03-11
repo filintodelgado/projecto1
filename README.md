@@ -9,7 +9,7 @@ the interations in the page.
 
 ## Multimedia
 
-It is also necessary to make a trailer presenting the game like in real life.
+It is also required to make a trailer presenting the game like in real life.
 
 ## Theme
 
