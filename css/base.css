@@ -1,0 +1,20 @@
+/* this stylesheet cleans some styles made by the browser */
+/* should be added in all pages and overwride if necessary */
+
+* {
+  /* the padding and margin should be added manually */
+  padding: 0;
+  margin: 0;
+  /* make so that margin and padding are included as the element */
+  /* width and hight insted of adding it to */
+  /* example: width: 100; hight: 100; margin: 30 */
+  /* the width and hight will be 70 so the element don't gets bigger */
+  /* overwride in the style.css if necessary */
+  box-sizing: border-box;
+}
+
+/* changes the font of the document */
+/* TODO change the font */
+html {
+  font-family: sans-serif;
+}
