@@ -13,4 +13,4 @@ It is also required to make a trailer presenting the game like in real life.
 
 ## Theme
 
-The theme of our project is _undecided_.
+The theme of our project is **Cinema** in the **90'** years. 
