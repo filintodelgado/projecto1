@@ -1,203 +1,205 @@
-/** @module cinescape/puzzle */
-/** @requires cinescape/utils */
+import { puzzle } from "./main.mjs";
 
-import {bindUtils} from "./utils.mjs"
+/** Represents any Puzzle component 
+ * @extends HTMLElement
+*/
+export
+class Puzzle 
+extends HTMLElement {
+  /**
+   * Creates a new custom event
+   * 
+   * @param {String} eventName 
+   * @returns {CustomEvent}
+   */
+  static _createEvent(eventName) {
+    return new CustomEvent(eventName);
+  }
 
-// Unlocks some utility functions on primitive types
-bindUtils();
+  /**
+   * @typedef {"solve" | "unsolve" | "miss"} PuzzleEventKeyMap
+   * 
+   * All Puzzle Events available to use:
+   * 
+   * * *solve* is trigged when the .solved property is set to false
+   * and the .solve() method is called, normally when the user
+   * responds correctly the form;
+   * 
+   * * *unsolve* is trigged when the .solved property is set to true
+   * and the .unsolve() method is called;
+   * 
+   * * *miss* is trigged when the .solved property is set to false
+   * and the .miss() method is called, normally when the user
+   * responds incorrectly the form;
+   * 
+   */
 
-export class Puzzle extends HTMLElement {
   /** 
-   * Holds reference to all the puzzles created 
+   * Event trigged when the puzzle is solved 
    * 
-   * @private
+   * @type {CustomEvent<"solve">}
+   * @event SolveEvent
    */
-  static #all = {};
-  /**
-   * Reference of all the puzzles added
+  static #SolveEvent = this._createEvent("solve");
+  /** 
+   * The CustomEvent that is trigged when the puzzle is solved 
    * 
-   * The key is the puzzle id
-   * @readonly @public
+   * @event SolveEvent
+   * @readonly
    */
-  static get all() { return this.#all.clone() };
+	static get SolveEvent() { return this.#SolveEvent; };
 
-  static #ids = [];
-  
-  /**
-   * Adds the puzzle to the all static property.
+  /** Says if the puzzle is solved. Default false. */
+  #solved = false;
+  /** Says if the puzzle is solved */
+  get solved() { return this.#solved };
+  /** 
+   * * Switching the value to true solves the puzzle calling .solve() method
+   * * Switching the value to false unsolves the puzzle calling .unsolve() method
    * 
-   * @param {Puzzle} puzzle
-   * @returns {true | false} If the puzzle was added.
-   * 
-   * @throws {TypeError} When the Puzzle instance is invalid.
+   * @fires SolveEvent when set to true
+   * @fires UnsolveEvent when set to false
    */
-  static add(puzzle) {
-    if(!(puzzle instanceof this))
-      throw TypeError("Puzzle.add(puzzle): puzzle needs to be a instance of Puzzle");
+  set solved(value) {
+    // value as to be a boolean and diferent otherwise ignore
+    if(typeof(value) != "boolean"
+      || value == this.#solved) return;
+
+    // if the value is true solve the puzzle
+		if(value) this.solve();
+    // else unsolve it
+		else this.unsolve();
+  }
+
+  /**
+   * Replaces a Callback from .addEventListener() stack with a new Callback
+   * @param {keyof HTMLElementEventMap | PuzzleEventKeyMap} name 
+   * @param {Function} newCallback 
+   * @param {Function | null} oldCallback
+   * @returns {boolean}
+   */
+  _replaceCallbackFunction(name, newCallback, oldCallback=null) {
+    if(!name || typeof(newCallback) != "function") return false;
+
+    // if there was a callback defined remove it
+		if(oldCallback) this.removeEventListener(name, oldCallback);
+
+		// add the new event listener callback
+		this.addEventListener(name, newCallback);
+
+    return true;
+  }
+
+  /** 
+   * The callback to call when the event solve is trigged
+   * @type {Function | null}
+   * @listens SolveEvent
+   */
+  #onsolve = null;
+  /** 
+   * The callback that is called when the event solve is trigged 
+   * @listens SolveEvent
+   */
+	get onsolve() { return this.#onsolve };
+  /** 
+   * Replaces the callback to the solve event with a new callback
+   * if the callback is not valid the it will be replaced with null
+   * @listens SolveEvent
+   */
+	set onsolve(value) {
+		if(typeof(value) != "function") {
+			this.#onsolve = null; 
+			return;
+		};
+
+		this._replaceCallbackFunction("solve", value, this.#onsolve);
+		this.#onsolve = value;
+	}
+
+  /**
+   * Solves the puzzle if the it is already not based on the property .solved
+   * @returns {Boolean}
+   * 
+   * @fires SolveEvent
+   */
+	solve() {
+		// puzzle already solved, ignore
+		if(this.solved == true) return false;
+
+    // change directly the value of #solved so that the setter
+    // is not trigged
+		this.#solved = true;
     
-    if(this.#all[puzzle.id])
-      return false;
+    // sets some classes and attributes to the element to help with styles
+    // and search
+		this.setAttribute("solved", "true");
+		this.classList.remove("unsolved");
+		this.classList.add("solved");
 
-    this.#all[String(puzzle.id)] = puzzle;
-    return true
-  };
+    // trigger the event
+		this.dispatchEvent(Puzzle.SolveEvent);
 
-  /** 
-   * Adds the instance to the all static property.
-   * @returns {true | false} If the puzzle was added.
-   */
-  add() {
-    return this.constructor.add(this);
-  }
-  
-  /**
-   * Removes the puzzle from the all static property.
-   * 
-   * @param {Puzzle | String | Number} param Puzzle or the ID to remove.
-   * @returns {true | false} If the puzzle was removed.
-   * 
-   * @throws {TypeError} if the param is invalid.
-   */
-  static remove(param) {
-    if(typeof(param) == "string" || typeof(param) == "number") {
-      param = String(param);
-
-      if(!this.#all[param])
-        return false;
-      
-      delete this.#all[param];
-    } else if(param instanceof Puzzle) {
-      if(!this.#all[param.id])
-        return false;
-      
-      delete this.#all[param.id];
-    } else {
-      throw TypeError("Puzzle.remove: param needs to be a id or a puzzle instance.");
-    }
-  }
+		return true;
+	}
 
   /**
-   * A callback that will listen to the event
+   * @inheritdoc
    * 
-   * @callback PuzzleEventCallback
-   * @param {Event} event The event object
-   * @returns {void}
-   */
-
-  /** @typedef {"solve" | "unsolve"} PuzzleEventMap */
-
-  /** 
-   * All the available types for listening 
-   * @type {Array<PuzzleEventMap>}
-   * @static @private
-   */
-  static #listenerType = ["solve", "unsolve"];
-
-  /**
-   * All the available types of listener
-   * @type {Array<PuzzleEventMap>}
-   * @static @public @readonly
-   */
-  static get listenerType() { return this.#listenerType.clone() }
-
-  /** @typedef {object.<Array<PuzzleEventCallback>>} PuzzleCallbackList*/
-
-  /** 
-   * Creates an object with each listenerType define as object
+   * Adds Puzzle events to the 
+   * {@link HTMLElement.addEventListener HTMLElement addEventListener method}
    * 
-   * @returns {PuzzleCallbackList}
-   */
-  static _defineListeners() {
-    const listeners = {};
-
-    for(const value in this.listenerType) {
-      listeners[value] = [];
-    }
-
-    return listeners;
-  }
-
-  /**
-   * Stores listeners for each specific Puzzle event
-   * Each key in the object is a listener type
+   * @param {keyof HTMLElementEventMap | PuzzleEventKeyMap} type The type of the Event
+   * which can be any {@link HTMLElementEventMap HTMLElement Event} 
+   * or a {@link PuzzleEventKeyMap Puzzle Event};
    * 
-   * @type {PuzzleCallbackList}
+   * @param {(this: Puzzle)} listener 
    * 
-   * @listens solve
-   * @listens unsolve
-   */
-  #listeners = this.constructor._defineListeners();
-
-  /**
-   * Works similar to the HTMLElement.addEventListener but adds adcional
-   * Puzzle specific listeners
+   * @param {boolean | AddEventListenerOptions | undefined} options
    * 
-   * @param { PuzzleEventMap | keyof HTMLElementEventMap } type Could be the HTMLElement
-   * type or the Puzzle types:
-   * 
-   * @event solve trigged when the puzzle is solved.
-   * @event unsolve trigged when the the puzzle is unsolved.
-   * 
-   * Could be trigged by changing .solved property or changing the element attribute
-   * or using the instance routines .solve and .unsolved.
-   * @param { PuzzleEventCallback } listener A callback that listen to the event.
-   * @param { Boolean | AddEventListenerOptions | undefined } options
-   * The HTMLElement default options, ignored when using a Puzzle event.
-   * 
-   * @throws {TypeError} When the type or listener are of invalid types
-   * 
-   * @public @override
+   * @listens SolveEvent 
+   * @listens UnsolveEvent 
+   * @listens MissEvent
    */
   addEventListener(type, listener, options=undefined) {
-    if(typeof(listener) != "function")
-      throw TypeError("Puzzle.addEventListener: The listener as to be a function.");
-
-    if(typeof(type) != "string")
-      throw TypeError("Puzzle.addEventListener: The type as to be a string.");
-    
-    if(this.#listeners[type])
-      this.#listeners[type].push(listener);
-    else
-      super.addEventListener(type, listener, options);
-  }
-
-  /**
-   * Removes the event listener in target's event listener list 
-   * with the same type, callback, and options (ignored if it is a Puzzle Event).
-   * 
-   * @param { PuzzleEventCallback | keyof HTMLElementEventMap } type The type can be a HTMLElement type
-   * or a Puzzle type
-   * @param { PuzzleEventCallback } listener The callback assined previouslly
-   * @param { Boolean | AddEventListenerOptions | undefined } options
-   * 
-   * @throws {TypeError} When the type or listener are of invalid types
-   * 
-   * @public @override
-   */
-  removeEventListener(type, listener, options=undefined) {
-    if(typeof(listener) != "function")
-      throw TypeError("Puzzle.removeEventListener: The listener as to be a function.");
-
-    if(typeof(type) != "string")
-      throw TypeError("Puzzle.removeEventListener: The type as to be a string.");
-    
-    if(this.#listeners[type])
-      this.#listeners[type].removeAll(listener);
-    else
-      super.addEventListener(type, listener, options);
-  }
-
-  constructor() {
-    super("my-puzzle");
+    super.addEventListener(type, listener, options);
   }
 }
 
-customElements.define("puzzle-puzzle", Puzzle);
+/** 
+ * Represents the types of puzzles that 
+ * aks the user to select from multiple options
+ */
+export
+class PuzzleChoose
+extends Puzzle {
+  
 
-const puzzle = document.createElement("puzzle-puzzle");
-puzzle.innerText = "something";
-document.body.appendChild(puzzle)
+}
 
-puzzle.addEventListener("solved", () => {
-  console.log("clicked")
-})
+/**
+ * The Puzzle Select component is a type of Puzzle that
+ * provides the user with 4 options to choose from
+ */
+export
+class PuzzleSelect
+extends PuzzleChoose {
+
+}
+
+customElements.define("puzzle-select", PuzzleSelect);
+
+/**
+ * Adds an event listener to the element.
+ * 
+ * @name addEventListener
+ * @method
+ * @memberof Puzzle
+ * 
+ * @param {keyof HTMLElementEventMap | PuzzleEventKeyMap} type
+ */
+
+/** sfaf */
+const puzzleTest = new PuzzleSelect;
+const element = new HTMLElement;
+
+element.addEventListener
