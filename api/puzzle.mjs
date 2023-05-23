@@ -1,9 +1,6 @@
-import { puzzle } from "./main.mjs";
-
 /** Represents any Puzzle component 
  * @extends HTMLElement
 */
-export
 class Puzzle 
 extends HTMLElement {
   /**
@@ -142,6 +139,64 @@ extends HTMLElement {
 		return true;
 	}
 
+  /** 
+   * Event trigged when the puzzle is solved 
+   * 
+   * @type {CustomEvent<"miss">}
+   * @event MissEvent
+   */
+  static #MissEvent = this._createEvent("miss");
+  /** 
+   * The CustomEvent that is trigged when the puzzle is solved 
+   * 
+   * @event MissEvent
+   * @readonly
+   */
+	static get MissEvent() { return this.#MissEvent; };
+
+  /** 
+   * The callback to call when the event miss is trigged
+   * @type {Function | null}
+   * @listens MissEvent
+   */
+  #onmiss = null;
+  /** 
+   * The callback that is called when the event miss is trigged 
+   * @listens SolveEvent
+   */
+	get onmiss() { return this.#onsolve };
+  /** 
+   * Replaces the callback to the miss event with a new callback
+   * if the callback is not valid the it will be replaced with null
+   * @listens SolveEvent
+   */
+	set onmiss(value) {
+		if(typeof(value) != "function") {
+			this.#onmiss = null; 
+			return;
+		};
+
+		this._replaceCallbackFunction("miss", value, this.#onsolve);
+		this.#onmiss = value;
+	}
+
+  /**
+   * Miss the puzzle if the it is not already solved not 
+   * based on the property {@link solved}
+   * @returns {Boolean}
+   * 
+   * @fires MissEvent
+   */
+	miss() {
+		// puzzle already solved, ignore
+		if(this.solved == true) return false;
+
+    // trigger the event
+		this.dispatchEvent(Puzzle.MissEvent);
+
+		return true;
+	}
+
   /**
    * @inheritdoc
    * 
@@ -163,13 +218,35 @@ extends HTMLElement {
   addEventListener(type, listener, options=undefined) {
     super.addEventListener(type, listener, options);
   }
+
+  /**
+   * @inheritdoc
+   * 
+   * Adds Puzzle events to the 
+   * {@link HTMLElement.removeEventListener HTMLElement removeEventListener method}
+   * 
+   * @param {keyof HTMLElementEventMap | PuzzleEventKeyMap} type The type of the Event
+   * which can be any {@link HTMLElementEventMap HTMLElement Event} 
+   * or a {@link PuzzleEventKeyMap Puzzle Event};
+   * 
+   * @param {(this: Puzzle)} listener 
+   * 
+   * @param {boolean | AddEventListenerOptions | undefined} options
+   * 
+   * @listens SolveEvent 
+   * @listens UnsolveEvent 
+   * @listens MissEvent
+   */
+  removeEventListener(type, listener, options=undefined) {
+    super.removeEventListener(type, listener, options);
+  }
 }
 
 /** 
  * Represents the types of puzzles that 
  * aks the user to select from multiple options
  */
-export
+
 class PuzzleChoose
 extends Puzzle {
   
@@ -198,8 +275,9 @@ customElements.define("puzzle-select", PuzzleSelect);
  * @param {keyof HTMLElementEventMap | PuzzleEventKeyMap} type
  */
 
-/** sfaf */
-const puzzleTest = new PuzzleSelect;
-const element = new HTMLElement;
+/** @type {PuzzleSelect} */ 
+const puzzleTest = document.createElement("puzzle-select");
+const element = document.createElement("div"); 
 
-element.addEventListener
+puzzleTest.onsolve = () => {console.log("solved")}
+puzzleTest.solve()
