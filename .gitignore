@@ -4,3 +4,7 @@
 # vscode settings folder
 # the settings are personal
 .vscode/
+
+# node
+## ignore the modules
+node_modules/

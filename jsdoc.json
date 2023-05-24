@@ -1,0 +1,16 @@
+{
+  "source" : {
+    "include" : ["api"],
+    "includePattern" : ".[m]js$",
+    "excludePattern" : "(node_modules/|docs)"
+  },
+  "plugins" : ["plugins/markdown"],
+  "templates" : {
+    "cleverLinks" : true,
+    "monospaceLinks" : true
+  },
+  "opts" : {
+    "recursive" : true,
+    "destination" : "./docs"
+  }
+}
