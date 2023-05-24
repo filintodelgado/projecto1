@@ -1,1 +1,3 @@
-import { PuzzleSelect } from "../api/puzzle.mjs"
+import {PuzzleSelect} from "../api/main.mjs"
+
+console.log(PuzzleSelect)

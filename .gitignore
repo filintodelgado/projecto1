@@ -8,3 +8,7 @@
 # node
 ## ignore the modules
 node_modules/
+
+# JSDoc
+## duplicated file
+jsdoc 2.json

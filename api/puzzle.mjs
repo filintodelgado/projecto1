@@ -1,10 +1,14 @@
 /**
+ * Define Puzzle components:
+ * 
+ * * **{@link PuzzleSelect}**: Multiple question puzzle
  * @module cinescape/puzzle
  */
 
 /** Represents any Puzzle component 
  * @extends HTMLElement
-*/
+ */
+export
 class Puzzle 
 extends HTMLElement {
   /**
@@ -384,7 +388,7 @@ extends HTMLElement {
  * Represents the types of puzzles that 
  * aks the user to select from multiple options
  */
-
+export
 class PuzzleChoose
 extends Puzzle {
   
@@ -393,7 +397,7 @@ extends Puzzle {
 
 /**
  * The Puzzle Select component is a type of Puzzle that
- * provides the user with 4 options to choose from
+ * provides the user with 4 options to choose from.
  */
 export
 class PuzzleSelect
@@ -402,6 +406,8 @@ extends PuzzleChoose {
 }
 
 customElements.define("puzzle-select", PuzzleSelect);
+
+export default { PuzzleSelect }
 
 /**
  * Adds an event listener to the element.
@@ -417,7 +423,5 @@ customElements.define("puzzle-select", PuzzleSelect);
 const puzzleTest = document.createElement("puzzle-select");
 
 puzzleTest.onsolve = () => {console.log("solved")}
-
-puzzleTest.id = 2;
 
 document.body.appendChild(puzzleTest);
