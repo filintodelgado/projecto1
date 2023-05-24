@@ -11,6 +11,7 @@
   },
   "opts" : {
     "recursive" : true,
-    "destination" : "./docs"
+    "destination" : "./docs",
+    "template" : "./template"
   }
 }
