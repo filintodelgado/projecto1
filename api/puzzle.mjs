@@ -197,6 +197,64 @@ extends HTMLElement {
 		return true;
 	}
 
+  /** 
+   * Event trigged when the puzzle is solved 
+   * 
+   * @type {CustomEvent<"unsolve">}
+   * @event unsolveEvent
+   */
+  static #UnsolveEvent = this._createEvent("unsolve");
+  /** 
+   * The CustomEvent that is trigged when the puzzle is solved 
+   * 
+   * @event UnsolveEvent
+   * @readonly
+   */
+	static get UnsolveEvent() { return this.#UnsolveEvent; };
+
+  /** 
+   * The callback to call when the event unsolve is trigged
+   * @type {Function | null}
+   * @listens UnsolveEvent
+   */
+  #onunsolve = null;
+  /** 
+   * The callback that is called when the event unsolve is trigged 
+   * @listens 
+   */
+	get onunsolve() { return this.#onunsolve };
+  /** 
+   * Replaces the callback to the unsolve event with a new callback
+   * if the callback is not valid the it will be replaced with null
+   * @listens SolveEvent
+   */
+	set onunsolve(value) {
+		if(typeof(value) != "function") {
+			this.#onunsolve = null; 
+			return;
+		};
+
+		this._replaceCallbackFunction("unsolve", value, this.#onsolve);
+		this.#onunsolve = value;
+	}
+
+  /**
+   * unsolve the puzzle if the it is not already solved not 
+   * based on the property {@link solved}
+   * @returns {Boolean}
+   * 
+   * @fires unsolveEvent
+   */
+	unsolve() {
+		// puzzle already solved, ignore
+		if(this.solved == true) return false;
+
+    // trigger the event
+		this.dispatchEvent(Puzzle.UnsolveEvent);
+
+		return true;
+	}
+
   /**
    * @inheritdoc
    * 
@@ -277,7 +335,5 @@ customElements.define("puzzle-select", PuzzleSelect);
 
 /** @type {PuzzleSelect} */ 
 const puzzleTest = document.createElement("puzzle-select");
-const element = document.createElement("div"); 
 
 puzzleTest.onsolve = () => {console.log("solved")}
-puzzleTest.solve()
