@@ -1,0 +1,53 @@
+.page {
+    margin-left: auto;
+    margin-right: auto;
+    background-color: lightblue;
+    width: 550px;
+    height: 320px;
+    display: inline-block;
+}
+
+.campos {
+    width: 545px;
+    height: 265px;
+    border: 2px dashed black;
+    background-color: red;
+    margin-top: 4px;
+    margin-bottom: -13px;
+    display: flex;
+
+}
+
+:hover.btn {
+    background: black;
+    color: white;
+
+}
+
+.btn {
+    text-decoration: none;
+    cursor: hand;
+    font-size: 16px;
+    text-align: center;
+    padding: 5px 5px;
+    border: 2px dashed black;
+    /*tracejado */
+}
+
+.criarconta .login {
+    width: 90px;
+    height: 22px;
+
+}
+
+.titulo {
+    transform: rotate(-90deg);
+    font-size: 50px;
+    border-bottom: 2px dashed black;
+    width: 266px;
+}
+.titulo p{
+    margin-bottom: 5px;
+    margin-top: 85px;
+    text-align: center;
+}
