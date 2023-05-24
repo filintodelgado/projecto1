@@ -18,7 +18,8 @@ extends HTMLElement {
    * @returns {CustomEvent}
    */
   static _createEvent(eventName) {
-    return new CustomEvent(eventName);
+    return new CustomEvent(eventName,
+      {bubbles: true});
   }
 
   /**
@@ -257,6 +258,12 @@ extends HTMLElement {
 		// puzzle already solved, ignore
 		if(this.solved == true) return false;
 
+    // sets some classes and attributes to the element to help with styles
+    // and search
+		this.setAttribute("solved", "false");
+		this.classList.remove("solved");
+		this.classList.add("unsolved");
+
     // trigger the event
 		this.dispatchEvent(Puzzle.UnsolveEvent);
 
@@ -381,6 +388,30 @@ extends HTMLElement {
     
     // removes the default elements
     this._removeDefaultElements();
+  }
+
+  static #observedAttributes = ["solved"];
+  static get observedAttributes() { return Puzzle.#observedAttributes };
+
+  /**
+   * {@link HTMLElement} lifecycle callback that watchs for
+   * changes in the attribute.
+   * 
+   * * *solved* when set to true triggers {@link solve} method
+   * otherwise fires {@link unsolve}
+   * 
+   * @param {String} name 
+   * @param {String} newValue 
+   * @param {String} oldValue 
+   * 
+   * @fires SolveEvent
+   * @fires UnsolveEvent
+   */
+  attributeChangedCallback(name, newValue, oldValue) {
+    if(name == "solved") {
+      if(newValue == "true") this.solve();
+      else this.unsolve();
+    }
   }
 }
 
