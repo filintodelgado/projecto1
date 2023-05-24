@@ -1,3 +1,7 @@
+/**
+ * @module cinescape/puzzle
+ */
+
 /** Represents any Puzzle component 
  * @extends HTMLElement
 */
@@ -298,6 +302,82 @@ extends HTMLElement {
   removeEventListener(type, listener, options=undefined) {
     super.removeEventListener(type, listener, options);
   }
+
+  /** The number to be formated for the default ID */
+  static #nextId = 0;
+  /** 
+   * The next default ID that will be define uppon a instance 
+   * 
+   * **Format**: puzzle:1 _(classname:#nextId)_
+   * 
+   * @returns {String} a formated string garanted to be unique for
+   * each instance that will be used if the instance does not have an
+   * ID when it is appended to the DOM
+   */
+  static get nextId() { return `${this.name.toLowerCase()}:${Puzzle.#nextId}` };
+
+  /** Increases ID */
+  static _increaseNextId() {
+    this.#nextId++;
+  }
+  
+  /**
+   * Gets the next id and increments the ID
+   * 
+   * @returns {String} the value of {@link nextId}
+   * before been incremented
+   */
+  static getNextId() {
+    // store the id
+    const id = this.nextId;
+    // increase the id;
+    this._increaseNextId;
+
+    return id;
+  }
+
+  /** Sets a default ID for the Puzzle */
+  _setDefaultId() {
+    this.id = this.constructor.getNextId();
+  }
+  
+  /** The list of all the default elements */
+  static #defaultElements = [
+    "puzzle-question", 
+    "puzzle-answers",
+    "puzzle-answer"
+  ]
+
+  /** A copy of the list of all the default elements */
+  static get defaultElements() { return this.#defaultElements }
+
+  /** 
+   * Removes the all the 
+   * {@link defaultElements Default Elements} 
+   * from the component.
+   */
+  _removeDefaultElements() {
+    for(const defaultElement of Puzzle.defaultElements) {
+      const elements = this.querySelectorAll(defaultElement);
+
+      for(const element of elements) element.remove();
+    }
+  }
+
+  /** 
+   * Makes some cleanups and configurations when the element 
+   * is added to the DOM
+   * 
+   * 1. Add the default ID if not already added
+   * 1. Removes the default elements
+   */
+  connectedCallback() {
+    // define a standart id if is not defined
+    if(!this.id) this._setDefaultId();
+    
+    // removes the default elements
+    this._removeDefaultElements();
+  }
 }
 
 /** 
@@ -337,3 +417,7 @@ customElements.define("puzzle-select", PuzzleSelect);
 const puzzleTest = document.createElement("puzzle-select");
 
 puzzleTest.onsolve = () => {console.log("solved")}
+
+puzzleTest.id = 2;
+
+document.body.appendChild(puzzleTest);
