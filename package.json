@@ -3,6 +3,9 @@
     "jsdoc": "^4.0.2"
   },
   "scripts": {
-    "doc" : "jsdoc -c jsdoc.json"
+    "doc": "jsdoc -c jsdoc.json"
+  },
+  "devDependencies": {
+    "jsdoc-plugin-typescript": "^2.2.1"
   }
 }

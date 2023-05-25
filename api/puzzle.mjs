@@ -5,7 +5,9 @@
  * @module cinescape/puzzle
  */
 
-/** Represents any Puzzle component 
+/** 
+ * Represents any Puzzle component 
+ * 
  * @extends HTMLElement
  */
 export
@@ -80,7 +82,7 @@ extends HTMLElement {
   /**
    * Replaces a Callback from .addEventListener() stack with a new Callback
    * @param {keyof HTMLElementEventMap | PuzzleEventKeyMap} name 
-   * @param {Function} newCallback 
+   * @param {Function | null} newCallback 
    * @param {Function | null} oldCallback
    * @returns {boolean}
    */
@@ -114,6 +116,8 @@ extends HTMLElement {
    */
 	set onsolve(value) {
 		if(typeof(value) != "function") {
+      // remove the event listener before
+      this.removeEventListener("solve", this.#onsolve);
 			this.#onsolve = null; 
 			return;
 		};
@@ -181,6 +185,7 @@ extends HTMLElement {
    */
 	set onmiss(value) {
 		if(typeof(value) != "function") {
+      this.removeEventListener("miss", this.#onmiss);
 			this.#onmiss = null; 
 			return;
 		};
@@ -239,6 +244,7 @@ extends HTMLElement {
    */
 	set onunsolve(value) {
 		if(typeof(value) != "function") {
+      this.removeEventListener("unsolve", this.#onunsolve);
 			this.#onunsolve = null; 
 			return;
 		};
@@ -413,6 +419,179 @@ extends HTMLElement {
       else this.unsolve();
     }
   }
+
+  /** 
+   * List of all instances
+   * @type {Puzzle[]}
+   */
+  static instances = [];
+
+  static _addInstance(instance) {
+    this.instances.push(instance);
+  }
+
+  /**
+   * Appends the instance to the {@link Puzzle.instances}
+   * 
+   * @returns 
+   */
+  _appendToPuzzle() {
+    // already added
+    if(Puzzle.instances.includes(this)) 
+      return false;
+
+    Puzzle._addInstance(this);
+
+    return true;
+  }
+
+  /**
+   * Appends the instance to the class 
+   * {@link Puzzle.instances | .instance}.
+   * 
+   * @returns 
+   */
+  _appendToClass() {
+    // already added
+    if(this.constructor.instances.includes(this))
+      return false;
+
+    this.constructor._addInstance(this);
+
+    return true;
+  }
+
+  /** 
+   * Appends the instance to both the class
+   * and Puzzle {@link Puzzle.instances | .instance}.
+   */
+  _appendInstance() {
+    this._appendToPuzzle();
+    this._appendToClass();
+  }
+
+  /**
+   * Replaces a callback in all {@link Puzzle.instances | instances}
+   * using {@link _replaceCallbackFunction} method.
+   * 
+   * @param {keyof HTMLElementEventMap | PuzzleEventKeyMap} name
+   * @param {Function | null} newCallback 
+   * @param {Function | null} oldCallback 
+   */
+  static _replaceInstancesCallbackFunction(name, newCallback, oldCallback=null) {
+    for(const puzzle of this.instances)
+      puzzle._replaceCallbackFunction(name, newCallback, oldCallback);
+  }
+
+  /**
+   * Removes a {@link callback} from every instance.
+   * 
+   * @param {keyof HTMLElementEventMap | PuzzleEventKeyMap} name 
+   * @param {Function} callback 
+   */
+  static _removeInstancesCallbackFunction(name, callback) {
+    for(const puzzle of this.instances)
+      puzzle.removeEventListener(name, callback);
+  }
+
+  /**
+   * Adds the {@link value | callback} to 
+   * {@link instances} when the event is set
+   * and also removes when the event is unset to the
+   * **on[event]** properties.
+   * 
+   * @param {PuzzleEventKeyMap} type The type of event 
+   * @param {Function} value The callback
+   * @returns 
+   */
+  static _onEvent(type, value) {
+    // construct the name of the property
+    // always start with static_on[type]
+    const propertyName = `static_on${type}`;
+
+    // remove the event if the value is not a function
+    if(typeof(value) != "function") {
+      this._removeInstancesCallbackFunction("solve", this[propertyName]);
+      this[propertyName] = null;
+      return false;
+    }
+
+    this._replaceInstancesCallbackFunction(type, value, this[propertyName]);
+    this[propertyName] = value;
+    return true;
+  }
+
+  /** @type {Function | null} */
+  static _static_onsolve = null;
+  /** 
+   * Apply a event when the Puzzle is {@link solve} to all the instances of the class.
+   * 
+   * Uses the {@link addEventListener} function.
+   * 
+   * @listens SolveEvent
+   */
+  static get onsolve() { return this._static_onsolve };
+  static set onsolve(value) {
+    return this._onEvent("solve", value);
+  };
+
+  /** @type {Function | null} */
+  static _static_onmiss = null;
+  /** 
+   * Apply a event when the Puzzle is {@link miss} to all the instances of the class.
+   * 
+   * Uses the {@link addEventListener} function.
+   * 
+   * @listens MissEvent
+   */
+  static get onmiss() { return this._static_onmiss };
+  static set onmiss(value) {
+    return this._onEvent("miss", value)
+  }
+
+  /** @type {Function | null} */
+  static _static_onunsolve = null;
+  /** 
+   * Apply a event when the Puzzle is {@link unsolve} to all the instances of the class.
+   * 
+   * Uses the {@link addEventListener} function.
+   * 
+   * @listens UnsolveEvent
+   */
+  static get onunsolve() { return this._static_onunsolve };
+  static set onunsolve(value) {
+    return this._onEvent("unsolve", value)
+  }
+
+  /**
+   * {@link addEventListener} to all the {@link instances} of the class.
+   * 
+   * @param {keyof HTMLElementEventMap | PuzzleEventKeyMap} type 
+   * @param {Function} listener 
+   * @param {boolean | AddEventListenerOptions | undefined} options 
+   */
+  static addEventListener(type, listener, options=null) {
+    for(const puzzle of this.instances) 
+      puzzle.addEventListener(type, listener, options);
+  }
+  
+  /**
+   * {@link removeEventListener} to all the {@link instances} of the class.
+   * 
+   * @param {keyof HTMLElementEventMap | PuzzleEventKeyMap} type 
+   * @param {Function} listener 
+   * @param {boolean | AddEventListenerOptions | undefined} options 
+   */
+  static removeEventListener(type, listener, options=null) {
+    for(const puzzle of this.instances)
+      puzzle.removeEventListener(type, listener, options);
+  }
+
+  constructor() {
+    super();
+
+    this._appendInstance();
+  }
 }
 
 /** 
@@ -438,21 +617,16 @@ extends PuzzleChoose {
 
 customElements.define("puzzle-select", PuzzleSelect);
 
-export default { PuzzleSelect }
-
-/**
- * Adds an event listener to the element.
- * 
- * @name addEventListener
- * @method
- * @memberof Puzzle
- * 
- * @param {keyof HTMLElementEventMap | PuzzleEventKeyMap} type
- */
+// Test ground
 
 /** @type {PuzzleSelect} */ 
 const puzzleTest = document.createElement("puzzle-select");
 
-puzzleTest.onsolve = () => {console.log("solved")}
+Puzzle.addEventListener("solve", () => console.log("something"));
+puzzleTest.solve()
 
 document.body.appendChild(puzzleTest);
+
+// Default export
+// import puzzle from "./puzzle.mjs"
+export default { PuzzleSelect }
