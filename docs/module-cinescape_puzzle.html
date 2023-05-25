@@ -168,7 +168,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="puzzle.mjs.html">puzzle.mjs</a>, <a href="puzzle.mjs.html#line623">line 623</a>
+        <a href="puzzle.mjs.html">puzzle.mjs</a>, <a href="puzzle.mjs.html#line638">line 638</a>
     </li></ul></dd>
     
 
@@ -270,7 +270,7 @@ responds incorrectly the form;</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="puzzle.mjs.html">puzzle.mjs</a>, <a href="puzzle.mjs.html#line27">line 27</a>
+        <a href="puzzle.mjs.html">puzzle.mjs</a>, <a href="puzzle.mjs.html#line29">line 29</a>
     </li></ul></dd>
     
 
@@ -306,22 +306,13 @@ responds incorrectly the form;</p>
 
 
 <div class="description">
-    <p>Event trigged when the puzzle is solved</p>
+    <p>The CustomEvent that is trigged when the puzzle is miss
+(the user responds incorretly).</p>
 </div>
 
 
 
 
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">CustomEvent.&lt;"miss"></span>
-
-
-        </li>
-    </ul>
 
 
 
@@ -360,7 +351,7 @@ responds incorrectly the form;</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="puzzle.mjs.html">puzzle.mjs</a>, <a href="puzzle.mjs.html#line155">line 155</a>
+        <a href="puzzle.mjs.html">puzzle.mjs</a>, <a href="puzzle.mjs.html#line178">line 178</a>
     </li></ul></dd>
     
 
@@ -381,9 +372,13 @@ responds incorrectly the form;</p>
 
 <h5>Listeners of This Event:</h5>
 <ul>
+    <li><a href="module-cinescape_puzzle.Puzzle.html#_onEvent">module:cinescape/puzzle.Puzzle#_onEvent</a></li>
+
     <li><a href="module-cinescape_puzzle.Puzzle.html#addEventListener">module:cinescape/puzzle.Puzzle#addEventListener</a></li>
 
     <li><a href="module-cinescape_puzzle.Puzzle.html#removeEventListener">module:cinescape/puzzle.Puzzle#removeEventListener</a></li>
+
+    <li><a href="module-cinescape_puzzle.Puzzle.html#._onEvent">module:cinescape/puzzle.Puzzle._onEvent</a></li>
 
     <li><a href="module-cinescape_puzzle.Puzzle.html#.onmiss">module:cinescape/puzzle.Puzzle.onmiss</a></li>
 </ul>
@@ -405,94 +400,6 @@ responds incorrectly the form;</p>
     
 
     
-    <h4 class="name" id="~event:MissEvent">MissEvent</h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>The CustomEvent that is trigged when the puzzle is solved</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="puzzle.mjs.html">puzzle.mjs</a>, <a href="puzzle.mjs.html#line162">line 162</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
     <h4 class="name" id="~event:SolveEvent">SolveEvent</h4>
     
 
@@ -501,22 +408,13 @@ responds incorrectly the form;</p>
 
 
 <div class="description">
-    <p>Event trigged when the puzzle is solved</p>
+    <p>The CustomEvent that is trigged when the puzzle is solved
+(the user responds correctly).</p>
 </div>
 
 
 
 
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">CustomEvent.&lt;"solve"></span>
-
-
-        </li>
-    </ul>
 
 
 
@@ -555,7 +453,7 @@ responds incorrectly the form;</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="puzzle.mjs.html">puzzle.mjs</a>, <a href="puzzle.mjs.html#line45">line 45</a>
+        <a href="puzzle.mjs.html">puzzle.mjs</a>, <a href="puzzle.mjs.html#line51">line 51</a>
     </li></ul></dd>
     
 
@@ -576,6 +474,8 @@ responds incorrectly the form;</p>
 
 <h5>Listeners of This Event:</h5>
 <ul>
+    <li><a href="module-cinescape_puzzle.Puzzle.html#_onEvent">module:cinescape/puzzle.Puzzle#_onEvent</a></li>
+
     <li><a href="module-cinescape_puzzle.Puzzle.html#addEventListener">module:cinescape/puzzle.Puzzle#addEventListener</a></li>
 
     <li><a href="module-cinescape_puzzle.Puzzle.html#onmiss">module:cinescape/puzzle.Puzzle#onmiss</a></li>
@@ -589,6 +489,8 @@ responds incorrectly the form;</p>
     <li><a href="module-cinescape_puzzle.Puzzle.html#onunsolve">module:cinescape/puzzle.Puzzle#onunsolve</a></li>
 
     <li><a href="module-cinescape_puzzle.Puzzle.html#removeEventListener">module:cinescape/puzzle.Puzzle#removeEventListener</a></li>
+
+    <li><a href="module-cinescape_puzzle.Puzzle.html#._onEvent">module:cinescape/puzzle.Puzzle._onEvent</a></li>
 
     <li><a href="module-cinescape_puzzle.Puzzle.html#.onsolve">module:cinescape/puzzle.Puzzle.onsolve</a></li>
 </ul>
@@ -610,94 +512,6 @@ responds incorrectly the form;</p>
     
 
     
-    <h4 class="name" id="~event:SolveEvent">SolveEvent</h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>The CustomEvent that is trigged when the puzzle is solved</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="puzzle.mjs.html">puzzle.mjs</a>, <a href="puzzle.mjs.html#line52">line 52</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
     <h4 class="name" id="~event:UnsolveEvent">UnsolveEvent</h4>
     
 
@@ -706,22 +520,13 @@ responds incorrectly the form;</p>
 
 
 <div class="description">
-    <p>Event trigged when the puzzle is solved</p>
+    <p>The CustomEvent that is trigged when the puzzle is unsolved
+(normally called manually).</p>
 </div>
 
 
 
 
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">CustomEvent.&lt;"unsolve"></span>
-
-
-        </li>
-    </ul>
 
 
 
@@ -760,7 +565,7 @@ responds incorrectly the form;</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="puzzle.mjs.html">puzzle.mjs</a>, <a href="puzzle.mjs.html#line214">line 214</a>
+        <a href="puzzle.mjs.html">puzzle.mjs</a>, <a href="puzzle.mjs.html#line228">line 228</a>
     </li></ul></dd>
     
 
@@ -781,100 +586,16 @@ responds incorrectly the form;</p>
 
 <h5>Listeners of This Event:</h5>
 <ul>
+    <li><a href="module-cinescape_puzzle.Puzzle.html#_onEvent">module:cinescape/puzzle.Puzzle#_onEvent</a></li>
+
     <li><a href="module-cinescape_puzzle.Puzzle.html#addEventListener">module:cinescape/puzzle.Puzzle#addEventListener</a></li>
 
     <li><a href="module-cinescape_puzzle.Puzzle.html#removeEventListener">module:cinescape/puzzle.Puzzle#removeEventListener</a></li>
 
+    <li><a href="module-cinescape_puzzle.Puzzle.html#._onEvent">module:cinescape/puzzle.Puzzle._onEvent</a></li>
+
     <li><a href="module-cinescape_puzzle.Puzzle.html#.onunsolve">module:cinescape/puzzle.Puzzle.onunsolve</a></li>
 </ul>
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="~event:UnsolveEvent">UnsolveEvent</h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>The CustomEvent that is trigged when the puzzle is solved</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="puzzle.mjs.html">puzzle.mjs</a>, <a href="puzzle.mjs.html#line221">line 221</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
 
 
 
@@ -905,7 +626,7 @@ responds incorrectly the form;</p>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu May 25 2023 17:28:28 GMT+0100 (Western European Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu May 25 2023 17:50:27 GMT+0100 (Western European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

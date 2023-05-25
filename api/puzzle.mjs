@@ -5,6 +5,8 @@
  * @module cinescape/puzzle
  */
 
+import { puzzle } from "./main.mjs";
+
 /** 
  * Represents any Puzzle component 
  * 
@@ -43,14 +45,12 @@ extends HTMLElement {
    */
 
   /** 
-   * Event trigged when the puzzle is solved 
-   * 
    * @type {CustomEvent<"solve">}
-   * @event SolveEvent
    */
   static #SolveEvent = this._createEvent("solve");
   /** 
-   * The CustomEvent that is trigged when the puzzle is solved 
+   * The CustomEvent that is trigged when the puzzle is solved
+   * (the user responds correctly).
    * 
    * @event SolveEvent
    * @readonly
@@ -98,6 +98,33 @@ extends HTMLElement {
     return true;
   }
 
+  /**
+   * Runs when the listener is assined to any
+   * on[event] property
+   * 
+   * @param {PuzzleEventKeyMap} type 
+   * @param {Function | null} callback 
+   * @returns
+   * 
+   * @listens SolveEvent
+   * @listens MissEvent
+   * @listens UnsolveEvent
+   */
+  _onEvent(type, callback) {
+    // how the property is named in the instance
+    const propertyName = `on${type}`;
+
+    if(typeof(callback) != "function") {
+      // remove the event listener before
+      this.removeEventListener(type, this.#onsolve);
+			this[propertyName] = null; 
+			return;
+		};
+
+		this._replaceCallbackFunction(type, callback, this[propertyName]);
+		this[propertyName] = callback;
+  }
+
   /** 
    * The callback to call when the event solve is trigged
    * @type {Function | null}
@@ -115,15 +142,7 @@ extends HTMLElement {
    * @listens SolveEvent
    */
 	set onsolve(value) {
-		if(typeof(value) != "function") {
-      // remove the event listener before
-      this.removeEventListener("solve", this.#onsolve);
-			this.#onsolve = null; 
-			return;
-		};
-
-		this._replaceCallbackFunction("solve", value, this.#onsolve);
-		this.#onsolve = value;
+		this._onEvent("solve", value);
 	}
 
   /**
@@ -153,14 +172,12 @@ extends HTMLElement {
 	}
 
   /** 
-   * Event trigged when the puzzle is solved 
-   * 
    * @type {CustomEvent<"miss">}
-   * @event MissEvent
    */
   static #MissEvent = this._createEvent("miss");
   /** 
-   * The CustomEvent that is trigged when the puzzle is solved 
+   * The CustomEvent that is trigged when the puzzle is miss
+   * (the user responds incorretly).
    * 
    * @event MissEvent
    * @readonly
@@ -184,14 +201,7 @@ extends HTMLElement {
    * @listens SolveEvent
    */
 	set onmiss(value) {
-		if(typeof(value) != "function") {
-      this.removeEventListener("miss", this.#onmiss);
-			this.#onmiss = null; 
-			return;
-		};
-
-		this._replaceCallbackFunction("miss", value, this.#onsolve);
-		this.#onmiss = value;
+		this._onEvent("miss", value);
 	}
 
   /**
@@ -212,14 +222,12 @@ extends HTMLElement {
 	}
 
   /** 
-   * Event trigged when the puzzle is solved 
-   * 
    * @type {CustomEvent<"unsolve">}
-   * @event UnsolveEvent
    */
   static #UnsolveEvent = this._createEvent("unsolve");
   /** 
-   * The CustomEvent that is trigged when the puzzle is solved 
+   * The CustomEvent that is trigged when the puzzle is unsolved
+   * (normally called manually).
    * 
    * @event UnsolveEvent
    * @readonly
@@ -243,14 +251,7 @@ extends HTMLElement {
    * @listens SolveEvent
    */
 	set onunsolve(value) {
-		if(typeof(value) != "function") {
-      this.removeEventListener("unsolve", this.#onunsolve);
-			this.#onunsolve = null; 
-			return;
-		};
-
-		this._replaceCallbackFunction("unsolve", value, this.#onsolve);
-		this.#onunsolve = value;
+		this._onEvent("unsolve", value);
 	}
 
   /**
@@ -387,6 +388,8 @@ extends HTMLElement {
    * 
    * 1. Add the default ID if not already added
    * 1. Removes the default elements
+   * 1. Add puzzle to the class so it is easier to identify
+   * 1. Add the puzzle type to the class list
    */
   connectedCallback() {
     // define a standart id if is not defined
@@ -394,6 +397,12 @@ extends HTMLElement {
     
     // removes the default elements
     this._removeDefaultElements();
+
+    // add puzzle to the class list to tell that it is a puzzle
+    this.classList.add("puzzle")
+
+    // add the puzzle type name to the class
+    this.classList.add(this.constructor.formatedName);
   }
 
   static #observedAttributes = ["solved"];
@@ -503,6 +512,10 @@ extends HTMLElement {
    * @param {PuzzleEventKeyMap} type The type of event 
    * @param {Function} value The callback
    * @returns 
+   * 
+   * @listens SolveEvent
+   * @listens MissEvent
+   * @listens UnsolveEvent
    */
   static _onEvent(type, value) {
     // construct the name of the property
@@ -587,6 +600,8 @@ extends HTMLElement {
       puzzle.removeEventListener(type, listener, options);
   }
 
+  static get formatedName() { return this.name.toLowerCase() };
+
   constructor() {
     super();
 
@@ -622,7 +637,7 @@ customElements.define("puzzle-select", PuzzleSelect);
 /** @type {PuzzleSelect} */ 
 const puzzleTest = document.createElement("puzzle-select");
 
-Puzzle.addEventListener("solve", () => console.log("something"));
+PuzzleSelect.onsolve = () => {console.log("working")}
 puzzleTest.solve()
 
 document.body.appendChild(puzzleTest);
