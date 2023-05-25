@@ -4,18 +4,13 @@
     background-color: lightblue;
     width: 550px;
     height: 320px;
-    display: inline-block;
+    padding: 15px;
+
 }
 
-.campos {
-    width: 545px;
-    height: 265px;
-    border: 2px dashed black;
-    background-color: red;
-    margin-top: 4px;
-    margin-bottom: -13px;
-    display: flex;
-
+.criarConta .login {
+    width: 90px;
+    height: 22px;
 }
 
 :hover.btn {
@@ -25,29 +20,38 @@
 }
 
 .btn {
+    float: right;
     text-decoration: none;
     cursor: hand;
     font-size: 16px;
     text-align: center;
     padding: 5px 5px;
     border: 2px dashed black;
-    /*tracejado */
 }
 
-.criarconta .login {
-    width: 90px;
-    height: 22px;
-
+.campos {
+    width: 546px;
+    height: 208px;
+    border: 2px dashed black;
+    background-color: red;
+    margin-top: 30px;
+    margin-bottom: -20px;
 }
 
 .titulo {
     transform: rotate(-90deg);
-    font-size: 50px;
+    font-size: 45px;
     border-bottom: 2px dashed black;
-    width: 266px;
-}
-.titulo p{
-    margin-bottom: 5px;
-    margin-top: 85px;
+    width: 208px;
+    height: 60px;
+    margin-top: 74px;
+    margin-left: -70px;
     text-align: center;
 }
+
+.formulario{
+    margin-top: -65px;
+    margin-left: 80px;
+}
+#user{
+margin-bottom: 20px;}
