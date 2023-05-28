@@ -13,5 +13,9 @@ export { puzzle };
 import { Puzzle, PuzzleSelect, PuzzleChoose } from "./puzzle.mjs";
 export { Puzzle, PuzzleSelect, PuzzleChoose }
 
+/* Timer */
+import { Timer } from "./timer.mjs";
+export { Timer };
+
 /* Defautl */
-export default { PuzzleSelect }
+export default { PuzzleSelect, Timer}
