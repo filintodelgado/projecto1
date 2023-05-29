@@ -4,6 +4,8 @@
  * @module cinescape/timer
  */
 
+import { EventModel } from "./eventModel.mjs";
+
 /**
  * Generic Timer that allows to define a time to counter up to
  * and define callbacks for specific moments in the time.
@@ -12,7 +14,9 @@
  * listeners for those operations.
  * 
  */
-export class Timer {
+export 
+class Timer
+extends EventModel {
   /**
    * A integer number that represent the time in seconds
    * @typedef {Number} Seconds
@@ -31,11 +35,11 @@ export class Timer {
   static get minTime() { return this.#minTime }
 
   /** 
-   * The minimun stop time will always be {@link Timer.minTime} + 1
+   * The minimun stop time will always be {@link minTime} + 1.
    */
-  get minStopTime() { return Timer.minTime + 1 }
+  static get minStopTime() { return Timer.minTime + 1 }
 
-  #stopTime = Timer.minTime + 1;
+  #stopTime = Timer.minStopTime;
   /**
    * The time in which the timer should stop
    * 
@@ -45,7 +49,7 @@ export class Timer {
   set stopTime(value) {
     // the stop will be always be at least 
     // be 1 more than the minTime
-    value = Math.max(value, this.minStopTime);
+    value = Math.max(value, Timer.minStopTime);
 
     this.#stopTime = value;
   }
@@ -73,6 +77,7 @@ export class Timer {
     this.#time = value;
   }
 
+  #step = 1;
   /** 
    * How much the time should be incremented each second. 
    * 
@@ -80,7 +85,14 @@ export class Timer {
    * 
    * @type {Seconds}.
    */
-  step = 1;
+  get step() { return this.#step };
+  set step(value) {
+    value = parseInt(value);
+    
+    if(!value) value = 1;
+
+    this.#step = value;
+  }
   
   /**
    * How fast in ms the timer will be refreshed.
@@ -97,9 +109,16 @@ export class Timer {
     if(typeof(value) != "boolean"
     || value == this.#paused) return;
 
-    this.#paused = value
+    // call methods instead of modifiying the value
+    if(value) this.pause();
+    else this.resume();
   }
 
+  /**
+   * Says if the timer is running.
+   * 
+   * Always inverse of {@link paused}.
+   */
   get running() { return !this.paused };
 
   /**
@@ -136,7 +155,11 @@ export class Timer {
   }
 
   /**
-   * The function that will execute each step;
+   * The function that will execute each step.
+   * 
+   * It does not trigger the step event. This event is trigged by
+   * {@link _task} method so that the event is only trigged when
+   * the timer is not paused.
    */
   _runner() {
     // only run the taks if not paused
@@ -155,7 +178,7 @@ export class Timer {
   }
 
   /**
-   * The tasks the timer will make if it is not paused
+   * The tasks the timer will make if it is not paused.
    * 
    * Things like:
    * 1. Increment the timer;
@@ -164,26 +187,43 @@ export class Timer {
   _task() {
     this.increment();
     this.runBreakingPointCallbacks(this.time);
+    this.dispatchEvent("step");
   }
 
+  /**
+   * Will start the timer if it is not already started.
+   * 
+   * @returns {Boolean} 
+   */
   start() {
     // only execute if timer is not running
     if(!this.running) return false;
 
+    this.dispatchEvent("start");
     this._runner();
 
     return true;
   }
 
+  /**
+   * Pauses the timer execution.
+   * 
+   * @returns 
+   */
   pause() {
     if(this.paused)
       return false;
 
-    this.paused = true;
+    this.dispatchEvent("pause");
+    this.#paused = true;
 
     return true;
   }
 
+  /**
+   * 
+   * @param {Boolean} pause 
+   */
   reset() {
     // set the time to the minimum
     this.time = Timer.#minTime;
@@ -194,6 +234,7 @@ export class Timer {
 
     // set pause without triggering the event
     this.#paused = true;
+    this.dispatchEvent("stop");
   }
 
   /**
@@ -315,6 +356,8 @@ export class Timer {
   }
 
   constructor(stop, autostart, step=null) {
+    super();
+
     this.stopTime = stop;
 
     if(autostart) this.start();
