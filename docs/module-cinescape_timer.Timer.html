@@ -158,13 +158,14 @@ listeners for those operations.</p></div>
 
         
             
-<h4 class="name" id="minStopTime"><span class="type-signature"></span>minStopTime<span class="type-signature"></span></h4>
+<h4 class="name" id="running"><span class="type-signature"></span>running<span class="type-signature"></span></h4>
 
 
 
 
 <div class="description">
-    <p>The minimun stop time will always be <code>Timer.minTime</code> + 1</p>
+    <p>Says if the timer is running.</p>
+<p>Always inverse of <code>paused</code>.</p>
 </div>
 
 
@@ -202,7 +203,7 @@ listeners for those operations.</p></div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="timer.mjs.html">timer.mjs</a>, <a href="timer.mjs.html#line40">line 40</a>
+        <a href="timer.mjs.html">timer.mjs</a>, <a href="timer.mjs.html#line122">line 122</a>
     </li></ul></dd>
     
 
@@ -275,7 +276,7 @@ listeners for those operations.</p></div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="timer.mjs.html">timer.mjs</a>, <a href="timer.mjs.html#line96">line 96</a>
+        <a href="timer.mjs.html">timer.mjs</a>, <a href="timer.mjs.html#line104">line 104</a>
     </li></ul></dd>
     
 
@@ -348,7 +349,7 @@ listeners for those operations.</p></div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="timer.mjs.html">timer.mjs</a>, <a href="timer.mjs.html#line87">line 87</a>
+        <a href="timer.mjs.html">timer.mjs</a>, <a href="timer.mjs.html#line88">line 88</a>
     </li></ul></dd>
     
 
@@ -485,6 +486,68 @@ listeners for those operations.</p></div>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="timer.mjs.html">timer.mjs</a>, <a href="timer.mjs.html#line65">line 65</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id=".minStopTime"><span class="type-signature">(static) </span>minStopTime<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <p>The minimun stop time will always be <code>minTime</code> + 1.</p>
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="timer.mjs.html">timer.mjs</a>, <a href="timer.mjs.html#line40">line 40</a>
     </li></ul></dd>
     
 
@@ -675,7 +738,7 @@ listeners for those operations.</p></div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="timer.mjs.html">timer.mjs</a>, <a href="timer.mjs.html#line263">line 263</a>
+        <a href="timer.mjs.html">timer.mjs</a>, <a href="timer.mjs.html#line300">line 300</a>
     </li></ul></dd>
     
 
@@ -818,7 +881,7 @@ listeners for those operations.</p></div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="timer.mjs.html">timer.mjs</a>, <a href="timer.mjs.html#line224">line 224</a>
+        <a href="timer.mjs.html">timer.mjs</a>, <a href="timer.mjs.html#line261">line 261</a>
     </li></ul></dd>
     
 
@@ -973,7 +1036,7 @@ listeners for those operations.</p></div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="timer.mjs.html">timer.mjs</a>, <a href="timer.mjs.html#line239">line 239</a>
+        <a href="timer.mjs.html">timer.mjs</a>, <a href="timer.mjs.html#line276">line 276</a>
     </li></ul></dd>
     
 
@@ -1111,7 +1174,7 @@ the expecific time</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="timer.mjs.html">timer.mjs</a>, <a href="timer.mjs.html#line252">line 252</a>
+        <a href="timer.mjs.html">timer.mjs</a>, <a href="timer.mjs.html#line289">line 289</a>
     </li></ul></dd>
     
 
@@ -1155,7 +1218,10 @@ the expecific time</p>
 
 
 <div class="description">
-    <p>The function that will execute each step;</p>
+    <p>The function that will execute each step.</p>
+<p>It does not trigger the step event. This event is trigged by
+<code>_task</code> method so that the event is only trigged when
+the timer is not paused.</p>
 </div>
 
 
@@ -1199,7 +1265,7 @@ the expecific time</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="timer.mjs.html">timer.mjs</a>, <a href="timer.mjs.html#line145">line 145</a>
+        <a href="timer.mjs.html">timer.mjs</a>, <a href="timer.mjs.html#line164">line 164</a>
     </li></ul></dd>
     
 
@@ -1243,7 +1309,7 @@ the expecific time</p>
 
 
 <div class="description">
-    <p>The tasks the timer will make if it is not paused</p>
+    <p>The tasks the timer will make if it is not paused.</p>
 <p>Things like:</p>
 <ol>
 <li>Increment the timer;</li>
@@ -1292,7 +1358,7 @@ the expecific time</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="timer.mjs.html">timer.mjs</a>, <a href="timer.mjs.html#line168">line 168</a>
+        <a href="timer.mjs.html">timer.mjs</a>, <a href="timer.mjs.html#line187">line 187</a>
     </li></ul></dd>
     
 
@@ -1452,7 +1518,7 @@ the expecific time</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="timer.mjs.html">timer.mjs</a>, <a href="timer.mjs.html#line281">line 281</a>
+        <a href="timer.mjs.html">timer.mjs</a>, <a href="timer.mjs.html#line318">line 318</a>
     </li></ul></dd>
     
 
@@ -1596,7 +1662,7 @@ that is 1 by default.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="timer.mjs.html">timer.mjs</a>, <a href="timer.mjs.html#line134">line 134</a>
+        <a href="timer.mjs.html">timer.mjs</a>, <a href="timer.mjs.html#line149">line 149</a>
     </li></ul></dd>
     
 
@@ -1744,7 +1810,234 @@ that is 1 by default.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="timer.mjs.html">timer.mjs</a>, <a href="timer.mjs.html#line118">line 118</a>
+        <a href="timer.mjs.html">timer.mjs</a>, <a href="timer.mjs.html#line133">line 133</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="pause"><span class="type-signature"></span>pause<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Pauses the timer execution.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="timer.mjs.html">timer.mjs</a>, <a href="timer.mjs.html#line213">line 213</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="reset"><span class="type-signature"></span>reset<span class="signature">(pause)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>pause</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="timer.mjs.html">timer.mjs</a>, <a href="timer.mjs.html#line227">line 227</a>
     </li></ul></dd>
     
 
@@ -1881,7 +2174,7 @@ that is 1 by default.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="timer.mjs.html">timer.mjs</a>, <a href="timer.mjs.html#line310">line 310</a>
+        <a href="timer.mjs.html">timer.mjs</a>, <a href="timer.mjs.html#line347">line 347</a>
     </li></ul></dd>
     
 
@@ -1912,6 +2205,112 @@ that is 1 by default.</p>
 
 
         
+            
+
+    
+
+    
+    <h4 class="name" id="start"><span class="type-signature"></span>start<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Will start the timer if it is not already started.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="timer.mjs.html">timer.mjs</a>, <a href="timer.mjs.html#line198">line 198</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
     
 
     
@@ -1933,7 +2332,7 @@ that is 1 by default.</p>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon May 29 2023 22:16:09 GMT+0100 (Western European Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon May 29 2023 22:58:05 GMT+0100 (Western European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

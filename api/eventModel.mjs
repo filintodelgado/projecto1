@@ -155,4 +155,8 @@ class EventModel {
       // the apply requires that second argument to by a array
       [eventData]);
   }
+
+  removeAllEventListeners() {
+    this.#listeners = {};
+  }
 }
