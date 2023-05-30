@@ -1,9 +1,12 @@
-import { Timer } from "../api/timer.mjs";
+import { Timer } from "../api/main.mjs"
 
-const timer = new Timer(3, true);
+const timer = new Timer(10)
 
-const callback = (timer) => {
-  console.log("working")
-}
+timer.addEventListener("start", () => { console.log("started") })
+timer.addBreakingPoint(5, (eventData) => {
+  console.log(`Event trigged at ${eventData.type} seconds.`)
+})
 
-timer.addBreakingPoint(2, callback)
+timer.start();
+
+timer.addEventListener("pause")

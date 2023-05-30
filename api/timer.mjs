@@ -4,7 +4,17 @@
  * @module cinescape/timer
  */
 
-import { EventModel } from "./eventModel.mjs";
+import { BreakingPointModel } from "./event.mjs";
+
+/**
+ * A integer number that represent the time in seconds
+ * @typedef {Number} Seconds
+ */
+
+/**
+ * A integer number that represent the time in miliseconds
+ * @typedef {Number} Miliseconds
+ */
 
 /**
  * Generic Timer that allows to define a time to counter up to
@@ -16,15 +26,59 @@ import { EventModel } from "./eventModel.mjs";
  */
 export 
 class Timer
-extends EventModel {
+extends BreakingPointModel {
   /**
-   * A integer number that represent the time in seconds
-   * @typedef {Number} Seconds
+   * All the available events.
+   * 
+   * @typedef {"start" | "stop" | "pause" | "step" | "reset"} EventType
    */
 
   /**
-   * A integer number that represent the time in miliseconds
-   * @typedef {Number} Miliseconds
+   * @typedef {(this: this, eventData: EventData) => void} EventListener
+   */
+
+  /** Events Declaration **/
+  /**
+   * Trigged when {@link Timer} is started or resumed, normally by calling
+   * {@link start} method.
+   * 
+   * @event StartEvent
+   */
+
+  /**
+   * Trigged when the {@link Timer} is paused, either by timeout (when time reaches stop)
+   * or by calling {@link pause} or {@link stop} method.
+   * 
+   * @event StopEvent
+   */
+
+  /**
+   * Trigged when the {@link Timer} is paused, either by timeout (when time reaches stop)
+   * or by calling {@link pause} or {@link stop} method.
+   * 
+   * @event PauseEvent
+   */
+  
+  /**
+   * Trigged each time {@link Timer} steps foward.
+   * 
+   * Only trigged when the timer is not {@link paused}.
+   * 
+   * @event StepEvent
+   */
+
+  /**
+   * Trigged when the {@link Timer} is reset, either by timeout (when time reaches stop)
+   * or by calling {@link reset} or {@link stop} method.
+   * 
+   * @event ResetEvent
+   */
+
+  /**
+   * Breakpoints can be assinged to be execute when the {@link Timer}
+   * reaches that point.
+   * 
+   * @event BreakingPoint
    */
 
   static #minTime = 0;
@@ -103,7 +157,15 @@ extends EventModel {
    */
   speed = 1000;
 
-  #paused = false;
+  #paused = true;
+  /**
+   * Says if the {@link Timer} is paused or not.
+   * Modifiying its value may trigger {@link pause} or
+   * {@link start} methods.
+   * 
+   * @fires StartEvent
+   * @fires PauseEvent
+   */
   get paused() { return this.#paused };
   set paused(value) {
     if(typeof(value) != "boolean"
@@ -111,7 +173,7 @@ extends EventModel {
 
     // call methods instead of modifiying the value
     if(value) this.pause();
-    else this.resume();
+    else this.start();
   }
 
   /**
@@ -155,6 +217,33 @@ extends EventModel {
   }
 
   /**
+   * @typedef {{
+   *  "type": EventType | "breakpoint",
+   *  "time": Seconds,
+   *  "target": Timer,
+   *  "paused": Boolean,
+   *  "running": Boolean
+  * }} EventData
+   */
+
+  /**
+   * Makes the Event Object that will be passed as the argument
+   * to the callback when the event is dispatch.
+   * 
+   * @param {EventType} type 
+   * @returns {EventData}
+   */
+  _makeEventObject(type) {
+    return {
+      "type": type,
+      "time": this.time,
+      "target": this,
+      "paused": this.paused,
+      "running": this.running
+    }
+  }
+
+  /**
    * The function that will execute each step.
    * 
    * It does not trigger the step event. This event is trigged by
@@ -183,24 +272,31 @@ extends EventModel {
    * Things like:
    * 1. Increment the timer;
    * 1. Trigger Events;
+   * 
+   * @fires StepEvent
    */
   _task() {
     this.increment();
-    this.runBreakingPointCallbacks(this.time);
+    this.dispatchBreakintPoint(this.time);
     this.dispatchEvent("step");
   }
 
   /**
    * Will start the timer if it is not already started.
    * 
+   * Can also be used to resume the execution.
+   * 
    * @returns {Boolean} 
+   * @fires StartEvent
    */
   start() {
-    // only execute if timer is not running
-    if(!this.running) return false;
+    // can't start what is already started
+    if(this.running) return false;
 
     this.dispatchEvent("start");
     this._runner();
+
+    this.#paused = false;
 
     return true;
   }
@@ -208,9 +304,10 @@ extends EventModel {
   /**
    * Pauses the timer execution.
    * 
-   * @returns 
+   * @fires PauseEvent
    */
   pause() {
+    // can't pause what is already paused
     if(this.paused)
       return false;
 
@@ -221,141 +318,38 @@ extends EventModel {
   }
 
   /**
+   * Resets the time back to 0 but does not pause the execution.
    * 
-   * @param {Boolean} pause 
+   * @fires ResetEvent
    */
   reset() {
     // set the time to the minimum
     this.time = Timer.#minTime;
+
+    this.dispatchEvent("reset");
   }
 
+  /**
+   * Resets the time back to 0 and pauses the execution.
+   * 
+   * @fires StopEvent
+   */
   stop() {
     this.reset();
-
-    // set pause without triggering the event
-    this.#paused = true;
+    this.pause();
     this.dispatchEvent("stop");
   }
 
   /**
-   * The type of the callback called by a breaking point.
+   * Create a new instance of a timer with builin event model and breakpoint model.
    * 
-   * @typedef {(this: Timer, timer: Timer) => void} BreakingPointCallback
-   */
-  
-  /**
-   * The breaking points callbacks are stored in this object
-   * were the key are the time assigned and the value is a 
-   * array with the callbacks;
+   * @param {Seconds} stop How long the timer takes to stop.
+   * @param {Boolean} autostart If tthe timer should start right away.
+   * @param {Number} step How fast the time will go each second, default 1.
    * 
-   * @type {{ [key: number]: Array<BreakingPointCallback> }}
+   * @fires StartEvent
    */
-  #breakingPoints = {};
-
-  /**
-   * Says if the value is in range of the Timer
-   * 
-   * @param {Seconds} time 
-   * @returns {Boolean}
-   */
-  _inRange(time) {
-    // not a valid integer
-    if(!(time = parseInt(time))) return false;
-
-    if(time < Timer.minTime || time > this.stopTime)
-      return false;
-
-    return true;
-  }
-
-  /**
-   * Says if a breaking point array already exists
-   * 
-   * @param {*} time 
-   */
-  _isBreakingPointArray(time) {
-    if(this.#breakingPoints[time] instanceof Array)
-      return true;
-    
-    return false;
-  }
-  
-  /**
-   * Says if there is a breaking point callback defined for
-   * the expecific time
-   * 
-   * @param {Seconds} time 
-   */
-  _isBreakingPointCallback(time) {
-    return this.#breakingPoints[time] ? true : false;
-  }
-
-  /**
-   * Creates a new breaking point array or return the existing one.
-   * 
-   * @param {Second} time 
-   * @returns {[BreakingPointCallback]}  The new breaking point array if assigned or
-   * the breaking point array already defined.
-   */
-  _createBreakingPointArray(time) {
-    let breakingPoint = this.#breakingPoints[time]
-
-    // only creates if it is not already created
-    if(!breakingPoint) {
-      this.#breakingPoints[time] = [];
-      breakingPoint = this.#breakingPoints[time]
-    }
-
-    return breakingPoint;
-  }
-
-  /**
-   * Allows to add a callback to a specific time in the Timer.
-   * 
-   * @param {Seconds} time
-   * @param {BreakingPointCallback} callback
-   */
-  addBreakingPoint(time, callback) {
-    if(!this._inRange(time)) return false;
-
-    const breakingPointArray = this._createBreakingPointArray(time);
-    breakingPointArray.push(callback);
-
-    return true;
-  }
-
-  removeBreakingPoint(time, callback) {
-    if(!this._inRange(time)
-    || !this._isBreakingPointArray(time)) 
-      return false;
-    
-    let index;
-
-    // remove all ocurances
-    while((index = this.#breakingPoints[time].indexOf(callback)) != -1) {
-      this.#breakingPoints[time].splice(index, 1)
-    }
-
-    return true
-  }
-
-  /**
-   * Runs all breaking points callbacks in a specific time
-   * 
-   * @param {Seconds} time 
-   */
-  runBreakingPointCallbacks(time) {
-    // ignore if there is no callback defined
-    if(!this._isBreakingPointArray(time)
-    || !this._isBreakingPointCallback(time))
-      return;
-
-    for(const callback of this.#breakingPoints[time])
-      // binds the this and sets the first argument to this
-      callback.bind(this)(this)
-  }
-
-  constructor(stop, autostart, step=null) {
+  constructor(stop, autostart=false, step=null) {
     super();
 
     this.stopTime = stop;
@@ -363,4 +357,139 @@ extends EventModel {
     if(autostart) this.start();
     if(step) this.step = step;
   }
+
+  /* Boilerplate ignore */
+
+  /**
+   * Can add those events:
+   * 1. start;
+   * 1. pause;
+   * 1. stop;
+   * 1. step;
+   * 1. reset;
+   * 
+   * @param {EventType} type 
+   * @param {EventListener} listener 
+   * 
+   * @inheritdoc
+   */
+  addEventListener(type, listener) {
+    super.addEventListener(type, listener)
+  }
+
+  /**
+   * @param {EventType} type 
+   * @param {EventListener} listener 
+   * 
+   * @inheritdoc
+   */
+  addEventListenerOnce(type, listener) {
+    super.addEventListenerOnce(type, listener);
+  }
+  
+  /**
+   * @param {EventType} type 
+   * @param {EventListener} listener 
+   * 
+   * @inheritdoc
+   */
+  removeEventListener(type, listener) {
+    super.addEventListener(type, listener)
+  }
+
+  /**
+   * @param {EventType} type 
+   * @param {EventData} eventData
+   * 
+   * @inheritdoc
+   */
+  dispatchEvent(type) {
+    // always pass the EventObject to the callback
+    super.dispatchEvent(type, this._makeEventObject(type));
+  }
+
+  /** @typedef {Number} Breakpoint */
+
+  /**
+   * @param {Breakpoint} breakpoint 
+   * @param {EventListener} callback 
+   * 
+   * @inheritdoc
+   */
+  addBreakingPoint(breakpoint, callback) {
+    super.addBreakingPoint(breakpoint, callback);
+  }
+
+  /**
+   * @param {Breakpoint} breakpoint 
+   * @param {EventListener} callback 
+   * 
+   * @inheritdoc
+   */
+  addBreakingPointOnce(breakpoint, callback) {
+    super.addBreakingPointOnce(breakpoint, callback);
+  }
+
+  /**
+   * @param {Breakpoint} breakpoint 
+   * @param {EventListener} callback 
+   * 
+   * @inheritdoc
+   */
+  removeBreakingPoint(breakpoint, callback) {
+    super.removeBreakingPoint(breakpoint, callback);
+  }
+  
+  /**
+   * @param {Breakpoint} breakpoint 
+   * 
+   * @inheritdoc
+   */
+  dispatchBreakintPoint(breakpoint) {
+    super.dispatchBreakintPoint(breakpoint, this._makeEventObject("breakpoint"));
+  }
+
+  
+
+  /**
+   * Called when the {@link Timer} is started or resumed, normally by calling
+   * {@link start} method.
+   * 
+   * @type {EventListener}
+   * @listens StartEvent
+   */
+  onstart;
+  /**
+   * Called when the {@link Timer} is stop, either by timeout (when time reaches stop)
+   * or by calling {@link stop} method.
+   * 
+   * @type {EventListener}
+   * @listens StopEvent
+   */
+  onstop;
+  /**
+   * Called when the {@link Timer} is paused, either by timeout (when time reaches stop)
+   * or by calling {@link pause} or {@link stop} method.
+   * 
+   * @type {EventListener}
+   * @listens PauseEvent
+   */
+  onpause;
+  /**
+   * Called each time {@link Timer} steps foward.
+   * 
+   * Only trigged when the timer is not {@link paused}.
+   * 
+   * @type {EventListener}
+   * @listens StepEvent
+   */
+  onstep;
+  /**
+   * Called when the {@link Timer} is reset, either by timeout (when time reaches stop)
+   * or by calling {@link reset} or {@link stop} method.
+   * 
+   * @type {EventListener}
+   * @listens ResetEvent
+   */
+  onreset;
 }

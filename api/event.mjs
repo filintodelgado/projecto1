@@ -2,7 +2,7 @@
  * Event model that can be extended in a generic way to be implemented and
  * use similar to the default JavaScript owns event model.
  * 
- * @module cinescape/eventModel
+ * @module cinescape/event
  */
 
 /**
@@ -65,7 +65,6 @@ class EventModel {
    * 
    * @param {EventType} type 
    * @param {EventListener} listener 
-   * @returns 
    */
   addEventListener(type, listener) {
     if(typeof(listener) != "function")
@@ -84,7 +83,6 @@ class EventModel {
    * 
    * @param {EventType} type 
    * @param {EventListener} listener 
-   * @returns 
    */
   removeEventListener(type, listener) {
     if(typeof(listener) != "function")
@@ -108,7 +106,7 @@ class EventModel {
    */
   addEventListenerOnce(type, listener) {
     const onceEvent = (...args) => {
-      this.removeEventListener(type, listener);
+      this.removeEventListener(type, onceEvent);
       // use the apply instead of bind so that the function is
       // emidiatly called (applies the this value to the instance
       // and set the arguments)
@@ -137,26 +135,146 @@ class EventModel {
    * @param  {EventData} eventData Will be passed as the first argument to the
    * callback.
    */
-  dispatchEvent(type, eventData=null) {
+  dispatchEvent(type, ...eventData) {
     const eventList = this.#listeners[type];
+    const onEvent = this[this._onEventName(type)];
 
-    if(!eventList) return;
-
-    // call the on[event] property if available
+    // if there is no functions in the stack and no function in the property
+    // just exit
+    if(!eventList 
+      && !onEvent) return;
 
     // call every event applying the this and the event data
     // as the argument
-    for(const listener of eventList)
-      listener.apply(this, eventData);
+    if(eventList)
+      for(const listener of eventList)
+        listener.apply(this, eventData);
 
-    const onEvent = this[this._onEventName(type)];
-
-    if(onEvent) onEvent.apply(this, 
+    // call the on[event] property if available
+    if(typeof(onEvent) == "function") onEvent.apply(this, 
       // the apply requires that second argument to by a array
       [eventData]);
   }
 
+  /**
+   * Empty the listeners stacks removing all the callbacks for all the types.
+   */
   removeAllEventListeners() {
     this.#listeners = {};
+  }
+}
+
+/**
+ * Similar to {@link EventModel} implmenets a **event model** but uses numbers
+ * instead of strings.
+ * 
+ * This model was made to use specificly with {@link module:cinescape/timer.Timer}
+ * to have this logical distinct one from another.
+ * 
+ * @augments EventModel
+ * @extends EventModel
+ */
+export
+class BreakingPointModel 
+extends EventModel {
+  /**
+   * @typedef {Number} Breakpoint
+   */
+
+  /**
+   * @typedef {Object} BreakingPointData
+   */
+
+  /**
+   * @typedef {(this: this) => void} BreakingPointCallback
+   */
+
+  /**
+   * @type {{[key: Number]: Function[]}}
+   */
+  #breakingPoints = {};
+
+  /**
+   * Adds a new breakpoint pushing the callback to the stack.
+   * 
+   * @param {Breakpoint} breakpoint
+   * @param {BreakingPointCallback} callback
+   */
+  addBreakingPoint(breakpoint, callback) {
+    breakpoint = parseInt(breakpoint);
+
+    // validate the data and do nothing if it is invalid
+    if(!breakpoint
+      || typeof(callback) != "function") return
+
+    // add the array if is not there
+    if(!this.#breakingPoints[breakpoint])
+      this.#breakingPoints[breakpoint] = [];
+    
+    const breakingPointArray = this.#breakingPoints[breakpoint];
+  
+    // push the callback to the stack
+    breakingPointArray.push(callback);
+  }
+
+  /**
+   * Adds a new breaking point pushing the callback to the stack.
+   * 
+   * @param {Breakpoint} breakpoint 
+   * @param {BreakingPointCallback} callback 
+   */
+  addBreakingPointOnce(breakpoint, callback) {
+    const callbackOnce = (...args) => {
+      this.removeBreakingPoint(breakpoint, callbackOnce);
+      callback.apply(this, args);
+    }
+
+    this.addBreakingPoint(breakpoint, callbackOnce);
+  }
+
+  /**
+   * Removes all the occurances of the callback from the type stack.
+   * 
+   * @param {Breakpoint} breakpoint 
+   * @param {BreakingPointCallback} callback 
+   */
+  removeBreakingPoint(breakpoint, callback) {
+    const breakingPointArray = this.#breakingPoints[breakpoint];
+
+    if(!breakingPointArray
+      || typeof(callback) != "function") return;
+
+    // remove all ocurances
+    for(const index = breakingPointArray.indexOf(callback);
+      breakingPointArray != -1;
+      breakingPointArray = breakingPointArray.indexOf(callback))
+        this.#breakingPoints[breakpoint].splice(index, 1)
+  }
+
+  /**
+   * Runs all breaking points callbacks in a specific breakpoint;
+   * 
+   * @param {Breakpoint} breakpoint 
+   * @param {BreakingPointData} data
+   */
+  dispatchBreakintPoint(breakpoint, ...data) {
+    breakpoint = parseInt(breakpoint);
+
+    if(!breakpoint) return;
+
+    const breakingPointArray = this.#breakingPoints[breakpoint];
+
+    if(!breakingPointArray) return
+
+    for(const callback of breakingPointArray)
+      // binds the this and sets the first argument to this
+      callback.apply(this, data);
+  }
+
+  /**
+   * Simply removes all the breakpoints defined.
+   */
+  removeAllBreakingPoint() {
+    this.#breakingPoints = {};
   }
 }

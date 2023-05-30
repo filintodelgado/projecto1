@@ -25,7 +25,7 @@ import { Timer } from "./timer.mjs";
 export { Timer };
 
 /* Event Model */
-import { EventModel } from "./eventModel.mjs";
+import { EventModel } from "./event.mjs";
 export { EventModel };
 
 /* Defautl */
