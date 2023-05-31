@@ -17,8 +17,8 @@ import * as puzzle from "./puzzle.mjs";
 export { puzzle };
 
 // import and exports individually
-import { Puzzle, PuzzleSelect, PuzzleChoose } from "./puzzle.mjs";
-export { Puzzle, PuzzleSelect, PuzzleChoose }
+import { Puzzle, PuzzleSelect } from "./puzzle.mjs";
+export { Puzzle, PuzzleSelect }
 
 /* Timer */
 import { Timer } from "./timer.mjs";

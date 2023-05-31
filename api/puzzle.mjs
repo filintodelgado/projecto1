@@ -5,8 +5,6 @@
  * @module cinescape/puzzle
  */
 
-import { puzzle } from "./main.mjs";
-
 /** 
  * Represents any Puzzle component 
  * 
@@ -104,7 +102,6 @@ extends HTMLElement {
    * 
    * @param {PuzzleEventKeyMap} type 
    * @param {Function | null} callback 
-   * @returns
    * 
    * @listens SolveEvent
    * @listens MissEvent
@@ -616,8 +613,91 @@ extends HTMLElement {
 export
 class PuzzleChoose
 extends Puzzle {
-  
+  _createErrors(message) {
+    return new Error(`${this.constructor.name}: ${message}`);
+  }
 
+  /** @type {HTMLElement} */
+  question;
+  /** @type {HTMLElement} */
+  questionElement;
+  /**
+   * @typedef {Error} QuestionElementError
+   */
+  /** Error that is throw when there is no valid question element. */
+  #QuestionElementError = this._createErrors("Question element invalid."); 
+  static questionElementName = "puzzle-question";
+
+  /**
+   * Stores the question text content on {@link question} and the element
+   * {@link questionElement}.
+   * 
+   * @throws QuestionElementError
+   */
+  _getQuestion() {
+    this.questionElement = this.querySelector(this.constructor.questionElementName);
+
+    if(!this.questionElement)
+      throw new this.#QuestionElementError;
+    
+    this.question = this.questionElement.textContent;
+  }
+
+  answers = [];
+  answersElements = [];
+  correctAnswer;
+  correctAnswerElement;
+  #AnswersElementsError = this._createErrors("There should at least 4 answer elements.");
+  static answerElementName = "puzzle-answer";
+
+  _getAnswers() {
+    const answersElements = this.querySelectorAll(this.constructor.answerElementName);
+
+    if(answersElements.length < 4)
+      throw this.#AnswersElementsError;
+    
+    for(let i = 0; i < 4; ++i) {
+      this.answersElements.push(answersElements[i])
+      this.answers.push(answersElements[i].textContent);
+    }
+
+    for(const answer of answersElements)
+      if(answer.getAttribute("correct") == ""
+      || answer.getAttribute("correct") == "true")
+        this.correctAnswerElement = answer;
+
+    this.correctAnswerElement = this.correctAnswerElement ? this.correctAnswerElement : this.answersElements[0];
+    this.correctAnswer = this.correctAnswerElement.textContent;
+  }
+
+  _getComponents() {
+    this._getQuestion();
+    this._getAnswers();
+  }
+
+  connectedCallback() {
+
+    // call it last so it does not delete the elements before we use it
+    super.connectedCallback()
+  }
+
+  static defaultShuffle = true;
+
+  get shuffle() {
+    const defaultBoolean = this.constructor.defaultShuffle;
+    const defaultValue = toString(defaultBoolean);
+
+    return this.getAttribute("shuffle") == defaultValue
+      || this.getAttribute("shuffle") == "" 
+      ? defaultBoolean : !defaultBoolean;
+  }
+
+  constructor() {
+    super();
+
+    this._createErrors();
+    this._getComponents();
+  }
 }
 
 /**
@@ -627,20 +707,12 @@ extends Puzzle {
 export
 class PuzzleSelect
 extends PuzzleChoose {
-
+  constructor() {
+    super();
+  }
 }
 
 customElements.define("puzzle-select", PuzzleSelect);
-
-// Test ground
-
-/** @type {PuzzleSelect} */ 
-const puzzleTest = document.createElement("puzzle-select");
-
-PuzzleSelect.onsolve = () => {console.log("working")}
-puzzleTest.solve()
-
-document.body.appendChild(puzzleTest);
 
 // Default export
 // import puzzle from "./puzzle.mjs"

@@ -131,6 +131,8 @@ extends BreakingPointModel {
     this.#time = value;
   }
 
+  get remainingTime() { return this.stopTime - this.time};
+
   #step = 1;
   /** 
    * How much the time should be incremented each second. 
@@ -220,6 +222,7 @@ extends BreakingPointModel {
    * @typedef {{
    *  "type": EventType | "breakpoint",
    *  "time": Seconds,
+   *  "remainingTime", Seconds
    *  "target": Timer,
    *  "paused": Boolean,
    *  "running": Boolean
@@ -237,6 +240,7 @@ extends BreakingPointModel {
     return {
       "type": type,
       "time": this.time,
+      "remainingTime": this.remainingTime,
       "target": this,
       "paused": this.paused,
       "running": this.running
