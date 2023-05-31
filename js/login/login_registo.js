@@ -33,7 +33,7 @@ function ChangeMode(){
         local.style.display = "none"
         sex.style.display = "none"
 
-        loginButton.innerHTML = '<h4>Entrar</h4>'
+        loginButton.innerHTML = '<h4 id="login-button">Entrar</h4>'
 
         login = true
     }else{
