@@ -20,6 +20,13 @@ export { puzzle };
 import { Puzzle, PuzzleSelect } from "./puzzle.mjs";
 export { Puzzle, PuzzleSelect }
 
+/* Form */
+import * as form from "./form.mjs";
+export { form };
+
+import { PuzzleForm } from "./form.mjs";
+export { PuzzleForm };
+
 /* Timer */
 import { Timer } from "./timer.mjs";
 export { Timer };

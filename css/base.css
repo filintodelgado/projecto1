@@ -3,8 +3,8 @@
 
 * {
   /* the padding and margin should be added manually */
-  padding: 0;
-  margin: 0;
+  /* padding: 0; */
+  /* margin: 0; */
   /* make so that margin and padding are included as the element */
   /* width and hight insted of adding it to */
   /* example: width: 100; hight: 100; margin: 30 */
@@ -16,5 +16,99 @@
 /* changes the font of the document */
 /* TODO change the font */
 html {
+  text-align: center;
   font-family: sans-serif;
+}
+
+/** Base Elements **/
+puzzle-question, puzzle-answers, puzzle-answer {
+  display: block;
+}
+
+/** Form **/
+form {
+  text-align: center;
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: white;
+  position: fixed;
+  max-width: 700px;
+  margin: 0 auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+form, form puzzle-question, form puzzle-answer, form button{
+  background-color: white;
+  border: 5px solid black;
+  border-radius: 20px;
+}
+
+form, form puzzle-question, form label, form button {
+  padding: 20px;
+}
+
+form button {
+  font-weight: bold;
+  display: inline-block;
+}
+
+form label {
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+  transition-duration: .2s;
+}
+
+form puzzle-answer {
+  display: inline-block;
+}
+
+form puzzle-answers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 20px;
+}
+
+form puzzle-answer.checked {
+  background-color: black;
+  color: white;
+}
+
+form input {
+  display: none;
+}
+
+.hide {
+  display: none;
+}
+
+/** Puzzle Select **/
+puzzle-select {
+  width: 100px;
+  height: 100px;
+  background-color: red;
+  display: inline-block;
+  margin: 10px;
+  border-radius: 20px;
+  transition-duration: .2s;
+}
+
+.puzzle:hover {
+  outline: 2px red solid;
+  outline-offset: 2px;
+  cursor: pointer;
+}
+
+.puzzle.solved {
+  background-color: silver;
+}
+
+.puzzle.solved:hover {
+  outline: none;
+  cursor: initial;
 }

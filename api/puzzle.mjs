@@ -5,6 +5,8 @@
  * @module cinescape/puzzle
  */
 
+import { PuzzleFormChoose } from "./form.mjs";
+
 /** 
  * Represents any Puzzle component 
  * 
@@ -165,8 +167,12 @@ extends HTMLElement {
     // trigger the event
 		this.dispatchEvent(Puzzle.SolveEvent);
 
+    this.removeEventListener("click", this.ask)
+
 		return true;
 	}
+
+  ask() {}
 
   /** 
    * @type {CustomEvent<"miss">}
@@ -643,13 +649,25 @@ extends Puzzle {
     this.question = this.questionElement.textContent;
   }
 
+  /** @type {String[]} */
   answers = [];
+  /** @type {HTMLElement[]} */
   answersElements = [];
+  /** @type {String} */
   correctAnswer;
+  /** @type {HTMLElement} */
   correctAnswerElement;
   #AnswersElementsError = this._createErrors("There should at least 4 answer elements.");
+  /** The tagname of the answers */
   static answerElementName = "puzzle-answer";
 
+  /**
+   * Parses the answers by: 
+   * 1. Collecting the first 4 answer elements and storing it in {@link answersElements};
+   * 1. Retrive their text content and storing it in {@link answers};
+   * 
+   * @throws AnswersElementError
+   */
   _getAnswers() {
     const answersElements = this.querySelectorAll(this.constructor.answerElementName);
 
@@ -670,6 +688,12 @@ extends Puzzle {
     this.correctAnswer = this.correctAnswerElement.textContent;
   }
 
+  /**
+   * Get the {@link answer} and the {@link question} and stores them.
+   * 
+   * @throws AnswersElementError
+   * @throws QuestionElementError
+   */
   _getComponents() {
     this._getQuestion();
     this._getAnswers();
@@ -681,22 +705,39 @@ extends Puzzle {
     super.connectedCallback()
   }
 
+  /** If the form should be shuffled by default */
   static defaultShuffle = true;
 
+  /** Query the shuffle property to say if the form should be shuffled. */
   get shuffle() {
     const defaultBoolean = this.constructor.defaultShuffle;
-    const defaultValue = toString(defaultBoolean);
+    const defaultValue = String(defaultBoolean);
+    const shuffle = this.getAttribute("shuffle")
 
-    return this.getAttribute("shuffle") == defaultValue
-      || this.getAttribute("shuffle") == "" 
+    return shuffle == defaultValue
+      || shuffle == "" 
       ? defaultBoolean : !defaultBoolean;
   }
+
+  static form;
+  get form() { return this.constructor.form }
+
+  ask = (function(event) {
+    event.stopPropagation();
+
+    const form = this.form;
+
+    form.ask(this);
+  }).bind(this)
 
   constructor() {
     super();
 
     this._createErrors();
     this._getComponents();
+    this.classList.add("puzzle-question");
+    this.addEventListener("click", this.ask);
+    document.body.appendChild(this.form);
   }
 }
 
@@ -707,6 +748,8 @@ extends Puzzle {
 export
 class PuzzleSelect
 extends PuzzleChoose {
+  static form = document.createElement("form", {is: "puzzle-form-choose"})
+
   constructor() {
     super();
   }

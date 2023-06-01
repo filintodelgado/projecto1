@@ -1,9 +1,8 @@
-import { Timer, PuzzleSelect } from "../api/main.mjs"
-import puzzle from "../api/puzzle.mjs"
+import { Timer, PuzzleSelect, PuzzleForm } from "../api/main.mjs"
 
 const timer = new Timer(10)
 
-timer.addEventListener("start", () => { console.log("started") })
+timer.addEventListener("pause", () => { console.log("started") })
 timer.addBreakingPoint(2, (eventData) => {
   console.log(`Event trigged at ${eventData.time} seconds.`)
 })
@@ -12,4 +11,5 @@ timer.addBreakingPoint(2, (eventData) => {
 
 /** @type {PuzzleSelect} */ 
 const puzzleTest = document.querySelector("puzzle-select");
-console.log(puzzleTest.shuffle)
+
+const form = document.querySelector("form");
