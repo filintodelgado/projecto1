@@ -128,84 +128,176 @@ extends HTMLFormElement {
 export
 class PuzzleFormChoose
 extends PuzzleForm {
-  inputs = [];
-  labels = [];
-  answers = [];
-  correctIndex;
-  correctInput;
-  checkedContainer;
-  checkedInput;
+  
+}
 
+export
+class PuzzleFormSelect
+extends PuzzleFormChoose {
+  /** 
+   * Contains all the inputs used contained in the form.
+   * 
+   * @type {HTMLInputElement[]}
+   */
+  inputs = [];
+  /** 
+   * Contains all the labels associated with the {@link input} 
+   * used contained in the form.
+   * 
+   * @type {HTMLLabelElement[]}
+   */
+  labels = [];
+  /**
+   * The answers for the {@link PuzzleSelect} currently in use.
+   * 
+   * If the {@link PuzzleSelect.shuffle} is se to true it will be
+   * ordered in a random way.
+   * 
+   * @type {String[]}
+   */
+  answers = [];
+  /**
+   * The index of the correct answer in the {@link answers} array.
+   * 
+   * Can also be used to find the correct input and label.
+   * 
+   * @type {Number}
+   */
+  correctIndex = 0;
+  /**
+   * Query the {@link inputs} list to find the correct inpput using
+   * {@link correctIndex}.
+   * 
+   * @type {HTMLInputElement}
+   */
+  get correctInput() { return this.inputs[this.correctIndex] };
+  /**
+   * Holds reference to the input that is currently checked.
+   * 
+   * @type {HTMLInputElement}
+   */
+  checkedInput;
+  /**
+   * Returns reference to the parent of the {@link checkedInput}.
+   */
+  get checkedContainer() { return this.checkedInput.parentElement };
+
+  /**
+   * Adds the class _checked_ to the parent of the provided input
+   * for styling porpose.
+   * @param {HTMLInputElement} input 
+   */
   _checkInput(input) {
     const container = input.parentElement;
     container.classList.add("checked");
   }
 
+  /**
+   * Removes the class _checked_ to the parent of the provided input
+   * for styling porpose.
+   * @param {HTMLInputElement} input 
+   */
   _uncheckInput(input) {
     const container = input.parentElement;
     container.classList.remove("checked");
   }
 
+  /**
+   * Handler for when the input is checked. It adds the class to the checked
+   * input parent and removes from the old checked input
+   */
   _inputCheckHandler = (function(event) {
+    // so that it won't trigger other events
     event.stopPropagation();
-      
+    
+    // uncheck the old input
     if(this.checkedInput)
       this._uncheckInput(this.checkedInput);
     
+    // check the new
     this._checkInput(event.target);
     
-    this.checkedContainer = container;
+    // set the new checked input
     this.checkedInput = event.target;
   }).bind(this);
 
   _createAnswers() {
+    // we will create 4 answers
     for(let i = 0; i &lt; 4; i++) {
+      // we made a container for all answers (puzzle-answers)
       const container = this.answersContainer;
+      // make a container for the answer (puzzle-answer)
       const answer = document.createElement("puzzle-answer");
+      // the input and label
       const input = document.createElement("input");
       const label = document.createElement("label");
       
+      // append all together
       answer.appendChild(label);
       answer.appendChild(input);
       container.appendChild(answer);
 
+      // the input in this case is radio
       input.type = "radio";
       input.addEventListener("change", this._inputCheckHandler);
 
+      // create a new id for the input
       input.id = `${this.constructor.name.toLowerCase()}:input:${i}`;
       label.setAttribute("for", input.id)
 
+      // not necessary but good to always have a name
       input.name = `${this.constructor.name.toLocaleLowerCase()}-option`;
       label.name = input.name;
 
-      this.answersElements.push(input);
+      // store the answer in case we need it later
+      this.answersElements.push(answer);
 
-      this.inputs.push(input);
+      // do the same with the input and label
+      this.inputs.push(input); // !import
       this.labels.push(label);
     }
   }
 
+  /**
+   * Will use what ever is in {@link answers} to fill the {@link answers}.
+   */
   _fillLabels() {
     for(let i = 0; i &lt; 4; i++)
       this.labels[i].textContent = this.answers[i];
   }
 
+  /**
+   * Tells if the input who holds the correct answer is checked or not.
+   */
   get correct() {
     return this.inputs[this.correctIndex].checked ? true : false;
   }
 
+  /**
+   * Opens the form and asks and waits for the user interation based on {@link puzzle}.
+   * @param {PuzzleFormChoose} puzzle The puzzle instance to ask for. If use reponds it
+   * wrong {@link Puzzle.miss} is trigged but if it responds right {@link Puzzle.solve}
+   * is trigged.
+   * 
+   * @fires SolveEvent
+   * @fires MissEvent
+   */
   ask(puzzle) {
+    // the super class defines some default interactions
     super.ask(puzzle);
 
+    // make a new clone of the answers so we don't afect the original one
     this.answers = cloneArray(puzzle.answers);
 
+    // shuffle is it says so
     if(puzzle.shuffle)
       this.correctIndex = shuffleArrayIndex(this.answers, puzzle.correctAnswer)
     else
       this.correctIndex = 0;
 
-    this.correctInput = this.inputs[this.correctIndex];
+    //fill the labels now that the answers are in place
     this._fillLabels();
+    // uncheck the input if there is any
     if(this.checkedInput) 
       this._uncheckInput(this.checkedInput)
   }
@@ -213,11 +305,12 @@ extends PuzzleForm {
   constructor() {
     super();
 
+    // the question is already created but he answers we create now
     this._createAnswers();
   }
 }
 
-customElements.define("puzzle-form-choose", PuzzleFormChoose, {extends: "form"});</code></pre>
+customElements.define("puzzle-form-select", PuzzleFormSelect, {extends: "form"});</code></pre>
         </article>
     </section>
 
@@ -227,13 +320,13 @@ customElements.define("puzzle-form-choose", PuzzleFormChoose, {extends: "form"})
 </div>
 
 <nav>
-    <h2><a href="index.html">CineScape</a></h2><h3>Modules</h3><ul><li><a href="module-cinescape.html">cinescape</a></li><li><a href="module-cinescape_event.html">cinescape/event</a></li><li><a href="module-cinescape_puzzle.html">cinescape/puzzle</a></li><li><a href="module-cinescape_timer.html">cinescape/timer</a></li></ul><h3>Classes</h3><ul><li><a href="PuzzleForm.html">PuzzleForm</a></li><li><a href="PuzzleFormChoose.html">PuzzleFormChoose</a></li><li><a href="module-cinescape_event.BreakingPointModel.html">BreakingPointModel</a></li><li><a href="module-cinescape_event.EventModel.html">EventModel</a></li><li><a href="module-cinescape_puzzle.Puzzle.html">Puzzle</a></li><li><a href="module-cinescape_puzzle.PuzzleChoose.html">PuzzleChoose</a></li><li><a href="module-cinescape_puzzle.PuzzleSelect.html">PuzzleSelect</a></li><li><a href="module-cinescape_timer.Timer.html">Timer</a></li></ul><h3>Events</h3><ul><li><a href="module-cinescape_timer.html#~event:BreakingPoint">BreakingPoint</a></li><li><a href="module-cinescape_puzzle.html#~event:MissEvent">MissEvent</a></li><li><a href="module-cinescape_timer.html#~event:PauseEvent">PauseEvent</a></li><li><a href="module-cinescape_timer.html#~event:ResetEvent">ResetEvent</a></li><li><a href="module-cinescape_puzzle.html#~event:SolveEvent">SolveEvent</a></li><li><a href="module-cinescape_timer.html#~event:StartEvent">StartEvent</a></li><li><a href="module-cinescape_timer.html#~event:StepEvent">StepEvent</a></li><li><a href="module-cinescape_timer.html#~event:StopEvent">StopEvent</a></li><li><a href="module-cinescape_puzzle.html#~event:UnsolveEvent">UnsolveEvent</a></li></ul><h3>Global</h3><ul><li><a href="global.html#cloneArray">cloneArray</a></li><li><a href="global.html#shuffleArray">shuffleArray</a></li><li><a href="global.html#shuffleArrayIndex">shuffleArrayIndex</a></li></ul>
+    <h2><a href="index.html">CineScape</a></h2><h3>Modules</h3><ul><li><a href="module-cinescape.html">cinescape</a></li><li><a href="module-cinescape_event.html">cinescape/event</a></li><li><a href="module-cinescape_puzzle.html">cinescape/puzzle</a></li><li><a href="module-cinescape_timer.html">cinescape/timer</a></li></ul><h3>Classes</h3><ul><li><a href="PuzzleForm.html">PuzzleForm</a></li><li><a href="PuzzleFormChoose.html">PuzzleFormChoose</a></li><li><a href="PuzzleFormSelect.html">PuzzleFormSelect</a></li><li><a href="module-cinescape_event.BreakingPointModel.html">BreakingPointModel</a></li><li><a href="module-cinescape_event.EventModel.html">EventModel</a></li><li><a href="module-cinescape_puzzle.Puzzle.html">Puzzle</a></li><li><a href="module-cinescape_puzzle.PuzzleChoose.html">PuzzleChoose</a></li><li><a href="module-cinescape_puzzle.PuzzleSelect.html">PuzzleSelect</a></li><li><a href="module-cinescape_timer.Timer.html">Timer</a></li></ul><h3>Events</h3><ul><li><a href="module-cinescape_timer.html#~event:BreakingPoint">BreakingPoint</a></li><li><a href="module-cinescape_puzzle.html#~event:MissEvent">MissEvent</a></li><li><a href="module-cinescape_timer.html#~event:PauseEvent">PauseEvent</a></li><li><a href="module-cinescape_timer.html#~event:ResetEvent">ResetEvent</a></li><li><a href="module-cinescape_puzzle.html#~event:SolveEvent">SolveEvent</a></li><li><a href="module-cinescape_timer.html#~event:StartEvent">StartEvent</a></li><li><a href="module-cinescape_timer.html#~event:StepEvent">StepEvent</a></li><li><a href="module-cinescape_timer.html#~event:StopEvent">StopEvent</a></li><li><a href="module-cinescape_puzzle.html#~event:UnsolveEvent">UnsolveEvent</a></li></ul><h3>Global</h3><ul><li><a href="global.html#cloneArray">cloneArray</a></li><li><a href="global.html#shuffleArray">shuffleArray</a></li><li><a href="global.html#shuffleArrayIndex">shuffleArrayIndex</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Jun 01 2023 10:29:20 GMT+0100 (Western European Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Fri Jun 02 2023 00:16:57 GMT+0100 (Western European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

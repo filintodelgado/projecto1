@@ -748,11 +748,8 @@ extends Puzzle {
 export
 class PuzzleSelect
 extends PuzzleChoose {
-  static form = document.createElement("form", {is: "puzzle-form-choose"})
-
-  constructor() {
-    super();
-  }
+  /** The Form that all the instances should use. */
+  static form = document.createElement("form", {is: "puzzle-form-select"})
 }
 
 customElements.define("puzzle-select", PuzzleSelect);
