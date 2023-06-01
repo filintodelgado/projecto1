@@ -1,4 +1,4 @@
-let darkmode = truenavbar
+let darkmode = true
 
 let theme_homepage = document.getElementById("theme-homepage")
 theme_homepage.addEventListener("click", function(){
@@ -9,12 +9,18 @@ theme_homepage.addEventListener("click", function(){
 function HomepageTheme(){
     let logo = document.getElementById("logo-header")
     let burger = document.getElementById("burger-icon")
+    let imgEscape = document.getElementById("fullscreen-image")
 
+
+    
     if(darkmode) {
         logo.src = "/assets/logo_black.png"
+        imgEscape.src="/assets/escapeRoom/Back_Branco.png"
         darkmode = false;
     }else {
         logo.src = "/assets/logo_white.png"
+        imgEscape.src="/assets/escapeRoom/Back_Preto.png"
+
         darkmode = true;
     }
 

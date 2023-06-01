@@ -1,0 +1,108 @@
+:root {
+    --primary: white;
+    --secondary: black;
+}
+
+body {
+    background-color: var(--secondary);
+    display: flex;
+    height: 100vh;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    font-family: Arial;
+}
+
+body.light {
+    --primary: black;
+    --secondary: white;
+}
+
+.main {
+    width: 100%;
+    border: dashed var(--primary);
+    color: white;
+    display: flex;
+}
+
+.main-content {
+    width: 30%;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 2%;
+}
+
+h1{
+    font-weight: lighter;
+    color: var(--primary);
+    margin: 0;
+}
+
+.bottom-menu {
+    width: 100%;
+    position: absolute;
+    margin: 0 auto;
+    padding: 10px;
+    bottom: 0;
+    background-color: var(--secondary);
+    border-top: solid var(--primary);
+}
+
+#voltar-menu {
+    font-size: 20px;
+    color: var(--primary);
+    display: inline-block;
+    margin: 0;
+}
+
+.navbar-left {
+    float: left;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-right {
+    float: right;
+    display: flex;
+    align-items: center;
+}
+
+@media only screen and (max-width: 400px) {
+    .bottom-menu {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .navbar-left,
+    .navbar-right {
+        float: none;
+    }
+}.arrow-left,.arrow-left:hover{
+    width:50px;
+    height:50px;
+    fill: var(--primary);
+    cursor: pointer;
+    margin:10px;
+}
+
+.color-mode,.color-mode:hover{
+    content: url("../assets/moon.svg");
+    height: 25px;
+    margin:15px;
+    cursor: pointer;
+}
+
+.light .color-mode,.light .color-mode:hover{
+    content: url("../assets/sun.svg");
+    height: 25px;
+    margin:15px;
+    cursor: pointer;
+}
+.field{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 2%;
+}
