@@ -25,6 +25,7 @@ function loginVerifi() {
         //verifica se coeencidem
         if (Email == email && Pass == pass) {
             alert("Logado")
+            window.location.href = 'escapeRoom.html';
         } else {
             alert("erro")
         }

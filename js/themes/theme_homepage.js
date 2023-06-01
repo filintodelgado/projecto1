@@ -1,4 +1,4 @@
-let darkmode = true
+let darkmode = truenavbar
 
 let theme_homepage = document.getElementById("theme-homepage")
 theme_homepage.addEventListener("click", function(){
@@ -11,10 +11,10 @@ function HomepageTheme(){
     let burger = document.getElementById("burger-icon")
 
     if(darkmode) {
-        logo.src = "assets/logo_black.png"
+        logo.src = "/assets/logo_black.png"
         darkmode = false;
     }else {
-        logo.src = "assets/logo_white.png"
+        logo.src = "/assets/logo_white.png"
         darkmode = true;
     }
 
