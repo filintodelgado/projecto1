@@ -6,8 +6,11 @@
  */
 
 /**
- * Defines a *Event Mode* similar to those found on {@link HTMLElement},
+ * Defines a **Event Model** similar to those found on {@link HTMLElement},
  * that can be extended to easily implement the event model uppon a class.
+ * 
+ * **Do not implement on classes that extends {@link HTMLElement} as it
+ * will overwrite the default _event model_**.
  * 
  * Event thought it is similar to the {@link HTMLElement} Event Model it 
  * implements adcional methods not found in that model like 
@@ -47,6 +50,7 @@ class EventModel {
    * }} EventData
    */
 
+  static listeners = {};
   /**
    * The listener is a function that works as a callback when a the especific event
    * is trigged.
@@ -57,7 +61,28 @@ class EventModel {
   /**
    * @type {{[key: String]:  Array<EventListener>}}
    */
-  #listeners = {};
+  listeners = {};
+
+  /**
+   * Appends a new callback listener to the class stack 
+   * that will be dispatched when the event
+   * is trigged usign {@link dispatchEvent} on any instance.
+   * 
+   * @param {EventType} type 
+   * @param {EventListener} listener 
+   */
+  static addEventListener(type, listener) {
+    // typecheck
+    if(typeof(listener) != "function")
+      return;
+
+    // create the array if is not already there
+    if(!this.listeners[type])
+      this.listeners[type] = [];
+
+    // add the method to the stack
+    this.listeners[type].push(listener);
+  }
 
   /**
    * Appends a new callback listener that will be dispatched when the event
@@ -67,28 +92,23 @@ class EventModel {
    * @param {EventListener} listener 
    */
   addEventListener(type, listener) {
-    if(typeof(listener) != "function")
-      return;
-
-    // create the array if is not already there
-    if(!this.#listeners[type])
-      this.#listeners[type] = [];
-
-    this.#listeners[type].push(listener);
+    // instead of implementing the method upon the intance we can call the static
+    // method with the this keyword pointing to the instance
+    this.constructor.addEventListener.apply(this, [type, listener]);
   }
 
   /**
-   * Removes the event listener in target's event listener list with the 
-   * same type.
+   * Remove the event listener from the class stack with the same type.
    * 
    * @param {EventType} type 
    * @param {EventListener} listener 
+   * @returns 
    */
-  removeEventListener(type, listener) {
+  static removeEventListener(type, listener) {
     if(typeof(listener) != "function")
       return;
 
-    const eventList = this.#listeners[type]
+    const eventList = this.listeners[type]
     if(!eventList) return;
 
     // remove all the occurences
@@ -99,12 +119,27 @@ class EventModel {
   }
 
   /**
-   * Adds a listener to the event that is removed once dispatched.
+   * Removes the event listener in target's event listener stack with the 
+   * same type.
    * 
    * @param {EventType} type 
    * @param {EventListener} listener 
    */
-  addEventListenerOnce(type, listener) {
+  removeEventListener(type, listener) {
+    // call the static method as if it was instance method
+    this.constructor.removeEventListener.apply(this, [type, listener]);
+  }
+
+  /**
+   * Adds a listener to the class stack itself that will will be dispatched 
+   * alongside with the instances equivalents.
+   * 
+   * **Will be remove once run**.
+   * 
+   * @param {EventType} type 
+   * @param {EventListener} listener 
+   */
+  static addEventListenerOnce(type, listener) {
     const onceEvent = (...args) => {
       this.removeEventListener(type, onceEvent);
       // use the apply instead of bind so that the function is
@@ -113,7 +148,20 @@ class EventModel {
       listener.apply(this, args);
     }
 
+    // event if the method is called as a instance method
+    // this method will be called as a instance method without much
+    // to do
     this.addEventListener(type, onceEvent);
+  }
+
+  /**
+   * Adds a listener for the event to the instance that is removed once dispatched.
+   * 
+   * @param {EventType} type 
+   * @param {EventListener} listener 
+   */
+  addEventListenerOnce(type, listener) {
+    this.constructor.addEventListenerOnce.apply(this, [type, listener]);
   }
 
   /**
@@ -123,20 +171,27 @@ class EventModel {
    * @param {EventType} type 
    * @returns {OnEventType}
    */
-  _onEventName(type) {
+  static _onEventName(type) {
     return `on${type}`;
   }
 
+  /** 
+   * Simply returns what is the property name of the on[event] property. 
+   * Calls {@link Timer._onEventName}.
+   */
+  _onEventName(type) {
+    return this.constructor._onEventName.apply(this, [type])
+  }
+
   /**
-   * Triggers/Dispatch the event by calling all the listeners callback defined
-   * for the event type.
+   * Run all the callbacks in the {@link listeners} stack and 
+   * the on[event] equivalents.
    * 
    * @param {EventType} type 
-   * @param  {EventData} eventData Will be passed as the first argument to the
-   * callback.
+   * @param  {EventData} eventData 
    */
-  dispatchEvent(type, ...eventData) {
-    const eventList = this.#listeners[type];
+  _runCallbacks(type, ...eventData) {
+    const eventList = this.listeners[type];
     const onEvent = this[this._onEventName(type)];
 
     // if there is no functions in the stack and no function in the property
@@ -157,10 +212,42 @@ class EventModel {
   }
 
   /**
+   * Triggers/Dispatch the event by calling all the listeners callback defined
+   * for the event type.
+   * 
+   * First call the callbacks defined for the instance and them those defined
+   * in the class itself.
+   * 
+   * @param {EventType} type 
+   * @param  {EventData} eventData Will be passed as the first argument to the
+   * callback.
+   */
+  dispatchEvent(type, ...eventData) {
+    const handler = this._runCallbacks;
+
+    /* Run instance callbacks */
+    handler.apply(this, [type, ...eventData])
+
+    /* Run static callbacks */
+    handler.apply(this.constructor, [type, ...eventData]);
+  }
+
+  /** 
+   * Remove all the static callback previouslly defined. 
+   * Does not remove the callbacks defined in instances, for that use 
+   * {@link removeAllEventListeners}
+   */
+  static removeAllEventListeners() {
+    this.listeners = {};
+  }
+
+  /**
    * Empty the listeners stacks removing all the callbacks for all the types.
+   * Does not remove the static callbacks, for that use 
+   * {@link EventModel.removeAllEventListeners}.
    */
   removeAllEventListeners() {
-    this.#listeners = {};
+    this.constructor.removeAllEventListeners.apply(this);
   }
 }
 

@@ -31,8 +31,10 @@
         <h2><span class="attribs"><span class="type-signature"></span></span>
             <span class="ancestors"><a href="module-cinescape_event.html">cinescape/event</a>.</span>EventModel<span class="signature">()</span><span class="type-signature"></span></h2>
         
-            <div class="class-description"><p>Defines a <em>Event Mode</em> similar to those found on <code>HTMLElement</code>,
+            <div class="class-description"><p>Defines a <strong>Event Model</strong> similar to those found on <code>HTMLElement</code>,
 that can be extended to easily implement the event model uppon a class.</p>
+<p><strong>Do not implement on classes that extends <code>HTMLElement</code> as it
+will overwrite the default <em>event model</em></strong>.</p>
 <p>Event thought it is similar to the <code>HTMLElement</code> Event Model it
 implements adcional methods not found in that model like
 <code>addEventListenerOnce</code> that removes the callback
@@ -115,7 +117,7 @@ from the context, use function syntax <code>(function() {})</code> instead.</li>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event.mjs.html">event.mjs</a>, <a href="event.mjs.html#line33">line 33</a>
+        <a href="event.mjs.html">event.mjs</a>, <a href="event.mjs.html#line36">line 36</a>
     </li></ul></dd>
     
 
@@ -161,6 +163,68 @@ from the context, use function syntax <code>(function() {})</code> instead.</li>
     
 
     
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="listeners"><span class="type-signature"></span>listeners<span class="type-signature"></span></h4>
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="event.mjs.html">event.mjs</a>, <a href="event.mjs.html#line64">line 64</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
 
     
         <h3 class="subsection-title">Methods</h3>
@@ -171,7 +235,7 @@ from the context, use function syntax <code>(function() {})</code> instead.</li>
     
 
     
-    <h4 class="name" id="_onEventName"><span class="type-signature"></span>_onEventName<span class="signature">(type)</span><span class="type-signature"> &rarr; {OnEventType}</span></h4>
+    <h4 class="name" id="_onEventName"><span class="type-signature"></span>_onEventName<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -179,8 +243,97 @@ from the context, use function syntax <code>(function() {})</code> instead.</li>
 
 
 <div class="description">
-    <p>As <code>dispatchEvent</code> also dispach property event formated like
-on[eventType] this utilily function returns the name of the property.</p>
+    <p>Simply returns what is the property name of the on[event] property.
+Calls <code>Timer._onEventName</code>.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="event.mjs.html">event.mjs</a>, <a href="event.mjs.html#line182">line 182</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="_runCallbacks"><span class="type-signature"></span>_runCallbacks<span class="signature">(type, &hellip;eventData)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Run all the callbacks in the <code>listeners</code> stack and
+the on[event] equivalents.</p>
 </div>
 
 
@@ -203,6 +356,8 @@ on[eventType] this utilily function returns the name of the property.</p>
 
         <th>Type</th>
 
+        
+        <th>Attributes</th>
         
 
         
@@ -228,6 +383,47 @@ on[eventType] this utilily function returns the name of the property.</p>
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>eventData</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">EventData</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                    &lt;repeatable><br>
+                
+                </td>
             
 
             
@@ -273,7 +469,7 @@ on[eventType] this utilily function returns the name of the property.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event.mjs.html">event.mjs</a>, <a href="event.mjs.html#line126">line 126</a>
+        <a href="event.mjs.html">event.mjs</a>, <a href="event.mjs.html#line193">line 193</a>
     </li></ul></dd>
     
 
@@ -298,24 +494,6 @@ on[eventType] this utilily function returns the name of the property.</p>
 
 
 
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">OnEventType</span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
@@ -452,7 +630,7 @@ is trigged usign <code>dispatchEvent</code>.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event.mjs.html">event.mjs</a>, <a href="event.mjs.html#line69">line 69</a>
+        <a href="event.mjs.html">event.mjs</a>, <a href="event.mjs.html#line94">line 94</a>
     </li></ul></dd>
     
 
@@ -496,7 +674,1172 @@ is trigged usign <code>dispatchEvent</code>.</p>
 
 
 <div class="description">
-    <p>Adds a listener to the event that is removed once dispatched.</p>
+    <p>Adds a listener for the event to the instance that is removed once dispatched.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">module:event~EventType</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>listener</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">module:event~EventListener</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="event.mjs.html">event.mjs</a>, <a href="event.mjs.html#line163">line 163</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="dispatchEvent"><span class="type-signature"></span>dispatchEvent<span class="signature">(type, &hellip;eventData)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Triggers/Dispatch the event by calling all the listeners callback defined
+for the event type.</p>
+<p>First call the callbacks defined for the instance and them those defined
+in the class itself.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">module:event~EventType</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>eventData</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">EventData</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                    &lt;repeatable><br>
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Will be passed as the first argument to the
+callback.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="event.mjs.html">event.mjs</a>, <a href="event.mjs.html#line225">line 225</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="removeAllEventListeners"><span class="type-signature"></span>removeAllEventListeners<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Empty the listeners stacks removing all the callbacks for all the types.
+Does not remove the static callbacks, for that use
+<code>EventModel.removeAllEventListeners</code>.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="event.mjs.html">event.mjs</a>, <a href="event.mjs.html#line249">line 249</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="removeEventListener"><span class="type-signature"></span>removeEventListener<span class="signature">(type, listener)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Removes the event listener in target's event listener stack with the
+same type.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">module:event~EventType</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>listener</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">module:event~EventListener</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="event.mjs.html">event.mjs</a>, <a href="event.mjs.html#line128">line 128</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="._onEventName"><span class="type-signature">(static) </span>_onEventName<span class="signature">(type)</span><span class="type-signature"> &rarr; {OnEventType}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>As <code>dispatchEvent</code> also dispach property event formated like
+on[eventType] this utilily function returns the name of the property.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">module:event~EventType</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="event.mjs.html">event.mjs</a>, <a href="event.mjs.html#line174">line 174</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">OnEventType</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".addEventListener"><span class="type-signature">(static) </span>addEventListener<span class="signature">(type, listener)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Appends a new callback listener to the class stack
+that will be dispatched when the event
+is trigged usign <code>dispatchEvent</code> on any instance.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">module:event~EventType</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>listener</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">module:event~EventListener</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="event.mjs.html">event.mjs</a>, <a href="event.mjs.html#line74">line 74</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".addEventListenerOnce"><span class="type-signature">(static) </span>addEventListenerOnce<span class="signature">(type, listener)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Adds a listener to the class stack itself that will will be dispatched
+alongside with the instances equivalents.</p>
+<p><strong>Will be remove once run</strong>.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">module:event~EventType</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>listener</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">module:event~EventListener</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="event.mjs.html">event.mjs</a>, <a href="event.mjs.html#line142">line 142</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".removeAllEventListeners"><span class="type-signature">(static) </span>removeAllEventListeners<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Remove all the static callback previouslly defined.
+Does not remove the callbacks defined in instances, for that use
+<code>removeAllEventListeners</code></p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="event.mjs.html">event.mjs</a>, <a href="event.mjs.html#line240">line 240</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".removeEventListener"><span class="type-signature">(static) </span>removeEventListener<span class="signature">(type, listener)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Remove the event listener from the class stack with the same type.</p>
 </div>
 
 
@@ -637,215 +1980,33 @@ is trigged usign <code>dispatchEvent</code>.</p>
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+    
 
 
 
 
 
         
-            
-
     
 
     
-    <h4 class="name" id="dispatchEvent"><span class="type-signature"></span>dispatchEvent<span class="signature">(type, &hellip;eventData)</span><span class="type-signature"></span></h4>
-    
+        <h3 class="subsection-title">Type Definitions</h3>
 
-    
+        
+                
+<h4 class="name" id="listeners">listeners</h4>
+
 
 
 
 <div class="description">
-    <p>Triggers/Dispatch the event by calling all the listeners callback defined
-for the event type.</p>
+    <p>Data that is passed as the first argument to the listener callback.</p>
 </div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>type</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">module:event~EventType</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>eventData</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">EventData</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                    &lt;repeatable><br>
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>Will be passed as the first argument to the
-callback.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event.mjs.html">event.mjs</a>, <a href="event.mjs.html#line138">line 138</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="removeAllEventListeners"><span class="type-signature"></span>removeAllEventListeners<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Empty the listeners stacks removing all the callbacks for all the types.</p>
-</div>
-
-
-
-
-
-
 
 
 
@@ -882,7 +2043,7 @@ callback.</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event.mjs.html">event.mjs</a>, <a href="event.mjs.html#line162">line 162</a>
+        <a href="event.mjs.html">event.mjs</a>, <a href="event.mjs.html#line53">line 53</a>
     </li></ul></dd>
     
 
@@ -898,184 +2059,7 @@ callback.</p></td>
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
             
-
-    
-
-    
-    <h4 class="name" id="removeEventListener"><span class="type-signature"></span>removeEventListener<span class="signature">(type, listener)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Removes the event listener in target's event listener list with the
-same type.</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>type</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">module:event~EventType</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>listener</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">module:event~EventListener</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event.mjs.html">event.mjs</a>, <a href="event.mjs.html#line87">line 87</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-    
-
     
 
     
@@ -1089,13 +2073,13 @@ same type.</p>
 </div>
 
 <nav>
-    <h2><a href="index.html">CineScape</a></h2><h3>Modules</h3><ul><li><a href="module-cinescape.html">cinescape</a></li><li><a href="module-cinescape_event.html">cinescape/event</a></li><li><a href="module-cinescape_puzzle.html">cinescape/puzzle</a></li><li><a href="module-cinescape_timer.html">cinescape/timer</a></li></ul><h3>Classes</h3><ul><li><a href="module-cinescape_event.BreakingPointModel.html">BreakingPointModel</a></li><li><a href="module-cinescape_event.EventModel.html">EventModel</a></li><li><a href="module-cinescape_puzzle.Puzzle.html">Puzzle</a></li><li><a href="module-cinescape_puzzle.PuzzleChoose.html">PuzzleChoose</a></li><li><a href="module-cinescape_puzzle.PuzzleSelect.html">PuzzleSelect</a></li><li><a href="module-cinescape_timer.Timer.html">Timer</a></li></ul><h3>Events</h3><ul><li><a href="module-cinescape_timer.html#~event:BreakingPoint">BreakingPoint</a></li><li><a href="module-cinescape_puzzle.html#~event:MissEvent">MissEvent</a></li><li><a href="module-cinescape_timer.html#~event:PauseEvent">PauseEvent</a></li><li><a href="module-cinescape_timer.html#~event:ResetEvent">ResetEvent</a></li><li><a href="module-cinescape_puzzle.html#~event:SolveEvent">SolveEvent</a></li><li><a href="module-cinescape_timer.html#~event:StartEvent">StartEvent</a></li><li><a href="module-cinescape_timer.html#~event:StepEvent">StepEvent</a></li><li><a href="module-cinescape_timer.html#~event:StopEvent">StopEvent</a></li><li><a href="module-cinescape_puzzle.html#~event:UnsolveEvent">UnsolveEvent</a></li></ul>
+    <h2><a href="index.html">CineScape</a></h2><h3>Modules</h3><ul><li><a href="module-cinescape.html">cinescape</a></li><li><a href="module-cinescape_event.html">cinescape/event</a></li><li><a href="module-cinescape_puzzle.html">cinescape/puzzle</a></li><li><a href="module-cinescape_timer.html">cinescape/timer</a></li></ul><h3>Classes</h3><ul><li><a href="PuzzleForm.html">PuzzleForm</a></li><li><a href="PuzzleFormChoose.html">PuzzleFormChoose</a></li><li><a href="module-cinescape_event.BreakingPointModel.html">BreakingPointModel</a></li><li><a href="module-cinescape_event.EventModel.html">EventModel</a></li><li><a href="module-cinescape_puzzle.Puzzle.html">Puzzle</a></li><li><a href="module-cinescape_puzzle.PuzzleChoose.html">PuzzleChoose</a></li><li><a href="module-cinescape_puzzle.PuzzleSelect.html">PuzzleSelect</a></li><li><a href="module-cinescape_timer.Timer.html">Timer</a></li></ul><h3>Events</h3><ul><li><a href="module-cinescape_timer.html#~event:BreakingPoint">BreakingPoint</a></li><li><a href="module-cinescape_puzzle.html#~event:MissEvent">MissEvent</a></li><li><a href="module-cinescape_timer.html#~event:PauseEvent">PauseEvent</a></li><li><a href="module-cinescape_timer.html#~event:ResetEvent">ResetEvent</a></li><li><a href="module-cinescape_puzzle.html#~event:SolveEvent">SolveEvent</a></li><li><a href="module-cinescape_timer.html#~event:StartEvent">StartEvent</a></li><li><a href="module-cinescape_timer.html#~event:StepEvent">StepEvent</a></li><li><a href="module-cinescape_timer.html#~event:StopEvent">StopEvent</a></li><li><a href="module-cinescape_puzzle.html#~event:UnsolveEvent">UnsolveEvent</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Wed May 31 2023 16:19:13 GMT+0100 (Western European Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Jun 01 2023 03:47:06 GMT+0100 (Western European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

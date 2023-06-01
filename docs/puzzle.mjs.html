@@ -33,6 +33,8 @@
  * @module cinescape/puzzle
  */
 
+import { PuzzleFormChoose } from "./form.mjs";
+
 /** 
  * Represents any Puzzle component 
  * 
@@ -671,13 +673,25 @@ extends Puzzle {
     this.question = this.questionElement.textContent;
   }
 
+  /** @type {String[]} */
   answers = [];
+  /** @type {HTMLElement[]} */
   answersElements = [];
+  /** @type {String} */
   correctAnswer;
+  /** @type {HTMLElement} */
   correctAnswerElement;
   #AnswersElementsError = this._createErrors("There should at least 4 answer elements.");
+  /** The tagname of the answers */
   static answerElementName = "puzzle-answer";
 
+  /**
+   * Parses the answers by: 
+   * 1. Collecting the first 4 answer elements and storing it in {@link answersElements};
+   * 1. Retrive their text content and storing it in {@link answers};
+   * 
+   * @throws AnswersElementError
+   */
   _getAnswers() {
     const answersElements = this.querySelectorAll(this.constructor.answerElementName);
 
@@ -698,6 +712,12 @@ extends Puzzle {
     this.correctAnswer = this.correctAnswerElement.textContent;
   }
 
+  /**
+   * Get the {@link answer} and the {@link question} and stores them.
+   * 
+   * @throws AnswersElementError
+   * @throws QuestionElementError
+   */
   _getComponents() {
     this._getQuestion();
     this._getAnswers();
@@ -709,8 +729,10 @@ extends Puzzle {
     super.connectedCallback()
   }
 
+  /** If the form should be shuffled by default */
   static defaultShuffle = true;
 
+  /** Query the shuffle property to say if the form should be shuffled. */
   get shuffle() {
     const defaultBoolean = this.constructor.defaultShuffle;
     const defaultValue = toString(defaultBoolean);
@@ -720,11 +742,26 @@ extends Puzzle {
       ? defaultBoolean : !defaultBoolean;
   }
 
+  static form;
+  get form() { return this.constructor.form }
+
+  ask = (function(event) {
+    event.stopPropagation();
+    console.log("a")
+
+    const form = this.form;
+
+    form.ask(this);
+  }).bind(this)
+
   constructor() {
     super();
 
     this._createErrors();
     this._getComponents();
+    this.classList.add("puzzle-question");
+    this.addEventListener("click", this.ask);
+    document.body.appendChild(this.form);
   }
 }
 
@@ -735,6 +772,8 @@ extends Puzzle {
 export
 class PuzzleSelect
 extends PuzzleChoose {
+  static form = document.createElement("form", {is: "puzzle-form-choose"})
+
   constructor() {
     super();
   }
@@ -754,13 +793,13 @@ export default { PuzzleSelect }</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">CineScape</a></h2><h3>Modules</h3><ul><li><a href="module-cinescape.html">cinescape</a></li><li><a href="module-cinescape_event.html">cinescape/event</a></li><li><a href="module-cinescape_puzzle.html">cinescape/puzzle</a></li><li><a href="module-cinescape_timer.html">cinescape/timer</a></li></ul><h3>Classes</h3><ul><li><a href="module-cinescape_event.BreakingPointModel.html">BreakingPointModel</a></li><li><a href="module-cinescape_event.EventModel.html">EventModel</a></li><li><a href="module-cinescape_puzzle.Puzzle.html">Puzzle</a></li><li><a href="module-cinescape_puzzle.PuzzleChoose.html">PuzzleChoose</a></li><li><a href="module-cinescape_puzzle.PuzzleSelect.html">PuzzleSelect</a></li><li><a href="module-cinescape_timer.Timer.html">Timer</a></li></ul><h3>Events</h3><ul><li><a href="module-cinescape_timer.html#~event:BreakingPoint">BreakingPoint</a></li><li><a href="module-cinescape_puzzle.html#~event:MissEvent">MissEvent</a></li><li><a href="module-cinescape_timer.html#~event:PauseEvent">PauseEvent</a></li><li><a href="module-cinescape_timer.html#~event:ResetEvent">ResetEvent</a></li><li><a href="module-cinescape_puzzle.html#~event:SolveEvent">SolveEvent</a></li><li><a href="module-cinescape_timer.html#~event:StartEvent">StartEvent</a></li><li><a href="module-cinescape_timer.html#~event:StepEvent">StepEvent</a></li><li><a href="module-cinescape_timer.html#~event:StopEvent">StopEvent</a></li><li><a href="module-cinescape_puzzle.html#~event:UnsolveEvent">UnsolveEvent</a></li></ul>
+    <h2><a href="index.html">CineScape</a></h2><h3>Modules</h3><ul><li><a href="module-cinescape.html">cinescape</a></li><li><a href="module-cinescape_event.html">cinescape/event</a></li><li><a href="module-cinescape_puzzle.html">cinescape/puzzle</a></li><li><a href="module-cinescape_timer.html">cinescape/timer</a></li></ul><h3>Classes</h3><ul><li><a href="PuzzleForm.html">PuzzleForm</a></li><li><a href="PuzzleFormChoose.html">PuzzleFormChoose</a></li><li><a href="module-cinescape_event.BreakingPointModel.html">BreakingPointModel</a></li><li><a href="module-cinescape_event.EventModel.html">EventModel</a></li><li><a href="module-cinescape_puzzle.Puzzle.html">Puzzle</a></li><li><a href="module-cinescape_puzzle.PuzzleChoose.html">PuzzleChoose</a></li><li><a href="module-cinescape_puzzle.PuzzleSelect.html">PuzzleSelect</a></li><li><a href="module-cinescape_timer.Timer.html">Timer</a></li></ul><h3>Events</h3><ul><li><a href="module-cinescape_timer.html#~event:BreakingPoint">BreakingPoint</a></li><li><a href="module-cinescape_puzzle.html#~event:MissEvent">MissEvent</a></li><li><a href="module-cinescape_timer.html#~event:PauseEvent">PauseEvent</a></li><li><a href="module-cinescape_timer.html#~event:ResetEvent">ResetEvent</a></li><li><a href="module-cinescape_puzzle.html#~event:SolveEvent">SolveEvent</a></li><li><a href="module-cinescape_timer.html#~event:StartEvent">StartEvent</a></li><li><a href="module-cinescape_timer.html#~event:StepEvent">StepEvent</a></li><li><a href="module-cinescape_timer.html#~event:StopEvent">StopEvent</a></li><li><a href="module-cinescape_puzzle.html#~event:UnsolveEvent">UnsolveEvent</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Wed May 31 2023 16:19:13 GMT+0100 (Western European Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Jun 01 2023 03:47:06 GMT+0100 (Western European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>
