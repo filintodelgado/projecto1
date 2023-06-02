@@ -7,6 +7,16 @@
 
 import { PuzzleFormChoose } from "./form.mjs";
 
+/**
+ * Puzzle in a gerenic Object Form.
+ * Use this instead of {@link JSON}.
+ * 
+ * @typedef {{
+*  "id": String,
+*  "solved": Boolean
+* }} PuzzleObject
+*/
+
 /** 
  * Represents any Puzzle component 
  * 
@@ -609,6 +619,20 @@ extends HTMLElement {
     super();
 
     this._appendInstance();
+  }
+
+  /**
+   * Turns the instance into a generic object.
+   * 
+   * @returns {PuzzleObject} An object containing the state of the puzzle:
+   * * Current {@link id} of the object;
+   * * If the puzzle is solved or not;
+   */
+  objectify() {
+    return {
+      "id": this.id,
+      "solved": this.solved
+    };
   }
 }
 

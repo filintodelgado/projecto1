@@ -1,4 +1,4 @@
-import { Timer, PuzzleSelect, PuzzleForm } from "../api/main.mjs"
+import { Timer, Level } from "../api/main.mjs"
 
 const timer = new Timer(10)
 
@@ -13,3 +13,8 @@ timer.addBreakingPoint(2, (eventData) => {
 const puzzleTest = document.querySelector("puzzle-select");
 
 const form = document.querySelector("form");
+
+const level = new Level();
+
+console.log(puzzleTest.objectify());
+console.log(level.puzzles)

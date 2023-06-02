@@ -24,8 +24,8 @@ export { Puzzle, PuzzleSelect }
 import * as form from "./form.mjs";
 export { form };
 
-import { PuzzleForm } from "./form.mjs";
-export { PuzzleForm };
+import { PuzzleFormSelect } from "./form.mjs";
+export { PuzzleFormSelect };
 
 /* Timer */
 import { Timer } from "./timer.mjs";
@@ -35,5 +35,15 @@ export { Timer };
 import { EventModel } from "./event.mjs";
 export { EventModel };
 
+/* Level */
+import { Level } from "./level.mjs"
+export { Level };
+
 /* Defautl */
-export default { PuzzleSelect, Timer}
+export default 
+{ 
+  PuzzleSelect,
+  Timer,
+  PuzzleFormSelect,
+  Level
+}

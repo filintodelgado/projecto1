@@ -160,6 +160,7 @@ extends PuzzleFormChoose {
    * @param {HTMLInputElement} input 
    */
   _checkInput(input) {
+    input.checked = true;
     const container = input.parentElement;
     container.classList.add("checked");
   }
@@ -170,6 +171,7 @@ extends PuzzleFormChoose {
    * @param {HTMLInputElement} input 
    */
   _uncheckInput(input) {
+    input.checked = false;
     const container = input.parentElement;
     container.classList.remove("checked");
   }
