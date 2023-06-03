@@ -15,6 +15,3 @@ const puzzleTest = document.querySelector("puzzle-select");
 const form = document.querySelector("form");
 
 const level = new Level();
-
-console.log(puzzleTest.objectify());
-console.log(level.puzzles)

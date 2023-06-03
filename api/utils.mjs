@@ -50,3 +50,21 @@ function shuffleArrayIndex(array, element) {
   shuffleArray(array);
   return array.indexOf(element);
 }
+
+/**
+ * Generates numbers.
+ * 
+ * @returns A {@link Generator} Object in which we can call {@link Generator.next}
+ * to generate the next number.
+ * @generator
+ */
+export
+function* numberGenerator(start=0, stop=null) {
+  let number = start;
+
+  // if there is a stop
+  while(stop 
+    ? stop >= start
+    : true)
+    yield number++;
+}
