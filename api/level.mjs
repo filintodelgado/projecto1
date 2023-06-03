@@ -11,6 +11,10 @@ class Level {
     // `level`
     if(!name)
       name = document.body.getAttribute("level").trim();
+
+    // if there is no name in the body we consider that this is not a level
+    if(!name)
+      return null;
     
     this.name = name;
   }
@@ -76,4 +80,14 @@ class Level {
   get numberOfPuzzlesUnsolved() {
     return this.puzzlesUnsolved.length;
   }
+
+  objectify() {}
 }
+
+/** 
+ * The current level. `null` if there is no level.
+ * 
+ * @type {Level | null}
+ */
+export
+const currentLevel = new Level;

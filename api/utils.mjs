@@ -68,3 +68,41 @@ function* numberGenerator(start=0, stop=null) {
     : true)
     yield number++;
 }
+
+/**
+ * Does some basic cleanup on the provided string.
+ * 
+ * @param {String} string 
+ * @returns 
+ */
+export
+function cleanup(string) {
+  return string.trim()
+}
+
+/**
+ * @typedef { {
+ *  autosave: Boolean,
+ *  save: () => void
+ * } } Autosaveble
+ */
+
+/**
+ * Creates a proxy that will autosave the odject each time a property is changed.
+ * 
+ * @param {Autosaveble} instance The instance needs to have
+ * a `autosave` boolean property and a save method.
+ */
+export
+function AutoSaver(instance) {
+  return new Proxy(instance, {
+      set(target) {
+        // only save if the autosave is set
+        if(target.autosave 
+          && typeof(target.save) == "function")
+          target.save();
+
+        return true;
+    }
+  });
+}

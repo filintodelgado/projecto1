@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: main.mjs</title>
+    <title>JSDoc: Source: user.mjs</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: main.mjs</h1>
+    <h1 class="page-title">Source: user.mjs</h1>
 
     
 
@@ -26,60 +26,120 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * The CineScape is a School project to make a educational ScapeRoom.
- * We made this Framework/API to make the whole process a lot easier.
- * 
- * This model includes things like:
- * 1. Puzzle Components;
- * 1. Timer;
- * 1. Event Model.
- * 
- * @module cinescape
+            <pre class="prettyprint source linenums"><code>import { currentLevel } from "./level.mjs";
+import { AutoSaver, cleanup } from "./utils.mjs";
+
+const MALE = 0;
+const FEMALE = 1;
+
+/**
+ * Represents a user/player that plays the game.
  */
+export
+class User {
+  _email
+  /** 
+   * The use email that must be unque for each user
+   */
+  get email() { return this._email };
+  set email(value) {
+    this._email = value;
+  }
+  password;
+  _name;
+  /**
+   * The name of the user.
+   * 
+   * @type {{
+   *  nick: String,
+   *  full: String,
+   *  toString: () => String,
+   *  valueOf: () => String
+   * }}
+   */
+  get name() { return this._name }
+  set name(value) {
+    // do some basic cleanup
+    value = cleanup(value);
+    // the name will contain only the first word
+    this._name = {
+      nick: value.split(" ")[0],
+      full: value,
+      // those two methods return the value each time
+      // the name is accessed directly or converted to string
+      toString() {
+        return this.nick;
+      },
+      valueOf() {
+        return this.toString();
+      }
+    }
+  }
+  _borndate;
+  get borndate() { return this._borndate }
+  set borndate(value) {
+    this._borndate = new Date(value);
+  }
+  local;
+  _gender;
+  get gender() { return this.gender }
+  set gender(value) {
+    try {
+      value = parseInt(value);
+    } catch {
+      value = String(value).toLowerCase();
+    }
 
-/* Puzzle */
-// import and exports as bundle
-import * as puzzle from "./puzzle.mjs";
-// contains every import
-export { puzzle };
+    if(value == MALE || value == "male") {
+      this._gender = "masculino";
+      this._gender.formated = "Masculino";
+      this._gender.code = MALE;
+    } else if (value == FEMALE || value == "female") {
+      this._gender = "feminino";
+      this._gender.formated = "Feminino";
+      this._gender.code = FEMALE;
+    }
+  };
+  
+  /** The state of the level the User is currectly playing. */
+  get level() { return currentLevel.odjectify() };
 
-// import and exports individually
-import { Puzzle, PuzzleSelect } from "./puzzle.mjs";
-export { Puzzle, PuzzleSelect }
+  /**
+   * Creates a new User and saves it to the store.
+   * 
+   * @param {String} email 
+   * @param {String} password 
+   * @param {String} name 
+   * @param {String | Number} borndate 
+   * @param {String} local 
+   * @param {Number} gender 
+   * @returns {Porxy&lt;User>} A User proxy instance that can autosave
+   * if the {@link autosave} property is set.
+   */
+  constructor(email, password, name, borndate, local, gender) {
+    this.email = email;
+    this.password = password;
+    this.name = name;
+    this.borndate = borndate;
+    this.local = local;
+    this.gender = gender;
 
-/* Form */
-import * as form from "./form.mjs";
-export { form };
+    // the returned object will autosave itself each time it is changed
+    return AutoSaver(this);
+  };
 
-import { PuzzleFormSelect } from "./form.mjs";
-export { PuzzleFormSelect };
+  autosave = true;
 
-/* Timer */
-import { Timer } from "./timer.mjs";
-export { Timer };
+  odjectify() {};
 
-/* Event Model */
-import { EventModel } from "./event.mjs";
-export { EventModel };
+  save() {
+    console.log("working")
+  };
 
-/* Level */
-import { Level } from "./level.mjs"
-export { Level };
+  static exists(email) {};
 
-/* User */
-import { User } from "./user.mjs";
-export { User };
-
-/* Defautl */
-export default 
-{ 
-  PuzzleSelect,
-  Timer,
-  PuzzleFormSelect,
-  Level
-}
-</code></pre>
+  static load(email) {};
+}</code></pre>
         </article>
     </section>
 

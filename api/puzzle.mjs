@@ -5,7 +5,6 @@
  * @module cinescape/puzzle
  */
 
-import { PuzzleFormChoose } from "./form.mjs";
 import { numberGenerator } from "./utils.mjs";
 
 /**
@@ -703,6 +702,7 @@ extends Puzzle {
   }
 
   connectedCallback() {
+    // retrive the components
     this._getComponents();
 
     // call it last so it does not delete the elements before we use it

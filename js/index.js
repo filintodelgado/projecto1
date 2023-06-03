@@ -1,4 +1,4 @@
-import { Timer, Level } from "../api/main.mjs"
+import { Timer, Level, User } from "../api/main.mjs"
 
 const timer = new Timer(10)
 
@@ -15,3 +15,8 @@ const puzzleTest = document.querySelector("puzzle-select");
 const form = document.querySelector("form");
 
 const level = new Level();
+
+const user = new User("filintodelgado@gmail.com", "1234", "Filinto Delgado", "2003-08-04", "Vila do Conde", "male");
+console.log(`The name of the user is ${user.name.nick}.`);
+
+user.name = "something"

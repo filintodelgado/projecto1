@@ -39,6 +39,10 @@ export { EventModel };
 import { Level } from "./level.mjs"
 export { Level };
 
+/* User */
+import { User } from "./user.mjs";
+export { User };
+
 /* Defautl */
 export default 
 { 
