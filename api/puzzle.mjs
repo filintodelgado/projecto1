@@ -432,7 +432,7 @@ extends HTMLElement {
 }
 
 /** 
- * Represents any Puzzle component 
+ * Represents any Puzzle component.
  * 
  * @extends HTMLElement
  */
@@ -509,6 +509,14 @@ extends PuzzleEventModel {
       "id": this.id,
       "solved": this.solved
     };
+  }
+
+  /**
+   * Used by {@link JSON.stringify} method.
+   * @returns 
+   */
+  toJSON() {
+    return this.objectify();
   }
 
   /** 

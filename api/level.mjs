@@ -2,11 +2,69 @@
  * @module cinescape/level
  */
 
+import { EventModel } from "./event.mjs";
+import { Puzzle } from "./puzzle.mjs";
+import { Timer } from "./timer.mjs";
+
+/**
+ * An object that represents the level.
+ * 
+ * @typedef {{
+ * "name": String,
+ * "puzzles": import("./puzzle.mjs").PuzzleObject[],
+ * "numberOfPuzzles": Number,
+ * "puzzlesSolved": String,
+ * "puzzlesUnsolved": String
+ * }} LevelObject
+ */
+
+/**
+ * All the events for {@link Level}.
+ * 
+ * @typedef {"change" | "complete"} LevelEventKeyMap
+ */
+
+/**
+ * The callback defined for the events.
+ * 
+ * @typedef {(event: LevelObject) => void} LevelEventCallback
+ */
+
+/**
+ * Defines the Level.
+ * 
+ * The Level ends when all the {@link Puzzle | Puzzles} have been solved.
+ */
 export
-class Level {
+class Level
+extends EventModel {
   name = "";
 
+  changeCallback = (function() {
+    this.dispatchEvent("change");
+  }).bind(this);
+
+  /** Event trigged everytime a change happens in the Level. */
+  applyChangeEvent() {
+    Puzzle.addEventListener("solve", this.changeCallback);
+    Puzzle.addEventListener("unsolve", this.changeCallback);
+    Puzzle.addEventListener("miss", this.changeCallback);
+    Timer.addEventListener("stop", this.changeCallback);
+    Timer.addEventListener("pause", this.changeCallback);
+    Timer.addEventListener("start", this.changeCallback);
+  }
+
+  /** True if all the Puzzle in the level have been completed */
+  get complete() { return this.numberOfPuzzlesUnsolved === 0 ? true : false }
+  verifyComplete = (function() {
+    // if all puzzles have been completed
+    if(this.complete)
+      this.dispatchEvent("complete");
+  }).bind(this)
+
   constructor(name=null) {
+    super();
+
     // if the name is not provided we will retrive the name from the body attribute
     // `level`
     if(!name)
@@ -15,6 +73,8 @@ class Level {
     // if there is no name in the body we consider that this is not a level
     if(!name)
       return null;
+
+    Puzzle.addEventListener("solve", this.verifyComplete);
     
     this.name = name;
   }
@@ -81,7 +141,41 @@ class Level {
     return this.puzzlesUnsolved.length;
   }
 
-  objectify() {}
+  objectify() {
+    return {
+      "name": this.name,
+      "puzzles": this.puzzles,
+      "numberOfPuzzles": this.puzzles.length,
+      "puzzlesSolved": this.numberOfPuzzlesSolved,
+      "puzzlesUnsolved": this.numberOfPuzzlesUnsolved
+    }
+  }
+
+  toJSON() {
+    return this.objectify();
+  }
+
+  /* Botterplate code */
+
+  /**
+   * Adds a Event Listener for the a expecific event.
+   * 
+   * @param {LevelEventKeyMap} type 
+   * @param {LevelEventCallback} listener 
+   */
+  addEventListener(type, listener) {
+    super.addEventListener(type, listener);
+  }
+
+  /**
+   * Triggers/Dispatch a event.
+   * 
+   * @param {LevelEventKeyMap} type 
+   * @param {LevelObject} data 
+   */
+  dispatchEvent(type, data=null) {
+    super.dispatchEvent(type, data=null);
+  }
 }
 
 /** 

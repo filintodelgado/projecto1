@@ -497,3 +497,30 @@ extends BreakingPointModel {
    */
   onreset;
 }
+
+/**
+ * Default timer.
+ */
+export 
+const timer = new Timer();
+
+/**
+ * Sets the time for the {@link timer} and starts it.
+ * 
+ * @param {Boolean} time
+ * @param {Seconds} autostart If set to false does not start the timer.
+ */
+export
+function setTime(time, autostart=true) {
+  timer.stopTime = time;
+
+  if(autostart) timer.start();
+}
+
+/**
+ * Stops the {@link timer}.
+ */
+export
+function stop() {
+  timer.stop();
+}

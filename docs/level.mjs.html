@@ -30,11 +30,69 @@
  * @module cinescape/level
  */
 
+import { EventModel } from "./event.mjs";
+import { Puzzle } from "./puzzle.mjs";
+import { Timer } from "./timer.mjs";
+
+/**
+ * An object that represents the level.
+ * 
+ * @typedef {{
+ * "name": String,
+ * "puzzles": import("./puzzle.mjs").PuzzleObject[],
+ * "numberOfPuzzles": Number,
+ * "puzzlesSolved": String,
+ * "puzzlesUnsolved": String
+ * }} LevelObject
+ */
+
+/**
+ * All the events for {@link Level}.
+ * 
+ * @typedef {"change" | "complete"} LevelEventKeyMap
+ */
+
+/**
+ * The callback defined for the events.
+ * 
+ * @typedef {(event: LevelObject) => void} LevelEventCallback
+ */
+
+/**
+ * Defines the Level.
+ * 
+ * The Level ends when all the {@link Puzzle | Puzzles} have been solved.
+ */
 export
-class Level {
+class Level
+extends EventModel {
   name = "";
 
+  changeCallback = (function() {
+    this.dispatchEvent("change");
+  }).bind(this);
+
+  /** Event trigged everytime a change happens in the Level. */
+  applyChangeEvent() {
+    Puzzle.addEventListener("solve", this.changeCallback);
+    Puzzle.addEventListener("unsolve", this.changeCallback);
+    Puzzle.addEventListener("miss", this.changeCallback);
+    Timer.addEventListener("stop", this.changeCallback);
+    Timer.addEventListener("pause", this.changeCallback);
+    Timer.addEventListener("start", this.changeCallback);
+  }
+
+  /** True if all the Puzzle in the level have been completed */
+  get complete() { return this.numberOfPuzzlesUnsolved === 0 ? true : false }
+  verifyComplete = (function() {
+    // if all puzzles have been completed
+    if(this.complete)
+      this.dispatchEvent("complete");
+  }).bind(this)
+
   constructor(name=null) {
+    super();
+
     // if the name is not provided we will retrive the name from the body attribute
     // `level`
     if(!name)
@@ -43,6 +101,8 @@ class Level {
     // if there is no name in the body we consider that this is not a level
     if(!name)
       return null;
+
+    Puzzle.addEventListener("solve", this.verifyComplete);
     
     this.name = name;
   }
@@ -109,7 +169,41 @@ class Level {
     return this.puzzlesUnsolved.length;
   }
 
-  objectify() {}
+  objectify() {
+    return {
+      "name": this.name,
+      "puzzles": this.puzzles,
+      "numberOfPuzzles": this.puzzles.length,
+      "puzzlesSolved": this.numberOfPuzzlesSolved,
+      "puzzlesUnsolved": this.numberOfPuzzlesUnsolved
+    }
+  }
+
+  toJSON() {
+    return this.objectify();
+  }
+
+  /* Botterplate code */
+
+  /**
+   * Adds a Event Listener for the a expecific event.
+   * 
+   * @param {LevelEventKeyMap} type 
+   * @param {LevelEventCallback} listener 
+   */
+  addEventListener(type, listener) {
+    super.addEventListener(type, listener);
+  }
+
+  /**
+   * Triggers/Dispatch a event.
+   * 
+   * @param {LevelEventKeyMap} type 
+   * @param {LevelObject} data 
+   */
+  dispatchEvent(type, data=null) {
+    super.dispatchEvent(type, data=null);
+  }
 }
 
 /** 
@@ -128,13 +222,13 @@ const currentLevel = new Level;</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">CineScape</a></h2><h3>Modules</h3><ul><li><a href="module-cinescape.html">cinescape</a></li><li><a href="module-cinescape_event.html">cinescape/event</a></li><li><a href="module-cinescape_level.html">cinescape/level</a></li><li><a href="module-cinescape_puzzle.html">cinescape/puzzle</a></li><li><a href="module-cinescape_timer.html">cinescape/timer</a></li></ul><h3>Classes</h3><ul><li><a href="PuzzleForm.html">PuzzleForm</a></li><li><a href="PuzzleFormChoose.html">PuzzleFormChoose</a></li><li><a href="PuzzleFormSelect.html">PuzzleFormSelect</a></li><li><a href="User.html">User</a></li><li><a href="module-cinescape_event.BreakingPointModel.html">BreakingPointModel</a></li><li><a href="module-cinescape_event.EventModel.html">EventModel</a></li><li><a href="module-cinescape_level.Level.html">Level</a></li><li><a href="module-cinescape_puzzle.Puzzle.html">Puzzle</a></li><li><a href="module-cinescape_puzzle.PuzzleChoose.html">PuzzleChoose</a></li><li><a href="module-cinescape_puzzle.PuzzleDrag.html">PuzzleDrag</a></li><li><a href="module-cinescape_puzzle.PuzzleSelect.html">PuzzleSelect</a></li><li><a href="module-cinescape_puzzle-PuzzleEventModel.html">PuzzleEventModel</a></li><li><a href="module-cinescape_timer.Timer.html">Timer</a></li></ul><h3>Interfaces</h3><ul><li><a href="module-cinescape_puzzle.Puzzle_ask.html">ask</a></li></ul><h3>Events</h3><ul><li><a href="module-cinescape_timer.html#~event:BreakingPoint">BreakingPoint</a></li><li><a href="module-cinescape_puzzle.html#~event:MissEvent">MissEvent</a></li><li><a href="module-cinescape_timer.html#~event:PauseEvent">PauseEvent</a></li><li><a href="module-cinescape_timer.html#~event:ResetEvent">ResetEvent</a></li><li><a href="module-cinescape_puzzle.html#~event:SolveEvent">SolveEvent</a></li><li><a href="module-cinescape_timer.html#~event:StartEvent">StartEvent</a></li><li><a href="module-cinescape_timer.html#~event:StepEvent">StepEvent</a></li><li><a href="module-cinescape_timer.html#~event:StopEvent">StopEvent</a></li><li><a href="module-cinescape_puzzle.html#~event:UnsolveEvent">UnsolveEvent</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AutoSaver">AutoSaver</a></li><li><a href="global.html#cleanup">cleanup</a></li><li><a href="global.html#cloneArray">cloneArray</a></li><li><a href="global.html#numberGenerator">numberGenerator</a></li><li><a href="global.html#shuffleArray">shuffleArray</a></li><li><a href="global.html#shuffleArrayIndex">shuffleArrayIndex</a></li></ul>
+    <h2><a href="index.html">CineScape</a></h2><h3>Modules</h3><ul><li><a href="module-cinescape.html">cinescape</a></li><li><a href="module-cinescape_event.html">cinescape/event</a></li><li><a href="module-cinescape_level.html">cinescape/level</a></li><li><a href="module-cinescape_puzzle.html">cinescape/puzzle</a></li><li><a href="module-cinescape_timer.html">cinescape/timer</a></li></ul><h3>Classes</h3><ul><li><a href="PuzzleForm.html">PuzzleForm</a></li><li><a href="PuzzleFormChoose.html">PuzzleFormChoose</a></li><li><a href="PuzzleFormSelect.html">PuzzleFormSelect</a></li><li><a href="User.html">User</a></li><li><a href="module-cinescape_event.BreakingPointModel.html">BreakingPointModel</a></li><li><a href="module-cinescape_event.EventModel.html">EventModel</a></li><li><a href="module-cinescape_level.Level.html">Level</a></li><li><a href="module-cinescape_puzzle.Puzzle.html">Puzzle</a></li><li><a href="module-cinescape_puzzle.PuzzleChoose.html">PuzzleChoose</a></li><li><a href="module-cinescape_puzzle.PuzzleDrag.html">PuzzleDrag</a></li><li><a href="module-cinescape_puzzle.PuzzleSelect.html">PuzzleSelect</a></li><li><a href="module-cinescape_puzzle-PuzzleEventModel.html">PuzzleEventModel</a></li><li><a href="module-cinescape_timer.Timer.html">Timer</a></li></ul><h3>Interfaces</h3><ul><li><a href="module-cinescape_puzzle.Puzzle_ask.html">ask</a></li></ul><h3>Events</h3><ul><li><a href="module-cinescape_timer.html#~event:BreakingPoint">BreakingPoint</a></li><li><a href="module-cinescape_puzzle.html#~event:MissEvent">MissEvent</a></li><li><a href="module-cinescape_timer.html#~event:PauseEvent">PauseEvent</a></li><li><a href="module-cinescape_timer.html#~event:ResetEvent">ResetEvent</a></li><li><a href="module-cinescape_puzzle.html#~event:SolveEvent">SolveEvent</a></li><li><a href="module-cinescape_timer.html#~event:StartEvent">StartEvent</a></li><li><a href="module-cinescape_timer.html#~event:StepEvent">StepEvent</a></li><li><a href="module-cinescape_timer.html#~event:StopEvent">StopEvent</a></li><li><a href="module-cinescape_puzzle.html#~event:UnsolveEvent">UnsolveEvent</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AutoSaver">AutoSaver</a></li><li><a href="global.html#cleanup">cleanup</a></li><li><a href="global.html#cloneArray">cloneArray</a></li><li><a href="global.html#makeUserKey">makeUserKey</a></li><li><a href="global.html#numberGenerator">numberGenerator</a></li><li><a href="global.html#shuffleArray">shuffleArray</a></li><li><a href="global.html#shuffleArrayIndex">shuffleArrayIndex</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Sat Jun 03 2023 18:19:58 GMT+0100 (Western European Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon Jun 05 2023 00:57:55 GMT+0100 (Western European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>
