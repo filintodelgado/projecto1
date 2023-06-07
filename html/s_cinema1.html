@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+    <!-- JQuery -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+    <!-- Responsive Image maps -->
+    <!-- Allows image maps to be used in a responsive design by recalculating the area coordinates  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-rwdImageMaps/1.6/jquery.rwdImageMaps.min.js"
+        integrity="sha512-eZB7hQa0bRlrKMQ2njpP0d/Klu6o30Gsr8e5FUCjUT3fSlnVkm/1J14n58BuwgaMuObrGb7SvUfQuF8qFsPU4g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <title>Cinema</title>
+</head>
+
+<body>
+    <img src="../assets/salas/sala_1.png" usemap="#workmap" alt="room" class="img-fluid img-responsive rounded mx-auto d-block">
+    <map name="workmap">
+        <area target="" alt="youtube" id="youtube" href="#"
+            coords="597,247,740,244,757,250,762,258,769,267,772,281,774,337,769,348,765,357,757,366,742,372,600,374,588,366,577,357,571,345,568,333,569,273,580,258"
+            shape="poly">
+        <area target="" alt="cadeira_1" id="cadeira_1" href="#"
+            coords="1281,980,1281,1112,1546,1114,1548,975,1539,958,1525,951,1513,948,1317,946,1302,951,1291,958,1284,967"
+            shape="poly">
+        <area target="" alt="porta" id="porta" href="#" coords="1401,203,1708,572" shape="rect">
+        <area target="" alt="cadeira_2" id="cadeira_2" href="#"
+            coords="0,603,134,604,147,604,156,610,165,618,169,629,172,641,171,769,-2,769,2,751" shape="poly">
+    </map>
+    <!-- javascript file -->
+    <script src="../js/salas.js"></script>
+</body>
+
+</html>

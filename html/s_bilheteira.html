@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+    <!-- JQuery -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+    <!-- Responsive Image maps -->
+    <!-- Allows image maps to be used in a responsive design by recalculating the area coordinates  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-rwdImageMaps/1.6/jquery.rwdImageMaps.min.js"
+        integrity="sha512-eZB7hQa0bRlrKMQ2njpP0d/Klu6o30Gsr8e5FUCjUT3fSlnVkm/1J14n58BuwgaMuObrGb7SvUfQuF8qFsPU4g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <title>Bilheteria</title>
+</head>
+<body>
+    <img src="../assets/salas/Bilheteira.png" usemap="#workmap" alt="room" class="img-fluid img-responsive rounded mx-auto d-block">
+    <map name="workmap">
+        <area alt="porta" id="porta" href="#" coords="694,70,853,458" shape="rect">
+        <area alt="poster" id="poster" href="#" coords="672,247,21,71" shape="rect">
+        <area alt="lixo" id="lixo" href="#" coords="623,395,675,395,675,412,668,412,668,458,631,459,630,411,623,412"
+            shape="poly">
+        <area alt="mesa" id="mesa" href="#" coords="200,327,575,319" shape="rect">
+    </map>
+    <!-- javascript file -->
+    <script src="../js/salas.js"></script>
+</body>
+</html>

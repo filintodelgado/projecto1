@@ -19,13 +19,16 @@ function loginVerifi() {
         var account = JSON.parse(accountString);
 
         // Acessar os valores do objeto
-        var email = account.email;
-        var pass = account.pass;
+        let email = account.email;
+        let pass = account.pass;
+        let user = account.username;
 
         //verifica se coeencidem
         if (Email == email && Pass == pass) {
-            alert("Logado")
+            sessionStorage.setItem("login", user);
             window.location.href = 'escapeRoom.html';
+            alert("Logado")
+
         } else {
             alert("erro")
         }
@@ -45,7 +48,7 @@ function loginVerifi() {
         var sex = document.getElementById('txtSex').value;
 
         //verifica se já é existente
-        if (localStorage.getItem(email)){
+        if (localStorage.getItem(email)) {
             alert("Essa conta já existe")
             return
         }
