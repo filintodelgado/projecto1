@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap');
+
 :root {
     --primary: white;
     --secondary: black;
@@ -10,7 +12,7 @@ body{
     flex-wrap: wrap;
     justify-content: center;
     align-content: center;
-    font-family: Arial;
+    font-family: Inter;
 }
 
 body.light {

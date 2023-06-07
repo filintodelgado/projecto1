@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap');
+
 :root {
     --primary: white;
     --secondary: black;
@@ -7,6 +9,7 @@ body{
     background-color: var(--secondary);
     height: 100vh;
     transition: 1s;
+    font-family: Inter;
 }
 
 body.light {
