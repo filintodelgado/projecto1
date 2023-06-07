@@ -6,12 +6,18 @@
 
 body{
     background-color: var(--secondary);
-    transition: 1s;
 }
 
 body.light {
     --primary: black;
     --secondary: white;
+}
+
+.header_username{
+    position: absolute;
+    margin-top: 3%;
+    margin-left: 3%;
+    color: var(--primary);
 }
 
 .header-navbar{

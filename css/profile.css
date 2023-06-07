@@ -1,0 +1,168 @@
+:root {
+    --primary: white;
+    --secondary: black;
+}
+
+body{
+    background-color: var(--secondary);
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-content: center;
+    font-family: Arial;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+body.light {
+    --primary: black;
+    --secondary: white;
+}
+
+::placeholder {
+    color: var(--primary);
+    opacity: 1; /* Firefox */
+}
+
+h1{
+    text-align: left;
+    color:var(--primary);
+    margin: 0 0 0 10%;
+}
+
+.profile-pic{
+    border: dotted var(--primary);
+    border-radius: 50%;
+    margin: 15px;
+}
+
+#profile-pic{
+    max-width: 100%;
+}
+
+.main{
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.ticket{
+    width: 50%;
+    background-color: var(--secondary);
+}
+
+.account-details{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    border: solid var(--primary);
+}
+
+.field{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 1%;
+}
+
+label{
+    text-align: right;
+    color:var(--primary);
+    padding: 5px;
+    width: 25%;
+}
+
+input{
+    width: 75%;
+    border: none;
+    border-bottom: 2px solid var(--primary);
+    background-color: var(--secondary);
+    color: var(--primary);
+}
+
+input:focus{
+    outline: none;
+}
+
+input[type=date] {
+    border: 2px solid var(--primary);
+    text-align: center;
+    padding: 5px;
+}
+
+input[type=radio],input[type=radio]:hover {
+    width: 15px;
+    height: 15px;
+    border: 4px solid var(--primary);
+    text-align: center;
+    padding: 5px;
+    background-color: var(--primary);
+    appearance: none;
+    border-radius:50%;
+    cursor: pointer;
+}
+
+input[type=radio]:checked {
+    background-color: var(--secondary);
+}
+
+#masc_label,#fem_label{
+    width: auto;
+    margin: 10px;
+}
+
+.radio_masc,.radio_fem{
+    display: flex;
+    align-items: center;
+}
+
+.radios{
+    width: 75%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.details{
+    width: 60%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.logoff,.save{
+    padding: 5px;
+}
+
+.logoff{
+    border-top:dotted var(--primary);
+    border-right:dotted var(--primary);
+    border-left:dotted var(--primary);
+}
+
+.save{
+    border-bottom:dotted var(--primary);
+    border-right:dotted var(--primary);
+    border-left:dotted var(--primary);
+}
+
+h4{
+    color:var(--primary);
+    margin: 0 auto;
+}
+
+@media only screen and (max-width: 700px) {
+    .main{
+        flex-direction: column;
+    }
+
+    .details{
+        width: 95%;
+    }
+  }
+  
+a{
+    text-decoration: none;
+}

@@ -59,23 +59,23 @@ body.light {
 }
 
 .signup,.signup:hover{
-    border-top: dashed var(--primary);
-    border-left: dashed var(--primary);
-    border-right: dashed var(--primary);
+    border-top: solid var(--primary);
+    border-left: solid var(--primary);
+    border-right: solid var(--primary);
     padding: 1%;
     cursor: pointer;
 }
 
 .login{
-    border-bottom: dashed var(--primary);
-    border-left: dashed var(--primary);
-    border-right: dashed var(--primary);
+    border-bottom: solid var(--primary);
+    border-left: solid var(--primary);
+    border-right: solid var(--primary);
     padding: 1%;
 }
 
 .main{
     width: 100%;
-    border: dashed var(--primary);
+    border: solid var(--primary);
     color: white;
     display: flex;
 }
@@ -167,57 +167,6 @@ input[type=radio]:checked {
     justify-content: space-evenly;
 }
 
-.arrow-left,.arrow-left:hover{
-    width:50px;
-    height:50px;
-    fill: var(--primary);
-    cursor: pointer;
-    margin:10px;
-}
-
-.color-mode,.color-mode:hover{
-    content: url("../assets/moon.svg");
-    height: 25px;
-    margin:15px;
-    cursor: pointer;
-}
-
-.light .color-mode,.light .color-mode:hover{
-    content: url("../assets/sun.svg");
-    height: 25px;
-    margin:15px;
-    cursor: pointer;
-}
-
-.bottom-menu{
-    width: 100%;
-    position: absolute;
-    margin: 0 auto;
-    padding: 10px;
-    bottom: 0;
-    background-color: var(--secondary);
-    border-top: solid var(--primary);
-}
-
-#voltar-menu{
-    font-size: 20px;
-    color:var(--primary);
-    display: inline-block;
-    margin: 0;
-}
-
-.navbar-left{
-    float: left;
-    display: flex;
-    align-items: center;
-}
-
-.navbar-right{
-    float: right;
-    display: flex;
-    align-items: center;
-}
-
 #username,#date,#local,#sex{
     display: none;
 }
@@ -290,4 +239,8 @@ input[type=radio]:checked {
     input[type=date] {
         width: 50%;
     }
+}
+
+a{
+    text-decoration: none;
 }

@@ -8,40 +8,37 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="../css/login.css">
+    <link rel="stylesheet" href="../css/profile.css">
     <link rel="stylesheet" href="../css/footer.css">
     <title>Página Principal</title>
 </head>
 
 <body>
-    <div class="container-xl ticket_container">
-        <div class="ticket">
-            <div class="top-login" id="top-login">
-                <h1>Login</h1>
-            </div>
-            <div class="signup" id="change-mode">
-                <h4>Criar Conta</h4>
-            </div>
-            <div class="main">
-                <div class="title-content" id="title-content">
-                    <img src="../assets/login/login_dark.png" height="190" id="ticket-title" style="width: 100%;">
+    <h1>Perfil</h1>
+    <div class="container-xl main">
+        <div class="profile-pic">
+            <img id="profile-pic" src="/assets/login/profile.png" width="200">
+        </div>
+        <div class="details">
+                <div class="logoff">
+                    <h4>Sair</h4>
                 </div>
-                <div class="main-content">
+                <div class="account-details">
                     <div class="field" id="username">
                         <label for="username">Username</label>
-                        <input type="text" name="username" id="txtUser">
+                        <input type="text" name="username" id="txtUser" placeholder="User">
                     </div>
                     <div class="field" id="email">
                         <label for="email">Email</label>
-                        <input type="text" name="email" id="txtEmail">
+                        <input type="text" name="email" id="txtEmail" placeholder="email@mail.com">
                     </div>
                     <div class="field" id="password">
                         <label for="password">Password</label>
-                        <input type="password" name="password" id="txtPass">
+                        <input type="password" name="password" id="txtPass" >
                     </div>
                     <div class="field" id="date">
                         <label for="date">Data de Nascimento</label>
-                        <input type="date" name="date" id="txtDate">
+                        <input type="date" name="date" id="txtDate" placeholder="10/10/1910">
                     </div>
                     <div class="field" id="local">
                         <label for="local">Localidade</label>
@@ -63,10 +60,9 @@
 
                     </div>
                 </div>
-            </div>
-            <div class="login">
-
-                <h4 id="login-button" onclick="loginVerifi()">Entrar</h4>
+                <div class="save">
+                    <h4>Guardar</h4>
+                </div>
             </div>
         </div>
     </div>
@@ -89,7 +85,7 @@
         </div>
     </div>
 
-    <script src="../js/themes/theme_login.js"></script>
+    <script src="../js/themes/theme_user.js"></script>
     <script src="../js/login/login_registo.js"></script>
     <script src="../js/login/login.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"

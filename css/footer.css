@@ -1,0 +1,55 @@
+
+.arrow-left,.arrow-left:hover{
+    width:50px;
+    height:50px;
+    fill: var(--primary);
+    cursor: pointer;
+    margin:10px;
+}
+
+.color-mode,.color-mode:hover{
+    content: url("../assets/moon.svg");
+    height: 25px;
+    margin:15px;
+    cursor: pointer;
+}
+
+.light .color-mode,.light .color-mode:hover{
+    content: url("../assets/sun.svg");
+    height: 25px;
+    margin:15px;
+    cursor: pointer;
+}
+
+.bottom-menu{
+    width: 100%;
+    position: absolute;
+    margin: 0 auto;
+    padding: 10px;
+    bottom: 0;
+    background-color: var(--secondary);
+    border-top: solid var(--primary);
+}
+
+#voltar-menu{
+    font-size: 20px;
+    color:var(--primary);
+    display: inline-block;
+    margin: 0;
+}
+
+.navbar-left{
+    float: left;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-right{
+    float: right;
+    display: flex;
+    align-items: center;
+}
+
+a{
+    text-decoration: none;
+}

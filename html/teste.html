@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form id="teste_form" action="escapeRoom.html">
+        <label for="fname">First name:</label><br>
+        <input type="text" id="fname" name="fname"><br>
+        <input type="submit" value="Submit" id="submit">
+    </form>
+    <script>
+        let submit = document.getElementById("submit")
+        submit.addEventListener("click",function(event){
+           let form = document.getElementById("teste_form")
+            let campo = document.getElementById("fname")
+            localStorage.setItem("username",campo.value)
+        })
+        
+    </script>
+</body>
+</html>
