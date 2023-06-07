@@ -16,7 +16,7 @@
     <h1 class="header_username" id="header_username">Bem Vindo,<br>Teste</h1>
     <script>
         let header_username = document.getElementById("header_username")
-        header_username.innerHTML = "Bem Vindo,<br>" + localStorage.getItem("username")
+        header_username.innerHTML = "Bem Vindo,<br>" + sessionStorage.getItem("login")
     </script>
     <nav class="navbar navbar-expand-lg p-1 header-navbar" id="header">
         <a class="navbar-brand" href="#">
@@ -36,13 +36,13 @@
         <div class="collapse navbar-collapse text-center" id="responsive-navbar">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item active">
-                    <a class="nav-link item-nav" href="#">Perfil</a>
+                    <a class="nav-link item-nav" href="../html/profile.html">Perfil</a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link item-nav" href="../html/atividades.html">Atividades</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link item-nav" href="#">Estatatiscas</a>
+                    <a class="nav-link item-nav" href="../html/statistics.html">Estatatiscas</a>
                 </li>
                 <li class="nav-item active button-header">
                     <a class="nav-link" href="../html/s_bilheteira.html">Jogar</a>

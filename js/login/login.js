@@ -49,10 +49,13 @@ function loginVerifi() {
 
         //verifica se já é existente
         if (localStorage.getItem(email)) {
-            alert("Essa conta já existe")
+            alert("Esse email já tem uma conta associada")
             return
         }
-
+        if (localStorage.getItem(username)) {
+            alert("Username ocupado")
+            return
+        }
         // Criar um objeto de conta
         var account = {
             username: username,

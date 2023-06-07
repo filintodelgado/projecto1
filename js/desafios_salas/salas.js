@@ -4,7 +4,5 @@ $(document).ready(function(e) {
     // to match the actual image size on load and window.resize
 });
 
-const porta = document.getElementById('porta').addEventListener('click', function() {
-    window.location.href = '../html/s_cinema1.html';
 
-});
+
