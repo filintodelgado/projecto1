@@ -8,6 +8,9 @@ theme_login.addEventListener("click", function(){
 function ThemeLogin(){
     document.body.classList.toggle("light")
 
+    let dateForm = document.getElementById("txtDate")
+    dateForm.classList.toggle("light")
+
     let logo_navbar = document.getElementById("logo-navbar")
     let ticket_title = document.getElementById("ticket-title")
 

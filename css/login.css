@@ -130,10 +130,15 @@ input:focus{
     outline: none;
 }
 
-input[type=date] {
+.date{
     border: 2px solid var(--primary);
     text-align: center;
     padding: 5px;
+    color-scheme: dark;
+}
+
+.date.light{
+    color-scheme: light;
 }
 
 input[type=radio],input[type=radio]:hover {
