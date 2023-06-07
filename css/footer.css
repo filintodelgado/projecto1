@@ -1,10 +1,10 @@
 
 .arrow-left,.arrow-left:hover{
-    width:50px;
-    height:50px;
+    width:40px;
+    height:40px;
     fill: var(--primary);
     cursor: pointer;
-    margin:10px;
+    margin:5px;
 }
 
 .color-mode,.color-mode:hover{
@@ -22,6 +22,7 @@
 }
 
 .bottom-menu{
+    display: flex;
     width: 100%;
     position: absolute;
     margin: 0 auto;
@@ -29,23 +30,23 @@
     bottom: 0;
     background-color: var(--secondary);
     border-top: solid var(--primary);
+    justify-content: space-between;
+    align-items: center;
 }
 
 #voltar-menu{
     font-size: 20px;
     color:var(--primary);
     display: inline-block;
-    margin: 0;
+    margin: 5px;
 }
 
 .navbar-left{
-    float: left;
     display: flex;
     align-items: center;
 }
 
 .navbar-right{
-    float: right;
     display: flex;
     align-items: center;
 }
@@ -53,3 +54,11 @@
 a{
     text-decoration: none;
 }
+
+@media only screen and (max-width: 400px) {
+    .bottom-menu{
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+  }

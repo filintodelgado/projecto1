@@ -5,6 +5,10 @@
     --secondary: black;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body{
     background-color: var(--secondary);
     font-family: Inter;

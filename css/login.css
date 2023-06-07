@@ -218,7 +218,7 @@ input[type=radio]:checked {
     .signup{
         order: 3;
         border-top: none;
-        border-bottom: dashed var(--primary);;
+        border-bottom: solid var(--primary);;
     }
 
     .login{
