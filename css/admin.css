@@ -99,12 +99,19 @@ button,button:hover{
 
 tbody {
     max-height: 20vw;
-    width: 100%;
     display:block;
     overflow-y:auto;    
     overflow-x:hidden;
 }
+
+thead{
+    width: 95%;
+}
+
+tbody{
+    width: 100%;
+}
+
 thead, tbody tr {
     display:table;
-    width:100%;
 }
