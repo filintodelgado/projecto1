@@ -73,11 +73,48 @@ function* numberGenerator(start=0, stop=null) {
  * Does some basic cleanup on the provided string.
  * 
  * @param {String} string 
- * @returns 
+ * @returns {String}
  */
 export
 function cleanup(string) {
-  return string.trim()
+  // in case the string is invalid return a empty string
+  if(!string || typeof(string) != "string") return "";
+
+  // removes the white space at the start and end of a string
+  return string.trim();
+}
+
+export
+function cleaupId(string) {
+  // replaces the space with dashed (-)
+  return cleanup(string).toLowerCase().replace(" ", "-");
+}
+
+/**
+ * Makes a key to be used as {@link localStorage} key.
+ * 
+ * @param {String} prefix 
+ * @param {String} sufix 
+ * @returns {`${prefix}:${sufix}`}
+ */
+export
+function makeKey(prefix, sufix) {
+  return `${cleaupId(prefix)}:${cleanup(sufix)}`
+}
+
+/**
+ * Makes a key to be used as {@link localStorage} key based on a class instance.
+ * 
+ * @param {{
+ *   name: String,
+ *   constructor: {
+ *     name: String
+ *   }
+ * }} instance
+ */
+export
+function makeInstanceKey(instance) {
+  return makeKey(instance.constructor.name, instance.name);
 }
 
 /**
@@ -96,11 +133,14 @@ function cleanup(string) {
 export
 function AutoSaver(instance) {
   return new Proxy(instance, {
-      set(target) {
+      set(target, prop, value) {
         // only save if the autosave is set
         if(target.autosave 
           && typeof(target.save) == "function")
           target.save();
+
+        // do the default action
+        target[prop] = value;
 
         return true;
     }

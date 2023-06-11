@@ -219,11 +219,15 @@ class EventModel {
    * in the class itself.
    * 
    * @param {EventType} type 
-   * @param  {EventData} eventData Will be passed as the first argument to the
+   * @param  {EventData[]} eventData Will be passed as the first argument to the
    * callback.
    */
   dispatchEvent(type, ...eventData) {
     const handler = this._runCallbacks;
+
+    // if there is no event data we will send a object representation of the
+    // instance
+    if(!eventData.length) eventData = [this.objectify()];
 
     /* Run instance callbacks */
     handler.apply(this, [type, ...eventData])
@@ -249,6 +253,11 @@ class EventModel {
   removeAllEventListeners() {
     this.constructor.removeAllEventListeners.apply(this);
   }
+  
+  /**
+   * Retruns a generic object that reprents the instance.
+   */
+  objectify() { return {} }; 
 }
 
 /**

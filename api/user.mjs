@@ -1,6 +1,6 @@
 import { EventModel } from "./event.mjs";
 import { Level, currentLevel } from "./level.mjs";
-import { AutoSaver, cleanup } from "./utils.mjs";
+import { AutoSaver, cleanup, makeInstanceKey, makeKey } from "./utils.mjs";
 
 // Defining some alias
 /** @typedef {import("./level.mjs").LevelObject} LevelObject */
@@ -29,6 +29,14 @@ import { AutoSaver, cleanup } from "./utils.mjs";
  * "levels": Levels,
  * "admin": boolean
  * }} UserObject
+ */
+
+/**
+ * Represents the state of all the challenges the User is making.
+ * 
+ * @typedef {{
+ *  [key: Number]: Number
+ * }} ChallengeState
  */
 
 /**
@@ -150,7 +158,17 @@ extends EventModel {
    * if the {@link autosave} property is set.
    */
   constructor(email, password=null, name=null, borndate=null, local=null, gender=null, admin=false) {
+    // just return the logged user if there is in case the email is not defined
+    if(!email) {
+      const currentUser = User.loggedUser;
+      
+      if(currentUser) return currentUser
+    }
+
     super();
+    
+    // if still no email returns undefined
+    if(!email) return undefined;
 
     // if any of the data is not provided we will extract from the storage
     const allDataProvided = password && name && borndate && local && gender;
@@ -180,8 +198,7 @@ extends EventModel {
     this.gender = gender;
     this.admin = admin
 
-    // save the user as when finished
-    this.save();
+    this.register();
 
     // save the user everytime the state of the level changes
     Level.addEventListener("change", this.save.bind(this))
@@ -192,18 +209,18 @@ extends EventModel {
 
   /** The key tha is used in {@link localStorage}. */
   get _key() {
-    return makeUserKey(this.email);
+    return makeKey(this.constructor.name, this.email);
   }
 
   /** Tells if the User should be autosaved to the storage. */
   autosave = true;
 
   /** Tells if the User is logged. Setting it to true will log the user and vice-versa. */
-  get logged() { return User.currentUser == this.email };
+  get logged() { return User.loggedUser == this.email };
   set logged(value) {
     value = Boolean(value);
 
-    if(value == this._logged)
+    if(value == this.logged)
       return;
 
     if(value) this.loggin();
@@ -211,13 +228,32 @@ extends EventModel {
   }
 
   /** 
-   * Logs the user in by loginout whoever is logged.
+   * Logs the user in by loginout whoever is logged. 
+   * 
+   * The current user is set to this User email.
    */
-  login() {}
+  login() {
+    // simply set the current user to this user email
+    User.loggedUser = this.email;
+  }
   /**
    * Logs out the user if the user is logged
    */
-  logout() {}
+  logout() {
+    // only logout if the user is logged in
+    if(!this.logged)
+      return
+    
+    User.logout();
+  }
+
+  /**
+   * Logout whoever user is logged in.
+   */
+  static logout() {
+    // redefine
+    User.loggedUser = null;
+  }
 
   /**
    * Represents the User as a genereic object.
@@ -253,7 +289,7 @@ extends EventModel {
   }
 
   /**
-   * Saves the User to the storage.
+   * Saves the User object to the {@link localStorage}.
    */
   save() {
     const data = this.objectify();
@@ -262,7 +298,7 @@ extends EventModel {
   };
 
   /**
-   * Removes the user from the {@link all | storage} and sets the
+   * Removes the user from the {@link allEmails | storage} and sets the
    * {@link autosave} to `false`.
    */
   remove() {
@@ -275,28 +311,49 @@ extends EventModel {
    * @param {String} email 
    */
   static remove(email) {
-    localStorage.removeItem(makeUserKey(email));
+    // removes the object
+    localStorage.removeItem(makeKey(this.name), email);
+    // removes it from the email list
+    this.allEmails = this.allEmails.filter((value, index, array) => value == email ? false : true)
   }
 
   /**
    * Removes all the users from the {@link localStorage | register}.
    */
   static removeAll() {
-    for(const user of this.all)
-      this.remove(user);
+    const users = this.instances;
+
+    for(const user of users)
+      user.remove();
   }
 
   /**
-   * All the users that are currectly registred.
+   * All the users emails that are currectly registred.
    * 
    * @returns {String[]}
    */
-  static get all() {
+  static get allEmails() {
     const data = localStorage["registredUsers"];
 
     if(data)
       return JSON.parse(data);
     else return [];
+  }
+
+  static set allEmails(value) {
+    if(!(value instanceof Array))
+      return;
+
+    localStorage["registredUsers"] = JSON.stringify(value);
+  }
+
+  static get instances() {
+    const allInstances = [];
+
+    for(const email of this.allEmails)
+      allInstances.push(new User(email))
+
+    return allInstances;
   }
 
   /**
@@ -305,32 +362,68 @@ extends EventModel {
    * @param {String} email 
    */
   static exists(email) {
-    return this.all.includes(email);
+    return this.allEmails.includes(email);
   };
   
   /**
-   * Says who is the current loggend user
+   * Returns a instance of the currently logged user.
+   * 
+   * @returns {User}
    */
-  static get currentUser() {
-    return localStorage["currentUser"];
+  static get loggedUser() {
+    const currentUser = localStorage["currentUser"];
+
+    if(!currentUser) return undefined;
+
+    return new User(localStorage["currentUser"]);
+  }
+  static set loggedUser(email) {
+    if(email instanceof User)
+      email = email.email
+    
+    // only set if the email is registred
+    if(!this.allEmails.includes(email))
+      return
+    
+    // remove the current user if the email is not defined
+    if(!email) localStorage.removeItem("currentUser");
+    // othewise set the email
+    else localStorage["currentUser"] = email
   }
 
   /**
    * Adds the user to the {@link registredUsers}.
    * 
-   * @param {User | String} value Can be the {@link User} instance or just
+   * @param {User | String} email Can be the {@link User} instance or just
    * the {@link email}.
    */
-  static register(value) {
-    // we will just use the email so if it is a User get the email
-    if(value instanceof User)
-      value = value.email;
+  static register(email) {
+    // if email is a user instance
+    if(email instanceof User) {
+      // save first
+      email.save();
+      // trigger event
+      email.dispatchEvent("register");
+      // retrive the email
+      email = email.email
+    }
 
-    value = cleanup(value);
+    // make a easy cleaup
+    email = cleanup(email);
+
+    const allEmails = this.allEmails;
     
-    const registredUsers = this.all;
-    if(!registredUsers.includes(value))
-      localStorage["registredUsers"] = registredUsers.push(value);
+    if(!allEmails.includes(email)) {
+      allEmails.push(email);
+      this.allEmails = allEmails;
+    }
+  }
+  
+  /**
+   * Register the user by adding it to the {@link localStorage}.
+   */
+  register() {
+    User.register(this);
   }
   
   /**
@@ -340,21 +433,30 @@ extends EventModel {
    * @returns {Levels}
    */
   static load(email) {
-    const jsonData = localStorage[makeUserKey(email)]
+    const jsonData = localStorage[makeKey(this.name, email)]
 
     if(!jsonData) return false;
 
-    return JSON.parse(localStorage[makeUserKey(email)]);
+    return JSON.parse(jsonData);
   }
+
+  /**
+   * The state of all the challenge the user makes.
+   * 
+   * Stores the id and the progress only
+   * 
+   * @type {ChallengeState}
+   */
+  challenges = {};
 }
 
-/** 
- * Makes the key that will be used with {@link localStorage}.
+/**
  * 
- * @param {String} email
- * 
- * @returns {`user:${email}`}
+ * @returns 
  */
-function makeUserKey(email) {
-  return `user:${email}`
+export
+const getLoggedUser = () => {
+  return User.loggedUser;
 }
+
+export const loggedUser = getLoggedUser();

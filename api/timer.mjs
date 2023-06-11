@@ -498,11 +498,18 @@ extends BreakingPointModel {
   onreset;
 }
 
+let time = parseInt(document.body.getAttribute("time"));
+if(time === NaN) time = undefined;
+
 /**
  * Default timer.
+ * 
+ * If time is not defined in the body the timer will be `null`.
+ * 
+ * @type {Timer | null}
  */
 export 
-const timer = new Timer();
+const timer = time ? new Timer(timer) : null;
 
 /**
  * Sets the time for the {@link timer} and starts it.

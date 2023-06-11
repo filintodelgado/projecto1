@@ -54,12 +54,14 @@ form, form puzzle-question, form label, form button {
 form button {
   font-weight: bold;
   display: inline-block;
+  cursor: pointer;
 }
 
 form label {
   width: 100%;
   height: 100%;
   display: inline-block;
+  cursor: pointer;
   transition-duration: .2s;
 }
 

@@ -786,7 +786,13 @@ extends PuzzleChoose {
 
 }
 
- customElements.define("puzzle-select", PuzzleSelect);
+export
+class PuzzleInput
+extends Puzzle {
+
+}
+
+customElements.define("puzzle-select", PuzzleSelect);
 
 // Default export
 // import puzzle from "./puzzle.mjs"

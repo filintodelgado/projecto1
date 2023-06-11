@@ -21,33 +21,51 @@ import { Puzzle, PuzzleSelect } from "./puzzle.mjs";
 export { Puzzle, PuzzleSelect }
 
 /* Form */
-import * as form from "./form.mjs";
-export { form };
-
 import { PuzzleFormSelect } from "./form.mjs";
 export { PuzzleFormSelect };
 
 /* Timer */
-import { Timer } from "./timer.mjs";
-export { Timer };
+import { Timer, timer } from "./timer.mjs";
+export { Timer, timer };
 
 /* Event Model */
 import { EventModel } from "./event.mjs";
 export { EventModel };
 
 /* Level */
-import { Level } from "./level.mjs"
-export { Level };
+import { Level, currentLevel } from "./level.mjs"
+export { Level, currentLevel };
 
 /* User */
-import { User } from "./user.mjs";
-export { User };
+import { User, getLoggedUser, loggedUser } from "./user.mjs";
+export { User, getLoggedUser, loggedUser };
+
+/* Challenge */
+import { Challenge, SolvePuzzleChallenge, CompleteLevelChallenge, SolvePuzzleInLevelChanllenge, CompleteUnderSecondsChallenge, createChallenge, restoreChallenge } from "./challenge.mjs";
+export { Challenge, SolvePuzzleChallenge, CompleteLevelChallenge, SolvePuzzleInLevelChanllenge, CompleteUnderSecondsChallenge, createChallenge, restoreChallenge };
 
 /* Defautl */
+/* import cinescape from "main.js" */
 export default 
 { 
+  // to make the puzzle
   PuzzleSelect,
-  Timer,
+  // form used by the puzzle
   PuzzleFormSelect,
-  Level
+
+  // will count in the level
+  timer,
+  // manually create the timer
+  Timer,
+
+  // the level the user is currently playing
+  currentLevel,
+  // used to create new users
+  User,
+  // the user that is logged currently
+  loggedUser,
+
+  // create and restore challenges
+  createChallenge,
+  restoreChallenge
 }
