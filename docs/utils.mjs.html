@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: utils.mjs</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: utils.mjs</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/** 
+ * @param {[]} array
+ * @returns {[]} A shallow copy of the the array.
+ */
+export
+function cloneArray(array) {
+  // just the laziest way to clone an array
+  return [...array];
+}
+
+/**
+ * Shuffles the given array using _Fisher-Yates shuffle algorithm_.
+ * 
+ * The algorithm starts by It starts from the **last element** in the 
+ * array and **swaps** it with a randomly selected element from the 
+ * remaining elements, working its way towards the **first element**. 
+ * Finally, it returns the shuffled array.
+ * 
+ * It modifies the original array.
+ * 
+ * @param {[]} array
+ * @returns {[]}
+ */
+export
+function shuffleArray(array) {
+  // loop the array
+  for (let i = array.length - 1; i > 0; i--) {
+    // j will be a n
+    const j = Math.floor(Math.random() * (i + 1));
+    // swap elements
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+
+  return array;
+}
+
+/**
+ * Shuffles the array and returns the position of the element.
+ * 
+ * @param {[]} array 
+ * @param {*} element
+ * @returns {Number} The position of the given element. If the element
+ * is not in the array it returns -1;
+ */
+export
+function shuffleArrayIndex(array, element) {
+  if(!array.includes(element))
+    return -1;
+
+  shuffleArray(array);
+  return array.indexOf(element);
+}
+
+/**
+ * Generates numbers.
+ * 
+ * @returns A {@link Generator} Object in which we can call {@link Generator.next}
+ * to generate the next number.
+ * @generator
+ */
+export
+function* numberGenerator(start=0, stop=null) {
+  let number = start;
+
+  // if there is a stop
+  while(stop 
+    ? stop >= start
+    : true)
+    yield number++;
+}
+
+/**
+ * Does some basic cleanup on the provided string.
+ * 
+ * @param {String} string 
+ * @returns {String}
+ */
+export
+function cleanup(string) {
+  // in case the string is invalid return a empty string
+  if(!string || typeof(string) != "string") return "";
+
+  // removes the white space at the start and end of a string
+  return string.trim();
+}
+
+export
+function cleaupId(string) {
+  // replaces the space with dashed (-)
+  return cleanup(string).toLowerCase().replace(" ", "-");
+}
+
+/**
+ * Makes a key to be used as {@link localStorage} key.
+ * 
+ * @param {String} prefix 
+ * @param {String} sufix 
+ * @returns {`${prefix}:${sufix}`}
+ */
+export
+function makeKey(prefix, sufix) {
+  return `${cleaupId(prefix)}:${cleanup(sufix)}`
+}
+
+/**
+ * Makes a key to be used as {@link localStorage} key based on a class instance.
+ * 
+ * @param {{
+ *   name: String,
+ *   constructor: {
+ *     name: String
+ *   }
+ * }} instance
+ */
+export
+function makeInstanceKey(instance) {
+  return makeKey(instance.constructor.name, instance.name);
+}
+
+/**
+ * @typedef { {
+ *  autosave: Boolean,
+ *  save: () => void
+ * } } Autosaveble
+ */
+
+/**
+ * Creates a proxy that will autosave the odject each time a property is changed.
+ * 
+ * @param {Autosaveble} instance The instance needs to have
+ * a `autosave` boolean property and a save method.
+ */
+export
+function AutoSaver(instance) {
+  return new Proxy(instance, {
+      set(target, prop, value) {
+        // only save if the autosave is set
+        if(target.autosave 
+          &amp;&amp; typeof(target.save) == "function")
+          target.save();
+
+        // do the default action
+        target[prop] = value;
+
+        return true;
+    }
+  });
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">CineScape</a></h2><h3>Modules</h3><ul><li><a href="module-cinescape.html">cinescape</a></li><li><a href="module-cinescape_event.html">cinescape/event</a></li><li><a href="module-cinescape_level.html">cinescape/level</a></li><li><a href="module-cinescape_popup.html">cinescape/popup</a></li><li><a href="module-cinescape_puzzle.html">cinescape/puzzle</a></li><li><a href="module-cinescape_timer.html">cinescape/timer</a></li></ul><h3>Classes</h3><ul><li><a href="Challenge.html">Challenge</a></li><li><a href="CompleteLevelChallenge.html">CompleteLevelChallenge</a></li><li><a href="CompleteUnderSecondsChallenge.html">CompleteUnderSecondsChallenge</a></li><li><a href="PuzzleForm.html">PuzzleForm</a></li><li><a href="PuzzleFormChoose.html">PuzzleFormChoose</a></li><li><a href="PuzzleFormSelect.html">PuzzleFormSelect</a></li><li><a href="SolvePuzzleChallenge.html">SolvePuzzleChallenge</a></li><li><a href="SolvePuzzleInLevelChanllenge.html">SolvePuzzleInLevelChanllenge</a></li><li><a href="User.html">User</a></li><li><a href="module-cinescape_event.BreakingPointModel.html">BreakingPointModel</a></li><li><a href="module-cinescape_event.EventModel.html">EventModel</a></li><li><a href="module-cinescape_level.Level.html">Level</a></li><li><a href="module-cinescape_popup.Popup.html">Popup</a></li><li><a href="module-cinescape_puzzle.Puzzle.html">Puzzle</a></li><li><a href="module-cinescape_puzzle.PuzzleChoose.html">PuzzleChoose</a></li><li><a href="module-cinescape_puzzle.PuzzleDrag.html">PuzzleDrag</a></li><li><a href="module-cinescape_puzzle.PuzzleInput.html">PuzzleInput</a></li><li><a href="module-cinescape_puzzle.PuzzleSelect.html">PuzzleSelect</a></li><li><a href="module-cinescape_puzzle-PuzzleEventModel.html">PuzzleEventModel</a></li><li><a href="module-cinescape_timer.Timer.html">Timer</a></li></ul><h3>Interfaces</h3><ul><li><a href="module-cinescape_puzzle.Puzzle_ask.html">ask</a></li></ul><h3>Events</h3><ul><li><a href="module-cinescape_timer.html#~event:BreakingPoint">BreakingPoint</a></li><li><a href="module-cinescape_puzzle.html#~event:MissEvent">MissEvent</a></li><li><a href="module-cinescape_timer.html#~event:PauseEvent">PauseEvent</a></li><li><a href="module-cinescape_timer.html#~event:ResetEvent">ResetEvent</a></li><li><a href="module-cinescape_puzzle.html#~event:SolveEvent">SolveEvent</a></li><li><a href="module-cinescape_timer.html#~event:StartEvent">StartEvent</a></li><li><a href="module-cinescape_timer.html#~event:StepEvent">StepEvent</a></li><li><a href="module-cinescape_timer.html#~event:StopEvent">StopEvent</a></li><li><a href="module-cinescape_puzzle.html#~event:UnsolveEvent">UnsolveEvent</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AutoSaver">AutoSaver</a></li><li><a href="global.html#allChallenges">allChallenges</a></li><li><a href="global.html#cleanup">cleanup</a></li><li><a href="global.html#cloneArray">cloneArray</a></li><li><a href="global.html#createChallenge">createChallenge</a></li><li><a href="global.html#getLoggedUser">getLoggedUser</a></li><li><a href="global.html#makeInstanceKey">makeInstanceKey</a></li><li><a href="global.html#makeKey">makeKey</a></li><li><a href="global.html#numberGenerator">numberGenerator</a></li><li><a href="global.html#restoreChallenge">restoreChallenge</a></li><li><a href="global.html#shuffleArray">shuffleArray</a></li><li><a href="global.html#shuffleArrayIndex">shuffleArrayIndex</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon Jun 12 2023 03:09:35 GMT+0100 (Western European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

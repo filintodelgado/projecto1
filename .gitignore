@@ -4,3 +4,11 @@
 # vscode settings folder
 # the settings are personal
 .vscode/
+
+# node
+## ignore the modules
+node_modules/
+
+# JSDoc
+## duplicated file
+jsdoc 2.json

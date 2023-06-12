@@ -1,0 +1,23 @@
+{
+  "source" : {
+    "include" : ["api"],
+    "includePattern" : ".[m]js$",
+    "excludePattern" : "(node_modules/|docs)"
+  },
+  "plugins" : [
+    "plugins/markdown",
+    "jsdoc-plugin-typescript"
+  ],
+  "templates" : {
+    "cleverLinks" : true,
+    "monospaceLinks" : true
+  },
+  "opts" : {
+    "recursive" : true,
+    "destination" : "./docs",
+    "template" : "./template"
+  },
+  "typescript": {
+    "moduleRoot": "./api"
+  }
+}
