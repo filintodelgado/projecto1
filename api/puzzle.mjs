@@ -5,7 +5,7 @@
  * @module cinescape/puzzle
  */
 
-import { numberGenerator } from "./utils.mjs";
+import { cleanup, numberGenerator } from "./utils.mjs";
 
 /**
  * Puzzle in a gerenic Object Form.
@@ -39,6 +39,12 @@ import { numberGenerator } from "./utils.mjs";
  * and the .miss() method is called, normally when the user
  * responds incorrectly the form;
  * 
+ */
+
+/**
+ * The type of puzzle that are available.
+ * 
+ * @typedef {"puzzleSelect" | "puzzleDrag" | "puzzleInput"} PuzzleType
  */
 
 /**
@@ -363,6 +369,13 @@ extends HTMLElement {
 
   /********** Methods **********/
   /**
+   * All the listeners.
+   * 
+   * @type {{[key: String]: [Function]}}
+   */
+  static _listeners = {}
+
+  /**
    * {@link addEventListener} to all the {@link instances} of the class.
    * 
    * @param {keyof HTMLElementEventMap | PuzzleEventKeyMap} type 
@@ -370,6 +383,14 @@ extends HTMLElement {
    * @param {boolean | AddEventListenerOptions | undefined} options 
    */
   static addEventListener(type, listener, options=null) {
+    // create the stack
+    if(!PuzzleEventModel._listeners[type])
+      PuzzleEventModel._listeners[type] = []
+
+    // add to the stack
+    PuzzleEventModel._listeners[type].push(listener);
+
+    // apply to all instance
     for(const puzzle of this.instances) 
       puzzle.addEventListener(type, listener, options);
   }
@@ -382,6 +403,10 @@ extends HTMLElement {
    * @param {boolean | AddEventListenerOptions | undefined} options 
    */
   static removeEventListener(type, listener, options=null) {
+    // remove from the stack
+    if(PuzzleEventModel._listeners[type])
+      PuzzleEventModel._listeners[type]
+        .filter((value) => value != listener);
     for(const puzzle of this.instances)
       puzzle.removeEventListener(type, listener, options);
   }
@@ -428,6 +453,16 @@ extends HTMLElement {
     this.replaceEventListener(type, callback, this[propertyName]);
     this[propertyName] = callback;
     return true;
+  }
+
+  constructor() {
+    super();
+
+    // apply all listeners
+    for(const type in PuzzleEventModel._listeners) {
+      for(const listerner of PuzzleEventModel._listeners[type])
+        this.addEventListener(type, listerner)
+    }
   }
 }
 
@@ -797,3 +832,58 @@ customElements.define("puzzle-select", PuzzleSelect);
 // Default export
 // import puzzle from "./puzzle.mjs"
 export default { PuzzleSelect }
+
+/**
+ * Creates a new puzzle element.
+ * @param {PuzzleType} type 
+ * @param {...*} options
+ * 
+ * @overload
+ * @param {"puzzleSelect"} type 
+ * @param {String} question 
+ * @param {String[]} answers
+ * 
+ * @overload
+ * @param {"puzzleDrag"} type 
+ * @param {String} question 
+ * @param {HTMLElement[]} answers
+ * 
+ * @overload
+ * @param {"puzzleInput"} type 
+ * @param {String} question
+ * @param {Number} min
+ * @param {Number} max
+ */
+export
+function createPuzzle(type, ...options) {
+  type = cleanup(type);
+  let puzzle;
+
+  switch(type) {
+    case "puzzleSelect":
+      puzzle = createPuzzleSelect(...options);
+      break;
+    default:
+      puzzle = false;
+      break;
+  }
+
+  document.body.appendChild(puzzle);
+}
+
+function createPuzzleSelect(question, answers) {
+  if(!question || answers.length < 4) return;
+
+  const puzzle = document.createElement("puzzle-select");
+  const questionElement = document.createElement("puzzle-question");
+  questionElement.textContent = question;
+  puzzle.appendChild(questionElement)
+
+  for(const answer of answers) {
+    const element = document.createElement("puzzle-answer");
+    element.textContent = answer;
+    puzzle.appendChild(element);
+  }
+
+  return puzzle;
+}

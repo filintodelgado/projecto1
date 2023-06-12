@@ -1,4 +1,4 @@
-import cinescape, { Challenge, popup } from "../api/main.mjs";
+import cinescape, { Challenge, createPuzzle, popup } from "../api/main.mjs";
 
 localStorage.clear();
 
@@ -13,3 +13,5 @@ challenge.addEventListener("progress", function() {
 challenge.addEventListener("progress", () => {
   popup.display("Something");
 })
+
+createPuzzle("puzzleSelect", "something", [1, 2, 3, 4]);

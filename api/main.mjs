@@ -17,8 +17,8 @@ import * as puzzle from "./puzzle.mjs";
 export { puzzle };
 
 // import and exports individually
-import { Puzzle, PuzzleSelect } from "./puzzle.mjs";
-export { Puzzle, PuzzleSelect }
+import { Puzzle, PuzzleSelect, createPuzzle } from "./puzzle.mjs";
+export { Puzzle, PuzzleSelect, createPuzzle }
 
 /* Form */
 import { PuzzleFormSelect } from "./form.mjs";
@@ -53,7 +53,7 @@ export { Popup, popup }
 export default 
 { 
   // to make the puzzle
-  PuzzleSelect,
+  createPuzzle,
   // form used by the puzzle
   PuzzleFormSelect,
 
