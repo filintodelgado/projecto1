@@ -5,6 +5,7 @@
  * @module cinescape/puzzle
  */
 
+import { popup } from "./popup.mjs";
 import { cleanup, numberGenerator } from "./utils.mjs";
 
 /**
@@ -391,7 +392,7 @@ extends HTMLElement {
     PuzzleEventModel._listeners[type].push(listener);
 
     // apply to all instance
-    for(const puzzle of this.instances) 
+    for(const puzzle of Puzzle.instances)
       puzzle.addEventListener(type, listener, options);
   }
   
@@ -412,7 +413,7 @@ extends HTMLElement {
   }
 
   /**
-   * Replaces a callback in all {@link Puzzle.instances | instances}
+   * Replaces a callback in all {@link Puzzle.appendedIntances | instances}
    * using {@link _replaceCallbackFunction} method.
    * 
    * @param {keyof HTMLElementEventMap | PuzzleEventKeyMap} name
@@ -463,6 +464,8 @@ extends HTMLElement {
       for(const listerner of PuzzleEventModel._listeners[type])
         this.addEventListener(type, listerner)
     }
+
+    Puzzle.instances.push(this);
   }
 }
 
@@ -514,6 +517,33 @@ extends PuzzleEventModel {
     }
   }
 
+  /**
+   * All the instances that were created.
+   * 
+   * @type {PuzzleEventModel[]}
+   */
+  static instances = []
+
+  /**
+   * How many puzzles have been solved.
+   */
+  static get numberOfSolvedPuzzle() {
+    let number = 0;
+
+    for(const puzzle of Puzzle.instances) {
+      if(puzzle.solved) number++;
+    }
+
+    return number;
+  }
+
+  /**
+   * How many puzzle have **not** been solved
+   */
+  static get numberOfUnsolvedPuzzle() {
+    return Math.abs(Puzzle.instances.length - Puzzle.numberOfSolvedPuzzle);
+  }
+
   /** 
    * List of all instances that can be quered in the DOM. 
    * Getted by querying the {@link document} for any element with
@@ -521,7 +551,7 @@ extends PuzzleEventModel {
    * 
    * @type {Puzzle[]}
    */
-  static get instances() { 
+  static get appendedIntances() { 
     const puzzles = [];
 
     // we intend to return an array not a NodeList
@@ -887,3 +917,14 @@ function createPuzzleSelect(question, answers) {
 
   return puzzle;
 }
+
+const puzzleSolvedCallback = () => {
+  popup.display(`Quebra-cabeça ${Puzzle.numberOfSolvedPuzzle} de ${Puzzle.instances.length} resolvido.`)
+}
+
+function puzzleMissCallback() {
+  popup.display(`Resposta errada. Restam ${Puzzle.numberOfUnsolvedPuzzle}.`)
+}
+
+Puzzle.addEventListener("solve", puzzleSolvedCallback);
+Puzzle.addEventListener("miss", puzzleMissCallback);

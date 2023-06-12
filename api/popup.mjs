@@ -221,12 +221,17 @@ extends HTMLDivElement {
 
     // hide by default
     this.hide();
+
+    document.body.appendChild(this)
   }
 }
 
 customElements.define("pop-up", Popup, {extends: "div"});
 
+/**
+ * The default popup.
+ * 
+ * @type {Popup}
+ */
 export
 const popup = document.createElement("div", {is: "pop-up"});
-
-document.body.appendChild(popup);

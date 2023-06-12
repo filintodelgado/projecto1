@@ -10,8 +10,4 @@ challenge.addEventListener("progress", function() {
   console.log(`Progressed, the progress is now ${this.progress}.`);
 });
 
-challenge.addEventListener("progress", () => {
-  popup.display("Something");
-})
-
 createPuzzle("puzzleSelect", "something", [1, 2, 3, 4]);
