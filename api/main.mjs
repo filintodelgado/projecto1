@@ -44,6 +44,10 @@ export { User, getLoggedUser, loggedUser };
 import { Challenge, SolvePuzzleChallenge, CompleteLevelChallenge, SolvePuzzleInLevelChanllenge, CompleteUnderSecondsChallenge, createChallenge, restoreChallenge } from "./challenge.mjs";
 export { Challenge, SolvePuzzleChallenge, CompleteLevelChallenge, SolvePuzzleInLevelChanllenge, CompleteUnderSecondsChallenge, createChallenge, restoreChallenge };
 
+/* Popup */
+import { Popup, popup } from "./popup.mjs";
+export { Popup, popup }
+
 /* Defautl */
 /* import cinescape from "main.js" */
 export default 
@@ -67,5 +71,8 @@ export default
 
   // create and restore challenges
   createChallenge,
-  restoreChallenge
+  restoreChallenge,
+
+  // popup
+  popup
 }

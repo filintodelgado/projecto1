@@ -174,7 +174,7 @@ extends EventModel{
     else this.dispatchEvent("decrease");
 
     // trigger the complete event if the goal is reached
-    if(this.progress == this.goal) this.complete();
+    if(this.progress == this.goal) this.dispatchEvent("complete");;
   }
 
   /**
@@ -189,7 +189,6 @@ extends EventModel{
     
     // if not completed simply force the progress to be equal to goal
     this.progress = this.goal;
-    this.dispatchEvent("complete");
   }
 
   /**
@@ -658,7 +657,7 @@ const allChallenges = Challenge.all;
  * @param {Number} [progress] How much times the user has completed those {@link goal | puzzles}.
  * @param {Boolean} [completed] Has user solved the puzzles {@link goal | time}
  * enougth to be consider completed.
- * @returns {CompleteLevelChallenge}
+ * @returns {SolvePuzzleInLevelChanllenge}
  * 
  * @overload
  * 
@@ -670,7 +669,7 @@ const allChallenges = Challenge.all;
  * @param {Number} [progress] How much time the user as take in the level.
  * @param {Boolean} [completed] Has user completed the levels under the expecifid
  * {@link goal | time}.
- * @returns {CompleteLevelChallenge}
+ * @returns {CompleteUnderSecondsChallenge}
  */
 export
 function createChallenge(type, goal, ...args) {
