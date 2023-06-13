@@ -55,6 +55,7 @@ extends EventModel {
   set email(value) {
     this._email = value;
   }
+
   password;
   _name;
   /**
@@ -118,7 +119,7 @@ extends EventModel {
   };
   
   /** The state of the level the User is currectly playing. */
-  get level() { return currentLevel.objectify() };
+  get level() { return currentLevel ? currentLevel.objectify() : {} };
 
   /** 
    * Retrive the state of all levels the user as played so far. 
@@ -430,7 +431,7 @@ extends EventModel {
    * Will load the user object from the storage.
    * 
    * @param {String} email The registred user Email.
-   * @returns {Levels}
+   * @returns {User}
    */
   static load(email) {
     const jsonData = localStorage[makeKey(this.name, email)]
@@ -438,6 +439,21 @@ extends EventModel {
     if(!jsonData) return false;
 
     return JSON.parse(jsonData);
+  }
+  
+  /**
+   * Given a email and password validates if the password if valid for the given user.
+   * 
+   * @param {String} email 
+   * @param {String} password 
+   * @returns {Boolean}
+   */
+  static checkPassword(email, password) {
+    const user = User.load(email);
+
+    if(!user) return false;
+
+    if(user.password == password) return true;
   }
 
   /**

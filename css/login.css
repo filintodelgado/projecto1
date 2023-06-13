@@ -251,3 +251,7 @@ input[type=radio]:checked {
 a{
     text-decoration: none;
 }
+
+.invalid {
+    border-color: red;
+}

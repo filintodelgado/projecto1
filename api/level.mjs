@@ -178,10 +178,11 @@ extends EventModel {
   }
 }
 
+const levelName = document.body.getAttribute("level");
 /** 
  * The current level. `null` if there is no level.
  * 
  * @type {Level | null}
  */
 export
-const currentLevel = new Level;
+const currentLevel = levelName ? new Level(levelName) : null;

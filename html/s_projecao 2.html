@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+    <!-- JQuery -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+    <!-- Responsive Image maps -->
+    <!-- Allows image maps to be used in a responsive design by recalculating the area coordinates  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-rwdImageMaps/1.6/jquery.rwdImageMaps.min.js"
+        integrity="sha512-eZB7hQa0bRlrKMQ2njpP0d/Klu6o30Gsr8e5FUCjUT3fSlnVkm/1J14n58BuwgaMuObrGb7SvUfQuF8qFsPU4g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <title>Cinema</title>
+</head>
+
+<body>
+    <img src="../assets/salas//projecao.png" usemap="#workmap" alt="room" class="img-fluid img-responsive rounded mx-auto d-block">
+    <map name="workmap">
+        <map name="image-map">
+            <area alt="filme1" id="filme1" href="#" coords="64,192,84,243" shape="rect">
+            <area alt="filme2" id="filme2" href="#" coords="145,351,164,401" shape="rect">
+            <area alt="filme 3" id="filme 3" href="#" coords="145,88,164,138" shape="rect">
+            <area alt="mesa" id="mesa" href="#" coords="223,360,607,387" shape="rect">
+            <area alt="projetor" id="projetor" href="#" coords="760,205,786,205,787,148,864,148,864,269,760,270" shape="poly">
+            <area alt="porta" id="porta" href="#" coords="375,30,488,301" shape="rect">
+        </map>
+
+    <!-- javascript file -->
+    <script src="../js//desafios_salas/salas.js"></script>
+    <script src="../js//desafios_salas/sala3.js"></script>
+</body>
+
+</html>

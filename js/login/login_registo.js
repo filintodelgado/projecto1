@@ -54,7 +54,7 @@ function ChangeMode(){
         local.style.display = "flex"
         sex.style.display = "flex"
 
-        loginButton.innerHTML = '<h4 id="login-button" onclick="loginVerifi()">Registar</h4>'
+        loginButton.innerHTML = '<h4 id="login-button">Registar</h4>'
 
         login = false
     }

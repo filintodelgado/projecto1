@@ -13,4 +13,4 @@
 import { loggedUser } from "../api/user.mjs";
 
 // send user back to home
-if(!loggedUser) location.pathname = "/";
+if(!loggedUser) location.href = "../";
