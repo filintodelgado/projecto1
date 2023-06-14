@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <style>
+        .image-container {
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+          padding: 20px;
+          margin-bottom: 20px;
+          border: 1px solid #ccc;
+        }
+    
+        .image-container img {
+          width: 100px;
+          height: 100px;
+          cursor: move;
+        }
+    
+        #result-message {
+          font-weight: bold;
+        }
+      </style>
+    </head>
+    
+    <body>
+      <div class="image-container">
+        <img src="/assets/poster/P1.jpg" alt="Image 1" >
+        <img src="/assets/poster/P2.jpg" alt="Image 2" >
+        <img src="/assets/poster/P3.png" alt="Image 3" >
+        <img src="/assets/poster/P4.jpg" alt="Image 4" >
+      </div>
+      <div id="result-message"></div>
+    
+      <script>
+        // Adiciona os eventos de arrastar e soltar às imagens
+        const images = document.querySelectorAll('.image-container img');
+        images.forEach(image => {
+          image.addEventListener('dragstart', dragStart);
+          image.addEventListener('dragover', dragOver);
+          image.addEventListener('dragleave', dragLeave);
+          image.addEventListener('drop', drop);
+        });
+    
+        let draggedImage = null; // Imagem sendo arrastada
+    
+        function dragStart(e) {
+          draggedImage = e.target;
+          e.dataTransfer.effectAllowed = 'move';
+        }
+    
+        function dragOver(e) {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'move';
+        }
+    
+        function dragLeave(e) {
+          e.target.style.border = 'none';
+        }
+    
+        function drop(e) {
+          e.preventDefault();
+          e.target.style.border = 'none';
+    
+          // Troca a posição das imagens
+          const targetImage = e.target;
+          const container = targetImage.parentNode;
+          const draggedIndex = Array.from(container.children).indexOf(draggedImage);
+          const targetIndex = Array.from(container.children).indexOf(targetImage);
+          if (draggedIndex < targetIndex) {
+            container.insertBefore(draggedImage, targetImage.nextSibling);
+          } else {
+            container.insertBefore(draggedImage, targetImage);
+          }
+    
+          checkOrder(); // Verifica se a ordem está correta
+        }
+    
+        function checkOrder() {
+          const container = document.querySelector('.image-container');
+          const images = container.querySelectorAll('img');
+    
+          let isCorrect = true;
+          images.forEach((image, index) => {
+            if (image.alt !== `Image ${index + 1}`) {
+              isCorrect = false;
+              return;
+            }
+          });
+    
+          if (isCorrect) {
+            document.getElementById('result-message').textContent = 'Parabéns! A ordem está correta.';
+          } else {
+            document.getElementById('result-message').textContent = '';
+          }
+        }
+      </script>
+</body>
+</html>
