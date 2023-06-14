@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 
@@ -17,7 +16,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-rwdImageMaps/1.6/jquery.rwdImageMaps.min.js"
         integrity="sha512-eZB7hQa0bRlrKMQ2njpP0d/Klu6o30Gsr8e5FUCjUT3fSlnVkm/1J14n58BuwgaMuObrGb7SvUfQuF8qFsPU4g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        
+    <link rel="stylesheet" href="../css/modal.css">
+
     <title>Bilheteria</title>
 </head>
 
@@ -31,8 +31,14 @@
             shape="poly">
         <area alt="mesa" id="mesa" coords="200,327,575,319" shape="rect">
     </map>
-
     
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="iframeContainer"></div>
+        </div>
+    </div>
+
 
 
     <!-- javascript file -->

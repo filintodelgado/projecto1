@@ -1,0 +1,45 @@
+<!-- the entry point of the site -->
+<!-- open a server in the folder and the / path should lead to this file -->
+<!-- example: htts://localhost:3000/ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CineScape</title>
+
+  <link rel="stylesheet" href="/css/index.css">
+  <script src="/js/index.js" type="module" defer></script>
+</head>
+<body level="test" timer="60">
+  <h1>CineScape</h1>
+  <p>Wellcome to cinescape</p>
+
+  <puzzle-select shuffle="true">
+    <puzzle-question>
+      A decada de 90 foi marcado por classicos que marcaram uma geração. 
+      Quais desses classicos teve a maior bilheteria
+    </puzzle-question>
+    <puzzle-answers>
+      <puzzle-answer>Titanic</puzzle-answer>
+      <puzzle-answer>Harry Potter</puzzle-answer>
+      <puzzle-answer>O Rei Leão</puzzle-answer>
+      <puzzle-answer>Jurassic Park</puzzle-answer>
+    </puzzle-answers>
+  </puzzle-select>
+
+  <puzzle-select>
+    <puzzle-question>
+      A decada de 90 foi marcado por classicos que marcaram uma geração. 
+      Quais desses classicos teve a maior bilheteria
+    </puzzle-question>
+    <puzzle-answers>
+      <puzzle-answer correct>Titanic</puzzle-answer>
+      <puzzle-answer>Harry Potter</puzzle-answer>
+      <puzzle-answer>O Rei Leão</puzzle-answer>
+      <puzzle-answer>Jurassic Park</puzzle-answer>
+    </puzzle-answers>
+  </puzzle-select>
+</body>
+</html>
