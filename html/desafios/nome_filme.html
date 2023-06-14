@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        #imageContainer {
+
+            margin-bottom: 15px;
+            margin-top: 15px;
+        }
+
+        img {
+            width: 215px;
+        }
+
+       
+    </style>
+</head>
+
+<body>
+    <h2>Qual o nome deste filme em Portugal?</h2>
+    <div id="imageContainer"></div>
+    <input type="text" id="guessInput" placeholder="Digite sua resposta">
+    <button id="submitBtn">Enviar</button>
+    <p id="resultText"></p>
+
+    <script>
+        // Array com as informações das imagens e respostas
+        var images = [
+            { src: '/assets/poster/P1.jpg', answer: 'pai para mim ... mãe para ti' },
+        ];
+
+        var currentImageIndex = 0;
+        var imageContainer = document.getElementById('imageContainer');
+        var guessInput = document.getElementById('guessInput');
+        var submitBtn = document.getElementById('submitBtn');
+        var resultText = document.getElementById('resultText');
+
+        // Função para exibir a imagem atual
+        function showCurrentImage() {
+            var currentImage = images[currentImageIndex];
+            imageContainer.innerHTML = '<img src="' + currentImage.src + '" alt="Imagem para adivinhar">';
+        }
+
+        // Função para verificar a resposta do jogador
+        function checkAnswer() {
+            var currentImage = images[currentImageIndex];
+            var playerAnswer = guessInput.value.toLowerCase();
+
+            if (playerAnswer === currentImage.answer) {
+                resultText.textContent = 'Parabéns! Você acertou!';
+            } else {
+                resultText.textContent = 'Resposta incorreta. Tente novamente.';
+            }
+
+            // Atualiza o índice da imagem
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+
+            guessInput.value = '';
+            guessInput.focus();
+            showCurrentImage(); // Mostra a próxima imagem
+        }
+
+        // Event listener para o botão de envio
+        submitBtn.addEventListener('click', function () {
+            checkAnswer();
+        });
+
+        // Event listener para a tecla Enter no campo de texto
+        guessInput.addEventListener('keydown', function (event) {
+            if (event.keyCode === 13) {
+                checkAnswer();
+            }
+        });
+
+        // Inicializa o jogo exibindo a primeira imagem
+        showCurrentImage();
+    </script>
+</body>
+
+</html>

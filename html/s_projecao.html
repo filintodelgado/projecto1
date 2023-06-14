@@ -16,24 +16,32 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-rwdImageMaps/1.6/jquery.rwdImageMaps.min.js"
         integrity="sha512-eZB7hQa0bRlrKMQ2njpP0d/Klu6o30Gsr8e5FUCjUT3fSlnVkm/1J14n58BuwgaMuObrGb7SvUfQuF8qFsPU4g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <link rel="stylesheet" href="../css/modal.css">
+
     <title>Cinema</title>
 </head>
 
 <body level="Sala de Projeção" time="90">
-    <img src="../assets/salas//projecao.png" usemap="#workmap" alt="room" class="img-fluid img-responsive rounded mx-auto d-block">
+    <img src="../assets/salas//projecao.png" usemap="#workmap" alt="room"
+        class="img-fluid img-responsive rounded mx-auto d-block">
     <map name="workmap">
         <map name="image-map">
-            <area alt="filme1" id="filme1" href="#" coords="64,192,84,243" shape="rect">
-            <area alt="filme2" id="filme2" href="#" coords="145,351,164,401" shape="rect">
-            <area alt="filme 3" id="filme3" href="#" coords="145,88,164,138" shape="rect">
-            <area alt="mesa" id="mesa" href="#" coords="223,360,607,387" shape="rect">
-            <area alt="projetor" id="projetor" href="#" coords="760,205,786,205,787,148,864,148,864,269,760,270" shape="poly">
-            <area alt="porta" id="porta" href="#" coords="375,30,488,301" shape="rect">
+            <area alt="porta" id="porta" coords="375,27,488,300" shape="rect">
+            <area alt="projetor" id="projetor" coords="864,147,787,148,788,202,758,206,760,267,787,266,792,271,865,268"
+                shape="poly">
+            <area alt="verde1fila" id="verde1fila" coords="105,88,125,138" shape="rect">
+            <area alt="mesa" id="mesa" coords="222,359,607,385" shape="rect">
         </map>
 
-    <!-- javascript file -->
-    <script src="../js//desafios_salas/salas.js"></script>
-    <script src="../js//desafios_salas/sala3.js"></script>
+        <div id="modal" class="modal">
+            <div class="modal-content">
+              <span class="close">&times;</span>
+              <div id="iframeContainer"></div>
+            </div>
+          </div>
+        <!-- javascript file -->
+        <script src="../js//desafios_salas/salas.js"></script>
+        <script src="../js//desafios_salas/sala3.js"></script>
 </body>
 
 </html>
