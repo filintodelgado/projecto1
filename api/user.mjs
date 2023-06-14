@@ -94,10 +94,21 @@ extends EventModel {
    */
   get borndate() { return this._borndate }
   set borndate(value) {
+    // not a valid date
+    if(!Date.parse(value)) return;
+
     this._borndate = new Date(value);
   }
   local;
   _gender;
+  /**
+   * The gender of the user.
+   * 
+   * @type {{
+   *  "value": String,
+   *  "formated": String
+   * }}
+   */
   get gender() { return this._gender }
   set gender(value) {
     value = String(value).toLowerCase();
@@ -217,7 +228,7 @@ extends EventModel {
   autosave = true;
 
   /** Tells if the User is logged. Setting it to true will log the user and vice-versa. */
-  get logged() { return User.loggedUser == this.email };
+  get logged() { return User.loggedUser.email == this.email };
   set logged(value) {
     value = Boolean(value);
 
@@ -253,7 +264,7 @@ extends EventModel {
    */
   static logout() {
     // redefine
-    User.loggedUser = null;
+    User.loggedUser = false;
   }
 
   /**
@@ -266,7 +277,7 @@ extends EventModel {
       "email": this.email,
       "password": this.password,
       "name": this.name.full,
-      "borndate": `${this.borndate.getFullYear()}-${this.borndate.getMonth()}-${this.borndate.getDate()}`,
+      "borndate": this.borndate.toISOString().substring(0, 10),
       "local": this.local,
       "gender": this.gender.value,
       "levels": this.levels,
@@ -376,9 +387,16 @@ extends EventModel {
 
     if(!currentUser) return undefined;
 
+    // create and return a new instance
     return new User(localStorage["currentUser"]);
   }
   static set loggedUser(email) {
+    // remove the current user if the email is not defined
+    if(!email) {
+      localStorage.removeItem("currentUser");
+      return
+    }
+    
     if(email instanceof User)
       email = email.email
     
@@ -386,8 +404,6 @@ extends EventModel {
     if(!this.allEmails.includes(email))
       return
     
-    // remove the current user if the email is not defined
-    if(!email) localStorage.removeItem("currentUser");
     // othewise set the email
     else localStorage["currentUser"] = email
   }
