@@ -26,8 +26,8 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { PuzzleChoose } from "./puzzle.mjs";
-import { cloneArray, shuffleArrayIndex } from "./utils.mjs";
+            <pre class="prettyprint source linenums"><code>import { Puzzle, PuzzleChoose, PuzzleDrag, PuzzleSelect } from "./puzzle.mjs";
+import { cloneArray, shuffleArray, shuffleArrayIndex } from "./utils.mjs";
 
 const container = document.createElement("div");
 container.classList.add("puzzle-form-container");
@@ -35,22 +35,51 @@ container.classList.add("puzzle-form-container");
 export
 class PuzzleForm 
 extends HTMLFormElement {
+  /**
+   * The last puzzle that the form was asked to ask.
+   * 
+   * @type {Puzzle}
+   */
   lastPuzzle;
+  /**
+   * The `puzzle-question` element.
+   * 
+   * @type {HTMLElement}
+   */
   questionElement = document.createElement("puzzle-question");
+  /**
+   * A container containing all the `puzzle-answer`'s.
+   * 
+   * @type {HTMLElement}
+   */
   answersContainer = document.createElement("puzzle-answers");
+  /**
+   * The list contaning the `puzzle-answer` elements used by the puzzle.
+   * 
+   * @type {HTMLElement[]}
+   */
   answersElements = [];
   submitButton = document.createElement("button");
 
+  /**
+   * Hides the form.
+   */
   hide() {
     this.classList.add("hide");
     this.classList.remove("show");
   }
 
+  /**
+   * Shows the form.
+   */
   show() {
     this.classList.add("show");
     this.classList.remove("hide");
   }
 
+  /**
+   * The handler that will hide the form when the user clicks outside it.
+   */
   closeOnClickHandler = (function(event) {
     const target = event.target;
 
@@ -58,21 +87,29 @@ extends HTMLFormElement {
         this.hide();
   }).bind(this);
 
+  /**
+   * Says if the form is correct.
+   * 
+   * @interface
+   */
   get correct() {}
 
+  /**
+   * Will be excuted when the form is submited.
+   */
   submitHandler = (function(event) {
     event.preventDefault();
     event.stopPropagation();
 
-    if(this.correct) {
-      this.lastPuzzle.solve();
-    } else {
-      this.lastPuzzle.miss();
-    }
+    if(this.correct) this.lastPuzzle.solve();
+    else this.lastPuzzle.miss();
 
     this.hide();
   }).bind(this);
 
+  /**
+   * If the form should be closed when clicking outside it.
+   */
   get closeOnClick() { return this.#closeOnClick };
   set closeOnClick(close) {
     if(close == true)
@@ -83,6 +120,11 @@ extends HTMLFormElement {
     this.#closeOnClick = close;
   }
 
+  /**
+   * Will create the answers for the form.
+   * 
+   * @interface
+   */
   _createAnswers() {}
 
   #closeOnClick = true;
@@ -128,7 +170,7 @@ extends HTMLFormElement {
 export
 class PuzzleFormChoose
 extends PuzzleForm {
-  
+  _createAnswers() {};
 }
 
 export
@@ -206,7 +248,7 @@ extends PuzzleFormChoose {
 
   /**
    * Handler for when the input is checked. It adds the class to the checked
-   * input parent and removes from the old checked input
+   * input parent and removes from the old checked input.
    */
   _inputCheckHandler = (function(event) {
     // so that it won't trigger other events
@@ -224,10 +266,11 @@ extends PuzzleFormChoose {
   }).bind(this);
 
   _createAnswers() {
+    // we made a container for all answers (puzzle-answers)
+    const container = this.answersContainer;
+
     // we will create 4 answers
     for(let i = 0; i &lt; 4; i++) {
-      // we made a container for all answers (puzzle-answers)
-      const container = this.answersContainer;
       // make a container for the answer (puzzle-answer)
       const answer = document.createElement("puzzle-answer");
       // the input and label
@@ -277,7 +320,8 @@ extends PuzzleFormChoose {
 
   /**
    * Opens the form and asks and waits for the user interation based on {@link puzzle}.
-   * @param {PuzzleFormChoose} puzzle The puzzle instance to ask for. If use reponds it
+   * 
+   * @param {PuzzleSelect} puzzle The puzzle instance to ask for. If use reponds it
    * wrong {@link Puzzle.miss} is trigged but if it responds right {@link Puzzle.solve}
    * is trigged.
    * 
@@ -309,10 +353,157 @@ extends PuzzleFormChoose {
 
     // the question is already created but he answers we create now
     this._createAnswers();
+
+    // add the class
+    this.classList.add("puzzle-form-select");
   }
 }
 
-customElements.define("puzzle-form-select", PuzzleFormSelect, {extends: "form"});</code></pre>
+export
+class PuzzleFromDrag
+extends PuzzleForm {
+  /**
+   * Holds the answers in their original order.
+   * 
+   * @type {HTMLElement[]}
+   */
+  originalAnswersElements;
+
+  /**
+   * The element that was dragged.
+   * 
+   * @type {HTMLElement}
+   */
+  firstElement;
+
+  /**
+   * The element that it was dragged to.
+   * 
+   * @type {HTMLElement}
+   */
+  secondElement;
+
+  /**
+   * Swaps the {@link firstElement} and {@link secondElement}.
+   */
+  _swapElements() {
+    const firstContainer = this.firstElement.parentElement;
+    const secondContainer = this.secondElement.parentElement;
+
+    secondContainer.appendChild(this.firstElement);
+    firstContainer.appendChild(this.secondElement);
+  }
+
+  _createAnswers() {
+    // remake the answers container
+    if(this.answersContainer) this.answersContainer.remove();
+    this.answersContainer = document.createElement("puzzle-answers");
+
+    // will contain all the answers
+    const answersContainer = this.answersContainer;
+
+    for(let i = 0; i &lt; 4; i++) {
+      const answer = document.createElement("puzzle-answer");
+
+      // when the user start dragging the element
+      this.answersElements[i].addEventListener("dragstart", (event) => {
+        // select this as the first element
+        this.firstElement = this.answersElements[i];
+      });
+
+      // add event to swap the elements when the drag operation ends
+      answer.addEventListener("drop", (event) => {
+        // the second element will be its only child
+        this.secondElement = answer.children[0];
+
+        // there is no need to swap if the elements are the same
+        if(this.firstElement == this.secondElement) return;
+
+        this._swapElements();
+      })
+
+      // specifies that it is a valid drop target
+      answer.addEventListener("dragover", (event) => { event.preventDefault(); })
+      answer.addEventListener("dragenter", (event) => { event.preventDefault(); })
+
+      // place the element into the container
+      answer.appendChild(this.answersElements[i]);
+
+      answersContainer.appendChild(answer);
+    }
+
+    // add to the form
+    this.appendChild(answersContainer);
+    // re add the button so it stays at the bottom
+    this.submitButton.remove();
+    this.appendChild(this.submitButton)
+  }
+
+  /**
+   * The {@link answersElements} in the order the user selected them.
+   * 
+   * @type {HTMLElement[]}
+   */
+  get selectedAnswersElements() {
+    const answers = [];
+
+    /* The DOM looks like this:
+        - form
+          - puzzle-question
+          - puzzle-answers
+            - puzzle-answer (answer) * 4
+             - element (answer.children[0])
+     */
+    for(const answer of this.answersContainer.children)
+      answers.push(answer.children[0]);
+
+    return answers;
+  }
+
+  /**
+   * Tells if the user ordered it corretly.
+   */
+  get correct() {
+    for(let i = 0; i &lt; 4; i++) {
+      if(this.originalAnswersElements[i] != this.selectedAnswersElements[i])
+        return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Opens the form and asks and waits for the user interation based on {@link puzzle}.
+   * 
+   * @param {PuzzleDrag} puzzle The puzzle instance to ask for. If use reponds it
+   * wrong {@link Puzzle.miss} is trigged but if it responds right {@link Puzzle.solve}
+   * is trigged.
+   * 
+   * @fires SolveEvent
+   * @fires MissEvent
+   */
+  ask(puzzle) {
+    super.ask(puzzle);
+
+    const answerElements = [];
+
+    // clone all the nodes so we don't accedentally change them
+    for(let i = 0; i &lt; 4; ++i) {
+      const element = puzzle.answersElements[i].children[0].cloneNode(true);
+      // make them draggable
+      element.setAttribute("draggable", "true");
+      answerElements.push(element);
+    }
+
+    this.originalAnswersElements = cloneArray(answerElements);
+    this.answersElements = shuffleArray(cloneArray(answerElements));
+
+    this._createAnswers();
+  }
+}
+
+customElements.define("puzzle-form-select", PuzzleFormSelect, {extends: "form"});
+customElements.define("puzzle-form-drag", PuzzleFromDrag, {extends: "form"})</code></pre>
         </article>
     </section>
 
@@ -322,13 +513,13 @@ customElements.define("puzzle-form-select", PuzzleFormSelect, {extends: "form"})
 </div>
 
 <nav>
-    <h2><a href="index.html">CineScape</a></h2><h3>Modules</h3><ul><li><a href="module-cinescape.html">cinescape</a></li><li><a href="module-cinescape_event.html">cinescape/event</a></li><li><a href="module-cinescape_level.html">cinescape/level</a></li><li><a href="module-cinescape_popup.html">cinescape/popup</a></li><li><a href="module-cinescape_puzzle.html">cinescape/puzzle</a></li><li><a href="module-cinescape_timer.html">cinescape/timer</a></li></ul><h3>Classes</h3><ul><li><a href="Challenge.html">Challenge</a></li><li><a href="CompleteLevelChallenge.html">CompleteLevelChallenge</a></li><li><a href="CompleteUnderSecondsChallenge.html">CompleteUnderSecondsChallenge</a></li><li><a href="PuzzleForm.html">PuzzleForm</a></li><li><a href="PuzzleFormChoose.html">PuzzleFormChoose</a></li><li><a href="PuzzleFormSelect.html">PuzzleFormSelect</a></li><li><a href="SolvePuzzleChallenge.html">SolvePuzzleChallenge</a></li><li><a href="SolvePuzzleInLevelChanllenge.html">SolvePuzzleInLevelChanllenge</a></li><li><a href="User.html">User</a></li><li><a href="module-cinescape_event.BreakingPointModel.html">BreakingPointModel</a></li><li><a href="module-cinescape_event.EventModel.html">EventModel</a></li><li><a href="module-cinescape_level.Level.html">Level</a></li><li><a href="module-cinescape_popup.Popup.html">Popup</a></li><li><a href="module-cinescape_puzzle.Puzzle.html">Puzzle</a></li><li><a href="module-cinescape_puzzle.PuzzleChoose.html">PuzzleChoose</a></li><li><a href="module-cinescape_puzzle.PuzzleDrag.html">PuzzleDrag</a></li><li><a href="module-cinescape_puzzle.PuzzleInput.html">PuzzleInput</a></li><li><a href="module-cinescape_puzzle.PuzzleSelect.html">PuzzleSelect</a></li><li><a href="module-cinescape_puzzle-PuzzleEventModel.html">PuzzleEventModel</a></li><li><a href="module-cinescape_timer.Timer.html">Timer</a></li></ul><h3>Interfaces</h3><ul><li><a href="module-cinescape_puzzle.Puzzle_ask.html">ask</a></li></ul><h3>Events</h3><ul><li><a href="module-cinescape_timer.html#~event:BreakingPoint">BreakingPoint</a></li><li><a href="module-cinescape_puzzle.html#~event:MissEvent">MissEvent</a></li><li><a href="module-cinescape_timer.html#~event:PauseEvent">PauseEvent</a></li><li><a href="module-cinescape_timer.html#~event:ResetEvent">ResetEvent</a></li><li><a href="module-cinescape_puzzle.html#~event:SolveEvent">SolveEvent</a></li><li><a href="module-cinescape_timer.html#~event:StartEvent">StartEvent</a></li><li><a href="module-cinescape_timer.html#~event:StepEvent">StepEvent</a></li><li><a href="module-cinescape_timer.html#~event:StopEvent">StopEvent</a></li><li><a href="module-cinescape_puzzle.html#~event:UnsolveEvent">UnsolveEvent</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AutoSaver">AutoSaver</a></li><li><a href="global.html#allChallenges">allChallenges</a></li><li><a href="global.html#cleanup">cleanup</a></li><li><a href="global.html#cloneArray">cloneArray</a></li><li><a href="global.html#createChallenge">createChallenge</a></li><li><a href="global.html#getLoggedUser">getLoggedUser</a></li><li><a href="global.html#makeInstanceKey">makeInstanceKey</a></li><li><a href="global.html#makeKey">makeKey</a></li><li><a href="global.html#numberGenerator">numberGenerator</a></li><li><a href="global.html#restoreChallenge">restoreChallenge</a></li><li><a href="global.html#shuffleArray">shuffleArray</a></li><li><a href="global.html#shuffleArrayIndex">shuffleArrayIndex</a></li></ul>
+    <h2><a href="index.html">CineScape</a></h2><h3>Modules</h3><ul><li><a href="module-cinescape.html">cinescape</a></li><li><a href="module-cinescape_event.html">cinescape/event</a></li><li><a href="module-cinescape_level.html">cinescape/level</a></li><li><a href="module-cinescape_popup.html">cinescape/popup</a></li><li><a href="module-cinescape_puzzle.html">cinescape/puzzle</a></li><li><a href="module-cinescape_timer.html">cinescape/timer</a></li></ul><h3>Classes</h3><ul><li><a href="Challenge.html">Challenge</a></li><li><a href="CompleteLevelChallenge.html">CompleteLevelChallenge</a></li><li><a href="CompleteUnderSecondsChallenge.html">CompleteUnderSecondsChallenge</a></li><li><a href="PuzzleForm.html">PuzzleForm</a></li><li><a href="PuzzleFormChoose.html">PuzzleFormChoose</a></li><li><a href="PuzzleFormSelect.html">PuzzleFormSelect</a></li><li><a href="PuzzleFromDrag.html">PuzzleFromDrag</a></li><li><a href="SolvePuzzleChallenge.html">SolvePuzzleChallenge</a></li><li><a href="SolvePuzzleInLevelChanllenge.html">SolvePuzzleInLevelChanllenge</a></li><li><a href="User.html">User</a></li><li><a href="module-cinescape_event.BreakingPointModel.html">BreakingPointModel</a></li><li><a href="module-cinescape_event.EventModel.html">EventModel</a></li><li><a href="module-cinescape_level.Level.html">Level</a></li><li><a href="module-cinescape_popup.Popup.html">Popup</a></li><li><a href="module-cinescape_puzzle.Puzzle.html">Puzzle</a></li><li><a href="module-cinescape_puzzle.PuzzleChoose.html">PuzzleChoose</a></li><li><a href="module-cinescape_puzzle.PuzzleDrag.html">PuzzleDrag</a></li><li><a href="module-cinescape_puzzle.PuzzleInput.html">PuzzleInput</a></li><li><a href="module-cinescape_puzzle.PuzzleSelect.html">PuzzleSelect</a></li><li><a href="module-cinescape_puzzle-PuzzleEventModel.html">PuzzleEventModel</a></li><li><a href="module-cinescape_timer.Timer.html">Timer</a></li></ul><h3>Interfaces</h3><ul><li><a href="PuzzleForm__createAnswers.html">_createAnswers</a></li><li><a href="PuzzleForm_correct.html">correct</a></li><li><a href="module-cinescape_puzzle.Puzzle_ask.html">ask</a></li></ul><h3>Events</h3><ul><li><a href="module-cinescape_timer.html#~event:BreakingPoint">BreakingPoint</a></li><li><a href="module-cinescape_puzzle.html#~event:MissEvent">MissEvent</a></li><li><a href="module-cinescape_timer.html#~event:PauseEvent">PauseEvent</a></li><li><a href="module-cinescape_timer.html#~event:ResetEvent">ResetEvent</a></li><li><a href="module-cinescape_puzzle.html#~event:SolveEvent">SolveEvent</a></li><li><a href="module-cinescape_timer.html#~event:StartEvent">StartEvent</a></li><li><a href="module-cinescape_timer.html#~event:StepEvent">StepEvent</a></li><li><a href="module-cinescape_timer.html#~event:StopEvent">StopEvent</a></li><li><a href="module-cinescape_puzzle.html#~event:UnsolveEvent">UnsolveEvent</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AutoSaver">AutoSaver</a></li><li><a href="global.html#admin">admin</a></li><li><a href="global.html#allChallenges">allChallenges</a></li><li><a href="global.html#cleanup">cleanup</a></li><li><a href="global.html#cloneArray">cloneArray</a></li><li><a href="global.html#createChallenge">createChallenge</a></li><li><a href="global.html#getLoggedUser">getLoggedUser</a></li><li><a href="global.html#loggedUser">loggedUser</a></li><li><a href="global.html#makeInstanceKey">makeInstanceKey</a></li><li><a href="global.html#makeKey">makeKey</a></li><li><a href="global.html#numberGenerator">numberGenerator</a></li><li><a href="global.html#restoreChallenge">restoreChallenge</a></li><li><a href="global.html#shuffleArray">shuffleArray</a></li><li><a href="global.html#shuffleArrayIndex">shuffleArrayIndex</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Wed Jun 14 2023 06:54:49 GMT+0100 (Western European Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Fri Jun 16 2023 10:03:18 GMT+0100 (Western European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

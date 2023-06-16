@@ -1,0 +1,10 @@
+@import url("./base.css");
+
+body {
+  height: 100vh;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+}

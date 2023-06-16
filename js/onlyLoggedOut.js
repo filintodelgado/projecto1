@@ -7,4 +7,4 @@
 import { loggedUser } from "../api/user.mjs";
 
 // sends the user to the homepage of the logged user
-if(loggedUser) location.href = "./escapeRoom.html";
+if(loggedUser) location.href = "./html/escapeRoom.html";

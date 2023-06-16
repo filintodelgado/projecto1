@@ -1,8 +1,17 @@
-const porta = document.getElementById('porta').addEventListener('click', function () {
-    window.location.href = '../html/s_cinema1.html';
+import { currentLevel } from "../../api/level.mjs";
+import { loggedUser } from "../../api/user.mjs";
+import { implementPuzzle } from "./salas.js";
 
+const porta = document.getElementById('porta');
+porta.addEventListener('click', () => {
+    loggedUser.save();
+    // only go if the level is completed
+    if(currentLevel.complete) window.location.href = '../html/s_cinema1.html';
 });
-const poster = document.getElementById('poster').addEventListener('click', function () {
+
+const poster = document.querySelector("#poster");
+
+poster.addEventListener('click', function () {
 
     // Seleciona elementos do DOM
     //var openModalBtn = document.getElementById('openModalBtn');
@@ -42,3 +51,9 @@ const poster = document.getElementById('poster').addEventListener('click', funct
         }
     });
 });
+
+const puzzles = [];
+
+puzzles.push(implementPuzzle("puzzleSelect", poster, 
+"Qual desses filmes teve a maior bilheteria nos anos 90'", 
+["Titanic", "Jurassic Park", "The Lion King", "Independence Day"]));

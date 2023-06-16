@@ -509,7 +509,7 @@ if(time === NaN) time = undefined;
  * @type {Timer | null}
  */
 export 
-const timer = time ? new Timer(timer) : null;
+const timer = time ? new Timer(time) : null;
 
 /**
  * Sets the time for the {@link timer} and starts it.
