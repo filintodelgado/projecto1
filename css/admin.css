@@ -8,6 +8,12 @@
 body{
     background-color: var(--secondary);
     font-family: Inter;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin: 0;
 }
 
 body.light {
@@ -17,13 +23,14 @@ body.light {
 
 .body-container{
     width: 100%;
-    height: 40vw;
+    height: 90%;
     display: flex;
     flex-direction:row;
+    justify-content: center;
 }
 
 .button-container{
-    width: 40%;
+    width: 30%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -47,7 +54,7 @@ h2{
 }
 
 .data-container{
-    width: 60%;
+    width: 70%;
     height: 100%;
     display: flex;
     align-items: center;
@@ -58,20 +65,23 @@ h2{
     width: 70%;
     height: 80%;
     border: solid var(--primary);
-    border-radius: 50px;
+    border-radius: 20px;
     margin: 20px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     flex-direction: column;
-    flex-wrap: wrap;
     padding:10px;
+    align-content: center;
 }
 
 .table-frame{
-    width: 80%;
-    height: 70%;
-    margin-top: 5%;
+    width: 90%;
+    height: 60%;
+    margin: 2%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    border-bottom: solid var(--primary);
 }
 
 table{
@@ -96,22 +106,152 @@ button,button:hover{
     cursor: pointer;
 }
 
-
-tbody {
-    max-height: 20vw;
-    display:block;
-    overflow-y:auto;    
-    overflow-x:hidden;
-}
-
-thead{
-    width: 95%;
-}
-
 tbody{
+    max-height: 50px;
+    overflow: auto;
+}
+
+
+tr{
     width: 100%;
 }
 
-thead, tbody tr {
-    display:table;
+
+.info-frame{
+    width: 90%;
+    height: 30%;
+    display: flex;
+    margin: 2%;
+}
+
+.info-user{
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-user{
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.info-row{
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin: 5px;
+}
+
+label{
+    color: var(--primary);
+    width: 30%;
+}
+
+input{
+    width: 70%;
+    border: none;
+    border-bottom: 2px solid var(--primary);
+    background-color: var(--secondary);
+    color: var(--primary);
+}
+
+.data{
+    color-scheme: dark;
+    text-align: center;
+}
+
+.data .light{
+    color-scheme: light;
+}
+
+.action-button{
+    width: 60%;
+    background-color: var(--secondary);
+    border: solid var(--primary);
+    border-radius:10px;
+    margin: 5%;
+    cursor: pointer;
+}
+
+.action-button p {
+    color: var(--primary);
+    font-size: 15px;
+    margin: 5%;
+}
+
+.theme{
+    width: 100%;
+    height: 10%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.color-mode,.color-mode:hover{
+    margin-right: 5%;
+    margin-bottom: 1%;
+    margin-top: 1%;
+    margin-left: 1%;
+    cursor: pointer;
+    height: 35px;
+}
+
+
+@media only screen and (max-width: 1050px) {
+    .button-container{
+        width: 25%;
+    }
+    
+    .data-container{
+        width: 75%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .data-frame{
+        width: 90%;
+    }
+  }
+
+@media only screen and (max-width: 1050px) {
+
+    body{
+        height: auto;
+    }
+
+    .body-container{
+        flex-direction: column;
+    }
+
+    .button-container{
+        width: 100%;
+    }
+    
+    .data-container{
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .data-frame{
+        width: 90%;
+    }
+
+    .theme{
+        justify-content: center;
+    }
+
+    .color-mode,.color-mode:hover{
+        margin: 2%;
+    }
 }
