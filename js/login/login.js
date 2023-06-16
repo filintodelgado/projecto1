@@ -56,7 +56,7 @@ function login() {
   }
 
   // loggs the user
-  User(fields.email).login();
+  new User(fields.email).login();
 
   goLoggedHome();
 }

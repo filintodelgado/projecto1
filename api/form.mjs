@@ -1,5 +1,5 @@
-import { PuzzleChoose } from "./puzzle.mjs";
-import { cloneArray, shuffleArrayIndex } from "./utils.mjs";
+import { Puzzle, PuzzleChoose, PuzzleDrag, PuzzleSelect } from "./puzzle.mjs";
+import { cloneArray, shuffleArray, shuffleArrayIndex } from "./utils.mjs";
 
 const container = document.createElement("div");
 container.classList.add("puzzle-form-container");
@@ -7,22 +7,51 @@ container.classList.add("puzzle-form-container");
 export
 class PuzzleForm 
 extends HTMLFormElement {
+  /**
+   * The last puzzle that the form was asked to ask.
+   * 
+   * @type {Puzzle}
+   */
   lastPuzzle;
+  /**
+   * The `puzzle-question` element.
+   * 
+   * @type {HTMLElement}
+   */
   questionElement = document.createElement("puzzle-question");
+  /**
+   * A container containing all the `puzzle-answer`'s.
+   * 
+   * @type {HTMLElement}
+   */
   answersContainer = document.createElement("puzzle-answers");
+  /**
+   * The list contaning the `puzzle-answer` elements used by the puzzle.
+   * 
+   * @type {HTMLElement[]}
+   */
   answersElements = [];
   submitButton = document.createElement("button");
 
+  /**
+   * Hides the form.
+   */
   hide() {
     this.classList.add("hide");
     this.classList.remove("show");
   }
 
+  /**
+   * Shows the form.
+   */
   show() {
     this.classList.add("show");
     this.classList.remove("hide");
   }
 
+  /**
+   * The handler that will hide the form when the user clicks outside it.
+   */
   closeOnClickHandler = (function(event) {
     const target = event.target;
 
@@ -30,21 +59,29 @@ extends HTMLFormElement {
         this.hide();
   }).bind(this);
 
+  /**
+   * Says if the form is correct.
+   * 
+   * @interface
+   */
   get correct() {}
 
+  /**
+   * Will be excuted when the form is submited.
+   */
   submitHandler = (function(event) {
     event.preventDefault();
     event.stopPropagation();
 
-    if(this.correct) {
-      this.lastPuzzle.solve();
-    } else {
-      this.lastPuzzle.miss();
-    }
+    if(this.correct) this.lastPuzzle.solve();
+    else this.lastPuzzle.miss();
 
     this.hide();
   }).bind(this);
 
+  /**
+   * If the form should be closed when clicking outside it.
+   */
   get closeOnClick() { return this.#closeOnClick };
   set closeOnClick(close) {
     if(close == true)
@@ -55,6 +92,11 @@ extends HTMLFormElement {
     this.#closeOnClick = close;
   }
 
+  /**
+   * Will create the answers for the form.
+   * 
+   * @interface
+   */
   _createAnswers() {}
 
   #closeOnClick = true;
@@ -100,7 +142,7 @@ extends HTMLFormElement {
 export
 class PuzzleFormChoose
 extends PuzzleForm {
-  
+  _createAnswers() {};
 }
 
 export
@@ -178,7 +220,7 @@ extends PuzzleFormChoose {
 
   /**
    * Handler for when the input is checked. It adds the class to the checked
-   * input parent and removes from the old checked input
+   * input parent and removes from the old checked input.
    */
   _inputCheckHandler = (function(event) {
     // so that it won't trigger other events
@@ -196,10 +238,11 @@ extends PuzzleFormChoose {
   }).bind(this);
 
   _createAnswers() {
+    // we made a container for all answers (puzzle-answers)
+    const container = this.answersContainer;
+
     // we will create 4 answers
     for(let i = 0; i < 4; i++) {
-      // we made a container for all answers (puzzle-answers)
-      const container = this.answersContainer;
       // make a container for the answer (puzzle-answer)
       const answer = document.createElement("puzzle-answer");
       // the input and label
@@ -249,7 +292,8 @@ extends PuzzleFormChoose {
 
   /**
    * Opens the form and asks and waits for the user interation based on {@link puzzle}.
-   * @param {PuzzleFormChoose} puzzle The puzzle instance to ask for. If use reponds it
+   * 
+   * @param {PuzzleSelect} puzzle The puzzle instance to ask for. If use reponds it
    * wrong {@link Puzzle.miss} is trigged but if it responds right {@link Puzzle.solve}
    * is trigged.
    * 
@@ -281,7 +325,154 @@ extends PuzzleFormChoose {
 
     // the question is already created but he answers we create now
     this._createAnswers();
+
+    // add the class
+    this.classList.add("puzzle-form-select");
+  }
+}
+
+export
+class PuzzleFromDrag
+extends PuzzleForm {
+  /**
+   * Holds the answers in their original order.
+   * 
+   * @type {HTMLElement[]}
+   */
+  originalAnswersElements;
+
+  /**
+   * The element that was dragged.
+   * 
+   * @type {HTMLElement}
+   */
+  firstElement;
+
+  /**
+   * The element that it was dragged to.
+   * 
+   * @type {HTMLElement}
+   */
+  secondElement;
+
+  /**
+   * Swaps the {@link firstElement} and {@link secondElement}.
+   */
+  _swapElements() {
+    const firstContainer = this.firstElement.parentElement;
+    const secondContainer = this.secondElement.parentElement;
+
+    secondContainer.appendChild(this.firstElement);
+    firstContainer.appendChild(this.secondElement);
+  }
+
+  _createAnswers() {
+    // remake the answers container
+    if(this.answersContainer) this.answersContainer.remove();
+    this.answersContainer = document.createElement("puzzle-answers");
+
+    // will contain all the answers
+    const answersContainer = this.answersContainer;
+
+    for(let i = 0; i < 4; i++) {
+      const answer = document.createElement("puzzle-answer");
+
+      // when the user start dragging the element
+      this.answersElements[i].addEventListener("dragstart", (event) => {
+        // select this as the first element
+        this.firstElement = this.answersElements[i];
+      });
+
+      // add event to swap the elements when the drag operation ends
+      answer.addEventListener("drop", (event) => {
+        // the second element will be its only child
+        this.secondElement = answer.children[0];
+
+        // there is no need to swap if the elements are the same
+        if(this.firstElement == this.secondElement) return;
+
+        this._swapElements();
+      })
+
+      // specifies that it is a valid drop target
+      answer.addEventListener("dragover", (event) => { event.preventDefault(); })
+      answer.addEventListener("dragenter", (event) => { event.preventDefault(); })
+
+      // place the element into the container
+      answer.appendChild(this.answersElements[i]);
+
+      answersContainer.appendChild(answer);
+    }
+
+    // add to the form
+    this.appendChild(answersContainer);
+    // re add the button so it stays at the bottom
+    this.submitButton.remove();
+    this.appendChild(this.submitButton)
+  }
+
+  /**
+   * The {@link answersElements} in the order the user selected them.
+   * 
+   * @type {HTMLElement[]}
+   */
+  get selectedAnswersElements() {
+    const answers = [];
+
+    /* The DOM looks like this:
+        - form
+          - puzzle-question
+          - puzzle-answers
+            - puzzle-answer (answer) * 4
+             - element (answer.children[0])
+     */
+    for(const answer of this.answersContainer.children)
+      answers.push(answer.children[0]);
+
+    return answers;
+  }
+
+  /**
+   * Tells if the user ordered it corretly.
+   */
+  get correct() {
+    for(let i = 0; i < 4; i++) {
+      if(this.originalAnswersElements[i] != this.selectedAnswersElements[i])
+        return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Opens the form and asks and waits for the user interation based on {@link puzzle}.
+   * 
+   * @param {PuzzleDrag} puzzle The puzzle instance to ask for. If use reponds it
+   * wrong {@link Puzzle.miss} is trigged but if it responds right {@link Puzzle.solve}
+   * is trigged.
+   * 
+   * @fires SolveEvent
+   * @fires MissEvent
+   */
+  ask(puzzle) {
+    super.ask(puzzle);
+
+    const answerElements = [];
+
+    // clone all the nodes so we don't accedentally change them
+    for(let i = 0; i < 4; ++i) {
+      const element = puzzle.answersElements[i].children[0].cloneNode(true);
+      // make them draggable
+      element.setAttribute("draggable", "true");
+      answerElements.push(element);
+    }
+
+    this.originalAnswersElements = cloneArray(answerElements);
+    this.answersElements = shuffleArray(cloneArray(answerElements));
+
+    this._createAnswers();
   }
 }
 
 customElements.define("puzzle-form-select", PuzzleFormSelect, {extends: "form"});
+customElements.define("puzzle-form-drag", PuzzleFromDrag, {extends: "form"})

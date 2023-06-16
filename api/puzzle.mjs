@@ -5,6 +5,7 @@
  * @module cinescape/puzzle
  */
 
+import { PuzzleFormSelect, PuzzleFromDrag } from "./form.mjs";
 import { popup } from "./popup.mjs";
 import { cleanup, numberGenerator } from "./utils.mjs";
 
@@ -611,9 +612,7 @@ extends PuzzleEventModel {
   ask = (function(event) {
     event.stopPropagation();
 
-    const form = this.form;
-
-    form.ask(this);
+    this.form.ask(this);
   })
   // when the .addEventListener calls a callback the value of this
   // is lost and so set to undefined, using bind prevent this
@@ -848,7 +847,7 @@ extends PuzzleChoose {
 export
 class PuzzleDrag
 extends PuzzleChoose {
-
+  static form = document.createElement("form", {is: "puzzle-form-drag"})
 }
 
 export
@@ -858,6 +857,7 @@ extends Puzzle {
 }
 
 customElements.define("puzzle-select", PuzzleSelect);
+customElements.define("puzzle-drag", PuzzleDrag)
 
 // Default export
 // import puzzle from "./puzzle.mjs"
@@ -898,7 +898,11 @@ function createPuzzle(type, ...options) {
       break;
   }
 
+  // append and remove to trigger connectedCallback
   document.body.appendChild(puzzle);
+  puzzle.remove();
+
+  return puzzle;
 }
 
 function createPuzzleSelect(question, answers) {

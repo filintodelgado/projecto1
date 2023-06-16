@@ -156,13 +156,13 @@ extends HTMLDivElement {
   }
 
   hide() {
-    this.setAttribute("hidden", true);
+    //this.setAttribute("hidden", true);
     this.replaceClass("hide", "show");
     this.#displaying = false;
   }
 
   show() {
-    this.removeAttribute("hidden");
+    //this.removeAttribute("hidden");
     this.replaceClass("show", "hide");
     this.#displaying = true;
   }
@@ -222,7 +222,9 @@ extends HTMLDivElement {
     // hide by default
     this.hide();
 
-    document.body.appendChild(this)
+    this.classList.add("pop-up")
+
+    document.body.appendChild(this);
   }
 }
 

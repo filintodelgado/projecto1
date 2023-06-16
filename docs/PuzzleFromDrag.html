@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: cinescape/level</title>
+    <title>JSDoc: Class: PuzzleFromDrag</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: cinescape/level</h1>
+    <h1 class="page-title">Class: PuzzleFromDrag</h1>
 
     
 
@@ -28,6 +28,9 @@
 
 <header>
     
+        <h2><span class="attribs"><span class="type-signature"></span></span>PuzzleFromDrag<span class="signature">()</span><span class="type-signature"></span></h2>
+        
+    
 </header>
 
 <article>
@@ -35,7 +38,26 @@
     
         
 
-        
+    
+
+    
+    <h4 class="name" id="PuzzleFromDrag"><span class="type-signature"></span>new PuzzleFromDrag<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 <dl class="details">
@@ -67,7 +89,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="level.mjs.html">level.mjs</a>, <a href="level.mjs.html#line1">line 1</a>
+        <a href="form.mjs.html">form.mjs</a>, <a href="form.mjs.html#line335">line 335</a>
     </li></ul></dd>
     
 
@@ -79,21 +101,42 @@
 </dl>
 
 
-        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
     </div>
 
     
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li>module:form.PuzzleForm</li>
+    </ul>
+
 
     
 
     
-        <h3 class="subsection-title">Classes</h3>
 
-        <dl>
-            <dt><a href="module-cinescape_level.Level.html">Level</a></dt>
-            <dd></dd>
-        </dl>
     
 
     
@@ -107,13 +150,75 @@
 
         
             
-<h4 class="name" id=".currentLevel"><span class="type-signature">(static, constant) </span>currentLevel<span class="type-signature"> :module:level.Level|null</span></h4>
+<h4 class="name" id="correct"><span class="type-signature"></span>correct<span class="type-signature"></span></h4>
 
 
 
 
 <div class="description">
-    <p>The current level. <code>null</code> if there is no level.</p>
+    <p>Tells if the user ordered it corretly.</p>
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="form.mjs.html">form.mjs</a>, <a href="form.mjs.html#line438">line 438</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="firstElement"><span class="type-signature"></span>firstElement<span class="type-signature"> :HTMLElement</span></h4>
+
+
+
+
+<div class="description">
+    <p>The element that was dragged.</p>
 </div>
 
 
@@ -122,10 +227,7 @@
     <ul>
         <li>
             
-<span class="param-type">module:level.Level</span>
-|
-
-<span class="param-type">null</span>
+<span class="param-type">HTMLElement</span>
 
 
         </li>
@@ -164,7 +266,223 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="level.mjs.html">level.mjs</a>, <a href="level.mjs.html#line188">line 188</a>
+        <a href="form.mjs.html">form.mjs</a>, <a href="form.mjs.html#line349">line 349</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="originalAnswersElements"><span class="type-signature"></span>originalAnswersElements<span class="type-signature"> :Array.&lt;HTMLElement></span></h4>
+
+
+
+
+<div class="description">
+    <p>Holds the answers in their original order.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Array.&lt;HTMLElement></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="form.mjs.html">form.mjs</a>, <a href="form.mjs.html#line342">line 342</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="secondElement"><span class="type-signature"></span>secondElement<span class="type-signature"> :HTMLElement</span></h4>
+
+
+
+
+<div class="description">
+    <p>The element that it was dragged to.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">HTMLElement</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="form.mjs.html">form.mjs</a>, <a href="form.mjs.html#line356">line 356</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="selectedAnswersElements"><span class="type-signature"></span>selectedAnswersElements<span class="type-signature"> :Array.&lt;HTMLElement></span></h4>
+
+
+
+
+<div class="description">
+    <p>The <code>answersElements</code> in the order the user selected them.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Array.&lt;HTMLElement></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="form.mjs.html">form.mjs</a>, <a href="form.mjs.html#line419">line 419</a>
     </li></ul></dd>
     
 
@@ -184,35 +502,32 @@
     
 
     
-
-    
-        <h3 class="subsection-title">Type Definitions</h3>
+        <h3 class="subsection-title">Methods</h3>
 
         
-                
-<h4 class="name" id="~LevelEventKeyMap">LevelEventKeyMap</h4>
+            
 
+    
+
+    
+    <h4 class="name" id="_swapElements"><span class="type-signature"></span>_swapElements<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
 
 
 
 <div class="description">
-    <p>All the events for <a href="global.html#Level"><code>Level</code></a>.</p>
+    <p>Swaps the <code>firstElement</code> and <code>secondElement</code>.</p>
 </div>
 
 
 
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">"change"</span>
-|
-
-<span class="param-type">"complete"</span>
 
 
-        </li>
-    </ul>
+
+
+
 
 
 
@@ -247,7 +562,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="level.mjs.html">level.mjs</a>, <a href="level.mjs.html#line22">line 22</a>
+        <a href="form.mjs.html">form.mjs</a>, <a href="form.mjs.html#line361">line 361</a>
     </li></ul></dd>
     
 
@@ -263,28 +578,95 @@
 
 
 
-            
-                
-<h4 class="name" id="~LevelObject">LevelObject</h4>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="ask"><span class="type-signature"></span>ask<span class="signature">(puzzle)</span><span class="type-signature"></span></h4>
+    
+
+    
 
 
 
 <div class="description">
-    <p>An object that represents the level.</p>
+    <p>Opens the form and asks and waits for the user interation based on <code>puzzle</code>.</p>
 </div>
 
 
 
-    <h5>Type:</h5>
-    <ul>
-        <li>
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
             
-<span class="param-type">Object</span>
+                <td class="name"><code>puzzle</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">module:puzzle.PuzzleDrag</span>
 
 
-        </li>
-    </ul>
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The puzzle instance to ask for. If use reponds it
+wrong <code>Puzzle.miss</code> is trigged but if it responds right <code>Puzzle.solve</code>
+is trigged.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
 
 
 
@@ -319,7 +701,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="level.mjs.html">level.mjs</a>, <a href="level.mjs.html#line10">line 10</a>
+        <a href="form.mjs.html">form.mjs</a>, <a href="form.mjs.html#line457">line 457</a>
     </li></ul></dd>
     
 
@@ -334,8 +716,31 @@
 
 
 
+<h5>Fires:</h5>
+<ul>
+    <li><a href="module-cinescape_puzzle.html#~event:SolveEvent">event:SolveEvent</a></li>
 
-            
+    <li><a href="module-cinescape_puzzle.html#~event:MissEvent">event:MissEvent</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+
     
 
     

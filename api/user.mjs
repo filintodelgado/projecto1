@@ -491,4 +491,25 @@ const getLoggedUser = () => {
   return User.loggedUser;
 }
 
+/**
+ * The user that is currently logged in.
+ * 
+ * @type {User}
+ */
 export const loggedUser = getLoggedUser();
+
+/**
+ * The first registred administrator.
+ * 
+ * * `email` : admin@admin.com;
+ * * `password` : 12345678
+ * 
+ * @type {User}
+ */
+export let admin;
+
+const adminEmail = "admin@admin.com";
+const adminPassword = "12345678";
+
+if(User.exists(adminEmail)) admin = new User(adminEmail);
+else admin = new User(adminEmail, adminPassword, "Administrador", "1999-01-01", "Adminstraland", "male", true);

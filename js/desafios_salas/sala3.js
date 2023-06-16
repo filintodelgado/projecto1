@@ -1,7 +1,16 @@
-const porta3 = document.getElementById('porta').addEventListener('click', function() {
-    window.location.href = '../html/escapeRoom.html';
+import { currentLevel } from "../../api/level.mjs";
+import { loggedUser } from "../../api/user.mjs";
 
+// requires to complete the sala de cinema first
+if(loggedUser.levels["Sala de Cinema"].puzzlesUnsolved > 0) {
+    location.href = "../html/s_cinema1.html"
+}
+
+const porta3 = document.getElementById('porta')
+porta3.addEventListener('click', () => {
+    if(currentLevel.completed) location.href = '../html/escapeRoom.html'; 
 });
+
 const filme = document.getElementById('verde1fila').addEventListener('click', function () {
 
     // Seleciona elementos do DOM

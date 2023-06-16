@@ -5,21 +5,28 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
+    <script src="../js/test.js" type="module" defer></script>
+    <link rel="stylesheet" href="../css/test.css">
 </head>
 <body>
-    <form id="teste_form" action="escapeRoom.html">
-        <label for="fname">First name:</label><br>
-        <input type="text" id="fname" name="fname"><br>
-        <input type="submit" value="Submit" id="submit">
-    </form>
-    <script>
-        let submit = document.getElementById("submit")
-        submit.addEventListener("click",function(event){
-           let form = document.getElementById("teste_form")
-            let campo = document.getElementById("fname")
-            localStorage.setItem("username",campo.value)
-        })
-        
-    </script>
+    <puzzle-drag>
+        Click for puzzle
+        <puzzle-question>The order is blue, red, yellow and green</puzzle-question>
+        <puzzle-answers>
+            <puzzle-answer>
+                <div class="blue"></div>
+            </puzzle-answer>
+            <puzzle-answer>
+                <div class="red"></div>
+            </puzzle-answer>
+            <puzzle-answer>
+                <div class="yellow"></div>
+            </puzzle-answer>
+            <puzzle-answer>
+                <div class="green"></div>
+            </puzzle-answer>
+        </puzzle-answers>
+    </puzzle-drag>
 </body>
 </html>

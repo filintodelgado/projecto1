@@ -3,6 +3,7 @@
  */
 
 import { EventModel } from "./event.mjs";
+import { popup } from "./popup.mjs";
 import { Puzzle } from "./puzzle.mjs";
 import { Timer } from "./timer.mjs";
 
@@ -86,7 +87,7 @@ extends EventModel {
    */
   get puzzles() {
     // all puzzle elements will have the puzzle class
-    const puzzleElements = document.querySelectorAll(".puzzle");
+    const puzzleElements = Puzzle.instances;
     // we will store it in a array
     const puzzles = [];
 
@@ -186,3 +187,9 @@ const levelName = document.body.getAttribute("level");
  */
 export
 const currentLevel = levelName ? new Level(levelName) : null;
+
+if(currentLevel) {
+  currentLevel.addEventListener("complete", () => {
+    popup.display(`Nivel ${currentLevel.name} completado.`, "Reward");
+  })
+}
