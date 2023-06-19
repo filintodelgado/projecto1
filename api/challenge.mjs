@@ -1,7 +1,7 @@
 import { EventModel } from "./event.mjs";
 import { loggedUser } from "./user.mjs";
 import { AutoSaver, makeKey } from "./utils.mjs";
-import { Puzzle, PuzzleChoose, PuzzleSelect, PuzzleDrag, PuzzleInput } from "./puzzle.mjs";
+import { Puzzle, PuzzleChoose, PuzzleSelect, PuzzleDrag } from "./puzzle.mjs";
 import { currentLevel } from "./level.mjs";
 import { Timer } from "./timer.mjs";
 

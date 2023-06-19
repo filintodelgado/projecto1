@@ -952,6 +952,15 @@ function createPuzzle(type, ...options) {
     case "puzzleSelect":
       puzzle = createPuzzleSelect(...options);
       break;
+    case "puzzleDrag":
+      puzzle = createPuzzleDrag(...options);
+      break;
+    case "puzzleAsk":
+      puzzle = createPuzzleAsk(...options);
+      break;
+    case "puzzleRange":
+      puzzle = createPuzzleRange(...options);
+      break;
     default:
       puzzle = false;
       break;
@@ -964,10 +973,10 @@ function createPuzzle(type, ...options) {
   return puzzle;
 }
 
-function createPuzzleSelect(question, answers) {
+function createPuzzleChoose(elementName, question, answers) {
   if(!question || answers.length < 4) return;
 
-  const puzzle = document.createElement("puzzle-select");
+  const puzzle = document.createElement(elementName);
   const questionElement = document.createElement("puzzle-question");
   questionElement.textContent = question;
   puzzle.appendChild(questionElement)
@@ -977,6 +986,52 @@ function createPuzzleSelect(question, answers) {
     element.textContent = answer;
     puzzle.appendChild(element);
   }
+
+  return puzzle;
+}
+
+function createPuzzleSelect(question, answers) {
+  return createPuzzleChoose("puzzle-select", question, answers);
+}
+
+
+function createPuzzleDrag(question, answersImagePath) {
+  const answersElements = [];
+
+  for(const path of answersImagePath) {
+    const image = document.createElement("img");
+    image.src = path;
+
+    answersElements.push(image);
+  }
+
+  return createPuzzleChoose("puzzle-drag", question, answersElements  );
+}
+
+function createPuzzleAsk(question, answer) {
+  if(!question || !answer) return;
+
+  const puzzle = document.createElement("puzzle-ask");
+  const questionElement = document.createElement("puzzle-question");
+  questionElement.textContent = question;
+  puzzle.appendChild(questionElement);
+
+  const answerElement = document.createElement("puzzle-answer");
+  answerElement.textContent = answer;
+  puzzle.appendChild(answerElement)
+
+  return puzzle;
+}
+
+function createPuzzleRange(question, correct, min, max) {
+  const puzzle = document.createElement("puzzle-range");
+  const questionElement = document.createElement("puzzle-question");
+  questionElement.textContent = question;
+  puzzle.appendChild(questionElement);
+
+  puzzle.setAttribute("min", min);
+  puzzle.setAttribute("max", max);
+  puzzle.setAttribute("correct", correct);
 
   return puzzle;
 }

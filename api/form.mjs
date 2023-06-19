@@ -129,7 +129,6 @@ extends HTMLFormElement {
    * @param {PuzzleChoose} puzzle 
    */
   ask(puzzle) {
-    console.log('The puzzle is ', puzzle)
     // the question is always the same so no need to change
     if(puzzle != this.lastPuzzle)
       this.questionElement.textContent = puzzle.question;
@@ -143,6 +142,15 @@ export
 class PuzzleFormChoose
 extends PuzzleForm {
   _createAnswers() {};
+
+  constructor() {
+    super();
+
+    this.appendChild(this.answersContainer);
+
+    this.submitButton.remove();
+    this.appendChild(this.submitButton);
+  }
 }
 
 export
@@ -550,6 +558,12 @@ extends PuzzleForm {
     this.correctAnswer = puzzle.correct;
 
     this._createAnswers(puzzle.min, puzzle.max);
+  }
+
+  constructor() {
+    super();
+
+    this.classList.add("puzzle-form-range");
   }
 }
 

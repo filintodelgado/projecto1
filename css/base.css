@@ -19,13 +19,8 @@ html {
   font-family: sans-serif;
 }
 
-/** Base Elements **/
-puzzle-question, puzzle-answers, puzzle-answer {
-  display: block;
-}
-
 /** .puzzle-form **/
-form {
+.puzzle-form {
   text-align: center;
   font-weight: bold;
   display: flex;
@@ -40,23 +35,38 @@ form {
   transform: translate(-50%, -50%);
 }
 
-form, form puzzle-question, form puzzle-answer, form button{
+.puzzle-form,
+.puzzle-form puzzle-question, 
+.puzzle-form puzzle-answer, 
+.puzzle-form button,
+.puzzle-form input[type="text"] {
   background-color: white;
   border: 5px solid black;
   border-radius: 20px;
 }
 
-form, form puzzle-question, form label, form button {
+.puzzle-form, 
+.puzzle-form puzzle-question, 
+.puzzle-form label, 
+.puzzle-form button,
+.puzzle-form input[type="text"] {
+  display: block;
   padding: 20px;
 }
 
-form button {
+.puzzle-form input[type="text"] {
+  display: block;
+  width: 100%;
+  margin: 10px 0px;
+}
+
+.puzzle-form button {
   font-weight: bold;
   display: inline-block;
   cursor: pointer;
 }
 
-form label {
+.puzzle-form label {
   width: 100%;
   height: 100%;
   display: inline-block;
@@ -64,31 +74,36 @@ form label {
   transition-duration: .2s;
 }
 
-form puzzle-answer {
+.puzzle-form puzzle-answer {
   display: inline-block;
 }
 
-form puzzle-answers {
+.puzzle-form puzzle-answers {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
   gap: 20px;
+  margin: 10px 0px;
 }
 
-form puzzle-answer.checked {
+.puzzle-form puzzle-answer.checked {
   background-color: black;
   color: white;
 }
 
-form input {
+.puzzle-form input[type="radio"] {
   display: none;
+}
+
+.puzzle-form-range puzzle-answers {
+  display: block;
 }
 
 .hide {
   display: none;
 }
 
-/** Puzzle Select **/
+/* * Puzzle Select *
 puzzle-select {
   width: 100px;
   height: 100px;
@@ -112,7 +127,7 @@ puzzle-select {
 .puzzle.solved:hover {
   outline: none;
   cursor: initial;
-}
+} */
 
 .pop-up {
   text-align: center;

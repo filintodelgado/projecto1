@@ -7,6 +7,10 @@ $(document).ready(function(e) {
 });
 
 /**
+ * @typedef {{type: String, element: HTMLElement, question: String, answer: String[]}} PuzzleImplementationObject
+ */
+
+/**
  * Implements a new puzzle and bind it to the element.
  * 
  * @param {import("../../api/puzzle.mjs").PuzzleType} type 
@@ -16,14 +20,31 @@ $(document).ready(function(e) {
  * @returns {Puzzle}
  */
 export
-function implementPuzzle(type, element, question, answer) {
-    const posterPuzzle = createPuzzle(type, question, answer);
+function implementPuzzle(type, element, ...options) {
+    const puzzle = createPuzzle(type, ...options);
 
     element.addEventListener("click", (event) => {
         event.stopPropagation();
-        posterPuzzle.click(); 
-        console.log("working")
+        puzzle.click(); 
     })
 
-    return posterPuzzle;
+    return puzzle;
+}
+
+/**
+ * Given a list of puzzle implements them binding
+ * @param {PuzzleImplementationObject[]} puzzles 
+ */
+export
+function implementPuzzles(puzzles) {
+    for(const puzzle of puzzles) {
+        const type = puzzle.type;
+        delete puzzle.type;
+
+        const element = puzzle.element;
+        delete puzzle.element;
+
+        const options = Object.values(puzzle);
+        implementPuzzle(type, element, ...options);
+    }
 }
