@@ -6,14 +6,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Panel</title>
   <link rel="stylesheet" href="../css/admin.css">
+
+  <script src="../js/onlyAdmin.js" type="module"></script>
+  <script src="../js/admin.js" type="module" defer></script>
 </head>
 <body>
   <div class="body-container">
     <div class="button-container">
-        <div class="button">
+        <div class="button" id="sair">
             <h2>Sair</h2>
         </div>
-        <div class="button">
+        <div class="button active">
             <h2>Utilizadores</h2>
         </div>
         <div class="button">
@@ -25,60 +28,12 @@
           <div class="table-frame">
               <table id="data-table">
                 <thead>
-                  <th>ID</th>
-                  <th>USERNAME</th>
+                  <th>Email</th>
+                  <th>Nome</th>
                   <th colspan="2">Ações</th>
                 </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>123</td>
-                    <td>username123</td>
-                    <td><button><p>DEL</p></button></td>
-                    <td><button><p>VER</p></button></td>
-                  </tr>
-                  <tr>
-                    <td>123</td>
-                    <td>username123</td>
-                    <td><button><p>DEL</p></button></td>
-                    <td><button><p>VER</p></button></td>
-                  </tr>
-                  <tr>
-                    <td>123</td>
-                    <td>username123</td>
-                    <td><button><p>DEL</p></button></td>
-                    <td><button><p>VER</p></button></td>
-                  </tr>
-                  <tr>
-                    <td>123</td>
-                    <td>username123</td>
-                    <td><button><p>DEL</p></button></td>
-                    <td><button><p>VER</p></button></td>
-                  </tr>
-                  <tr>
-                    <td>123</td>
-                    <td>username123</td>
-                    <td><button><p>DEL</p></button></td>
-                    <td><button><p>VER</p></button></td>
-                  </tr>
-                  <tr>
-                    <td>123</td>
-                    <td>username123</td>
-                    <td><button><p>DEL</p></button></td>
-                    <td><button><p>VER</p></button></td>
-                  </tr>
-                  <tr>
-                    <td>123</td>
-                    <td>username123</td>
-                    <td><button><p>DEL</p></button></td>
-                    <td><button><p>VER</p></button></td>
-                  </tr>
-                  <tr>
-                    <td>123</td>
-                    <td>username123</td>
-                    <td><button><p>DEL</p></button></td>
-                    <td><button><p>VER</p></button></td>
-                  </tr>
                 </tbody>
               </table>
           </div>
@@ -86,27 +41,27 @@
             <div class="info-user">
               <div class="info-row">
                 <label for="nome">Nome:</label>
-                <input type="text" id="nome" name="nome" disabled>
+                <input type="text" id="nome" name="nome">
               </div>
               <div class="info-row">
                 <label for="email">Email:</label>
-                <input type="text" id="email" name="email" disabled>
+                <input type="text" id="email" name="email">
               </div>
               <div class="info-row">
                 <label for="data">Data de Nascimento:</label>
-                <input type="date" id="data" name="data" class="data" disabled>
+                <input type="date" id="data" name="data" class="data">
               </div>
               <div class="info-row">
                 <label for="local">Localidade:</label>
-                <input type="text" id="local" name="local" disabled>
+                <input type="text" id="local" name="local">
               </div>
               <div class="info-row">
                 <label for="sexo">Sexo:</label>
-                <input type="text" id="sexo" name="sexo" disabled>
+                <input type="text" id="sexo" name="sexo">
               </div>
             </div>
             <div class="action-user">
-              <button class="action-button"><p>Apagar</p></button>
+              <button class="action-button"><p>Registrar</p></button>
               <button class="action-button"><p>Limpar</p></button>
             </div>
           </div>
@@ -116,6 +71,6 @@
   <div class="theme">
     <img src="../assets/moon.svg" class="color-mode" id="theme-login">
   </div>
-  <script src="../js/themes/theme_admin.js"></script>
+  <script src="../js/themes/theme_admin.js" type="module"></script>
 </body>
 </html>

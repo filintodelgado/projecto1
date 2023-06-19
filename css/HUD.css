@@ -1,0 +1,15 @@
+.HUD {
+  display: block;
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  text-align: center;
+}
+
+.HUD p {
+  padding: 10px 20px;
+  display: block;
+  border: 2px black solid;
+  background-color: white;
+  border-radius: 15px;
+}

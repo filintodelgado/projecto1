@@ -323,8 +323,11 @@ extends EventModel {
    * @param {String} email 
    */
   static remove(email) {
+    // also logout if logged in
+    if(loggedUser.email == email) loggedUser.logout();
+
     // removes the object
-    localStorage.removeItem(makeKey(this.name), email);
+    localStorage.removeItem(makeKey(this.name, email));
     // removes it from the email list
     this.allEmails = this.allEmails.filter((value, index, array) => value == email ? false : true)
   }
@@ -510,6 +513,22 @@ export let admin;
 
 const adminEmail = "admin@admin.com";
 const adminPassword = "12345678";
-
 if(User.exists(adminEmail)) admin = new User(adminEmail);
-else admin = new User(adminEmail, adminPassword, "Administrador", "1999-01-01", "Adminstraland", "male", true);
+
+/* Says if the game as been runned before */
+const runned = localStorage["runned"] != undefined
+? true : false;
+
+// running for the first time
+if(!runned) {
+  admin = new User(
+    adminEmail, 
+    adminPassword, 
+    "Administrador", 
+    "1999-01-01", 
+    "Adminstraland", 
+    "male", true
+  );
+
+  localStorage["runned"] = true;
+}

@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap');
+@import url('./popup.css');
 
 :root {
     --primary: white;
@@ -200,6 +201,15 @@ input{
     margin-left: 1%;
     cursor: pointer;
     height: 35px;
+}
+
+.active {
+    background-color: white;
+    border-color: black;
+}
+
+.active h2 {
+    color: black;
 }
 
 

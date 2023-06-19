@@ -92,10 +92,11 @@ extends EventModel {
     const puzzles = [];
 
     // store all the elements object ito the arrays
-    for(const puzzle of puzzleElements)
+    for(const puzzle of puzzleElements) {
       // the objectify does not return a reference to the element but if we need the element
       // we can search by the id
       puzzles.push(puzzle.objectify());
+    }
 
     return puzzles;
   }

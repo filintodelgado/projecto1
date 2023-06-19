@@ -129,22 +129,4 @@ puzzle-select {
   cursor: initial;
 } */
 
-.pop-up {
-  text-align: center;
-  position: fixed;
-  z-index: 2;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  transition: transform 0.3s ease;
-  background-color: white;
-  color: black;
-  padding: 20px;
-  border-radius: 20px;
-  border: 2px solid black;
-  box-shadow: 0px 2px 10px black;
-}
-
-.pop-up .hide {
-  display: none;
-}
+@import url("./popup.css");

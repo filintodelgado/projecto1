@@ -1,5 +1,6 @@
 import { currentLevel } from "../../api/level.mjs";
 import { loggedUser } from "../../api/user.mjs";
+import { applyHUD } from "../HUD.js";
 import { implementPuzzles } from "./salas.js";
 
 const porta = document.getElementById('porta');
@@ -35,3 +36,5 @@ const puzzles = [{
     }];
 
 implementPuzzles(puzzles);
+
+applyHUD();

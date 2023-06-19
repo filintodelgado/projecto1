@@ -1,5 +1,6 @@
 import { currentLevel } from "../../api/level.mjs";
 import { loggedUser } from "../../api/user.mjs";
+import { applyHUD } from "../HUD";
 
 // requires to complete the sala de cinema first
 if(loggedUser.levels["Sala de Cinema"].puzzlesUnsolved > 0) {
@@ -51,3 +52,5 @@ const filme = document.getElementById('verde1fila').addEventListener('click', fu
         }
     });
 });
+
+applyHUD();

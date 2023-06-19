@@ -1,4 +1,7 @@
-import { Puzzle, createPuzzle } from "../../api/main.mjs";
+import { Puzzle, createPuzzle, timer } from "../../api/main.mjs";
+import { applyHUD } from "../HUD.js";
+
+timer.start();
 
 $(document).ready(function(e) {
     $('img[usemap]').rwdImageMaps(); 

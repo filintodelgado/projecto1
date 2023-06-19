@@ -1,4 +1,6 @@
 @import url("./base.css");
+@import url("./popup.css");
+@import url("./HUD.css");
 
 body {
   height: 100vh;
