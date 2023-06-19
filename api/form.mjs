@@ -1,4 +1,4 @@
-import { Puzzle, PuzzleChoose, PuzzleDrag, PuzzleSelect } from "./puzzle.mjs";
+import { Puzzle, PuzzleChoose, PuzzleDrag, PuzzleRange, PuzzleSelect } from "./puzzle.mjs";
 import { cloneArray, shuffleArray, shuffleArrayIndex } from "./utils.mjs";
 
 const container = document.createElement("div");
@@ -130,6 +130,7 @@ extends HTMLFormElement {
    * @param {PuzzleChoose} puzzle 
    */
   ask(puzzle) {
+    console.log('The puzzle is ', puzzle)
     // the question is always the same so no need to change
     if(puzzle != this.lastPuzzle)
       this.questionElement.textContent = puzzle.question;
@@ -323,7 +324,7 @@ extends PuzzleFormChoose {
   constructor() {
     super();
 
-    // the question is already created but he answers we create now
+    // the question is already created but the answers we create now
     this._createAnswers();
 
     // add the class
@@ -369,6 +370,7 @@ extends PuzzleForm {
   _createAnswers() {
     // remake the answers container
     if(this.answersContainer) this.answersContainer.remove();
+
     this.answersContainer = document.createElement("puzzle-answers");
 
     // will contain all the answers
@@ -467,12 +469,112 @@ extends PuzzleForm {
       answerElements.push(element);
     }
 
+    // we use the original answers to verify if the user answered right
     this.originalAnswersElements = cloneArray(answerElements);
+    // this is the one that we will suflle
     this.answersElements = shuffleArray(cloneArray(answerElements));
 
     this._createAnswers();
   }
 }
 
+export
+class PuzzleFormRange
+extends PuzzleForm {
+  /**
+   * The input element that the user will use to provide tha answer.
+   * 
+   * @type {HTMLInputElement}
+   */
+  inputElement;
+
+  labelElement;
+  /**
+   * The correct answer for the {@link lastPuzzle}.
+   */
+  correctAnswer = 0;
+
+  _createAnswers(min, max) {
+    this.answersContainer.remove();
+    this.answersContainer = document.createElement("puzzle-answers");
+
+    const id = "puzzle-form-range:input";
+
+    this.inputElement = document.createElement("input");
+    this.inputElement.type = "range";
+    this.inputElement.min = min;
+    this.inputElement.max = max;
+    this.inputElement.id = id;
+    this.inputElement.value = min;
+
+    this.labelElement = document.createElement("label");
+    this.labelElement.for = id;
+    this.labelElement.textContent = min;
+
+    /**
+     * Updates the label text content to match the input.
+     */
+    const updateLabel = (() => {
+      this.labelElement.textContent = this.inputElement.value;
+    }).bind(this)
+
+    this.inputElement.addEventListener("input", updateLabel); 
+    this.inputElement.addEventListener("change", updateLabel);
+
+    this.answersElements.push(this.inputElement);
+    this.answersContainer.appendChild(this.labelElement);
+    this.answersContainer.appendChild(this.inputElement);
+
+    // add the container to the element
+    this.appendChild(this.answersContainer);
+
+    // re-add the button so it stays at the bottom
+    this.submitButton.remove();
+    this.appendChild(this.submitButton);
+  }
+
+  get correct() {
+    if(parseInt(this.inputElement.value) == this.correctAnswer)
+      return true;
+
+    return false;
+  }
+
+  /**
+   * Ask the user to select a value from a range of value.
+   * 
+   * @param {PuzzleRange} puzzle 
+   */
+  ask(puzzle) {
+    super.ask(puzzle);
+
+    this.correctAnswer = puzzle.correct;
+
+    this._createAnswers(puzzle.min, puzzle.max);
+  }
+}
+
+export
+class PuzzleFormAsk
+extends PuzzleForm {
+  inputElement = document.createElement("input");
+
+  get inputAnswer() { return this.inputElement.textContent.trim().toLowerCase() };
+  get correct() { return this.correctAnswer === this.inputAnswer };
+
+  submitButton = document.createElement("button")
+
+  _createAnswers() {
+    this.inputElement = document.createElement("input");
+    this.inputElement.type = "text";
+    this.inputElement.placeholder = "Escreva a resposta...";
+  }
+
+  ask(puzzle) {
+    super.ask(puzzle);
+  }
+}
+
 customElements.define("puzzle-form-select", PuzzleFormSelect, {extends: "form"});
-customElements.define("puzzle-form-drag", PuzzleFromDrag, {extends: "form"})
+customElements.define("puzzle-form-drag", PuzzleFromDrag, {extends: "form"});
+customElements.define("puzzle-form-range", PuzzleFormRange, {extends: "form"});

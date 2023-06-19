@@ -26,7 +26,7 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { Puzzle, PuzzleChoose, PuzzleDrag, PuzzleSelect } from "./puzzle.mjs";
+            <pre class="prettyprint source linenums"><code>import { Puzzle, PuzzleChoose, PuzzleDrag, PuzzleRange, PuzzleSelect } from "./puzzle.mjs";
 import { cloneArray, shuffleArray, shuffleArrayIndex } from "./utils.mjs";
 
 const container = document.createElement("div");
@@ -158,6 +158,7 @@ extends HTMLFormElement {
    * @param {PuzzleChoose} puzzle 
    */
   ask(puzzle) {
+    console.log('The puzzle is ', puzzle)
     // the question is always the same so no need to change
     if(puzzle != this.lastPuzzle)
       this.questionElement.textContent = puzzle.question;
@@ -351,7 +352,7 @@ extends PuzzleFormChoose {
   constructor() {
     super();
 
-    // the question is already created but he answers we create now
+    // the question is already created but the answers we create now
     this._createAnswers();
 
     // add the class
@@ -397,6 +398,7 @@ extends PuzzleForm {
   _createAnswers() {
     // remake the answers container
     if(this.answersContainer) this.answersContainer.remove();
+
     this.answersContainer = document.createElement("puzzle-answers");
 
     // will contain all the answers
@@ -495,15 +497,115 @@ extends PuzzleForm {
       answerElements.push(element);
     }
 
+    // we use the original answers to verify if the user answered right
     this.originalAnswersElements = cloneArray(answerElements);
+    // this is the one that we will suflle
     this.answersElements = shuffleArray(cloneArray(answerElements));
 
     this._createAnswers();
   }
 }
 
+export
+class PuzzleFormRange
+extends PuzzleForm {
+  /**
+   * The input element that the user will use to provide tha answer.
+   * 
+   * @type {HTMLInputElement}
+   */
+  inputElement;
+
+  labelElement;
+  /**
+   * The correct answer for the {@link lastPuzzle}.
+   */
+  correctAnswer = 0;
+
+  _createAnswers(min, max) {
+    this.answersContainer.remove();
+    this.answersContainer = document.createElement("puzzle-answers");
+
+    const id = "puzzle-form-range:input";
+
+    this.inputElement = document.createElement("input");
+    this.inputElement.type = "range";
+    this.inputElement.min = min;
+    this.inputElement.max = max;
+    this.inputElement.id = id;
+    this.inputElement.value = min;
+
+    this.labelElement = document.createElement("label");
+    this.labelElement.for = id;
+    this.labelElement.textContent = min;
+
+    /**
+     * Updates the label text content to match the input.
+     */
+    const updateLabel = (() => {
+      this.labelElement.textContent = this.inputElement.value;
+    }).bind(this)
+
+    this.inputElement.addEventListener("input", updateLabel); 
+    this.inputElement.addEventListener("change", updateLabel);
+
+    this.answersElements.push(this.inputElement);
+    this.answersContainer.appendChild(this.labelElement);
+    this.answersContainer.appendChild(this.inputElement);
+
+    // add the container to the element
+    this.appendChild(this.answersContainer);
+
+    // re-add the button so it stays at the bottom
+    this.submitButton.remove();
+    this.appendChild(this.submitButton);
+  }
+
+  get correct() {
+    if(parseInt(this.inputElement.value) == this.correctAnswer)
+      return true;
+
+    return false;
+  }
+
+  /**
+   * Ask the user to select a value from a range of value.
+   * 
+   * @param {PuzzleRange} puzzle 
+   */
+  ask(puzzle) {
+    super.ask(puzzle);
+
+    this.correctAnswer = puzzle.correct;
+
+    this._createAnswers(puzzle.min, puzzle.max);
+  }
+}
+
+export
+class PuzzleFormAsk
+extends PuzzleForm {
+  inputElement = document.createElement("input");
+
+  get inputAnswer() { return this.inputElement.textContent.trim().toLowerCase() };
+  get correct() { return this.correctAnswer === this.inputAnswer };
+
+  submitButton = document.createElement("button")
+
+  _createAnswers() {
+    this.inputElement = document.createElement("input");
+    this.inputElement.type = "text";
+    this.inputElement.placeholder = "Escreva a resposta...";
+  }
+
+  ask(puzzle) {
+    super.ask(puzzle);
+  }
+}
+
 customElements.define("puzzle-form-select", PuzzleFormSelect, {extends: "form"});
-customElements.define("puzzle-form-drag", PuzzleFromDrag, {extends: "form"})</code></pre>
+customElements.define("puzzle-form-drag", PuzzleFromDrag, {extends: "form"});
+customElements.define("puzzle-form-range", PuzzleFormRange, {extends: "form"});</code></pre>
         </article>
     </section>
 
@@ -513,13 +615,13 @@ customElements.define("puzzle-form-drag", PuzzleFromDrag, {extends: "form"})</co
 </div>
 
 <nav>
-    <h2><a href="index.html">CineScape</a></h2><h3>Modules</h3><ul><li><a href="module-cinescape.html">cinescape</a></li><li><a href="module-cinescape_event.html">cinescape/event</a></li><li><a href="module-cinescape_level.html">cinescape/level</a></li><li><a href="module-cinescape_popup.html">cinescape/popup</a></li><li><a href="module-cinescape_puzzle.html">cinescape/puzzle</a></li><li><a href="module-cinescape_timer.html">cinescape/timer</a></li></ul><h3>Classes</h3><ul><li><a href="Challenge.html">Challenge</a></li><li><a href="CompleteLevelChallenge.html">CompleteLevelChallenge</a></li><li><a href="CompleteUnderSecondsChallenge.html">CompleteUnderSecondsChallenge</a></li><li><a href="PuzzleForm.html">PuzzleForm</a></li><li><a href="PuzzleFormChoose.html">PuzzleFormChoose</a></li><li><a href="PuzzleFormSelect.html">PuzzleFormSelect</a></li><li><a href="PuzzleFromDrag.html">PuzzleFromDrag</a></li><li><a href="SolvePuzzleChallenge.html">SolvePuzzleChallenge</a></li><li><a href="SolvePuzzleInLevelChanllenge.html">SolvePuzzleInLevelChanllenge</a></li><li><a href="User.html">User</a></li><li><a href="module-cinescape_event.BreakingPointModel.html">BreakingPointModel</a></li><li><a href="module-cinescape_event.EventModel.html">EventModel</a></li><li><a href="module-cinescape_level.Level.html">Level</a></li><li><a href="module-cinescape_popup.Popup.html">Popup</a></li><li><a href="module-cinescape_puzzle.Puzzle.html">Puzzle</a></li><li><a href="module-cinescape_puzzle.PuzzleChoose.html">PuzzleChoose</a></li><li><a href="module-cinescape_puzzle.PuzzleDrag.html">PuzzleDrag</a></li><li><a href="module-cinescape_puzzle.PuzzleInput.html">PuzzleInput</a></li><li><a href="module-cinescape_puzzle.PuzzleSelect.html">PuzzleSelect</a></li><li><a href="module-cinescape_puzzle-PuzzleEventModel.html">PuzzleEventModel</a></li><li><a href="module-cinescape_timer.Timer.html">Timer</a></li></ul><h3>Interfaces</h3><ul><li><a href="PuzzleForm__createAnswers.html">_createAnswers</a></li><li><a href="PuzzleForm_correct.html">correct</a></li><li><a href="module-cinescape_puzzle.Puzzle_ask.html">ask</a></li></ul><h3>Events</h3><ul><li><a href="module-cinescape_timer.html#~event:BreakingPoint">BreakingPoint</a></li><li><a href="module-cinescape_puzzle.html#~event:MissEvent">MissEvent</a></li><li><a href="module-cinescape_timer.html#~event:PauseEvent">PauseEvent</a></li><li><a href="module-cinescape_timer.html#~event:ResetEvent">ResetEvent</a></li><li><a href="module-cinescape_puzzle.html#~event:SolveEvent">SolveEvent</a></li><li><a href="module-cinescape_timer.html#~event:StartEvent">StartEvent</a></li><li><a href="module-cinescape_timer.html#~event:StepEvent">StepEvent</a></li><li><a href="module-cinescape_timer.html#~event:StopEvent">StopEvent</a></li><li><a href="module-cinescape_puzzle.html#~event:UnsolveEvent">UnsolveEvent</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AutoSaver">AutoSaver</a></li><li><a href="global.html#admin">admin</a></li><li><a href="global.html#allChallenges">allChallenges</a></li><li><a href="global.html#cleanup">cleanup</a></li><li><a href="global.html#cloneArray">cloneArray</a></li><li><a href="global.html#createChallenge">createChallenge</a></li><li><a href="global.html#getLoggedUser">getLoggedUser</a></li><li><a href="global.html#loggedUser">loggedUser</a></li><li><a href="global.html#makeInstanceKey">makeInstanceKey</a></li><li><a href="global.html#makeKey">makeKey</a></li><li><a href="global.html#numberGenerator">numberGenerator</a></li><li><a href="global.html#restoreChallenge">restoreChallenge</a></li><li><a href="global.html#shuffleArray">shuffleArray</a></li><li><a href="global.html#shuffleArrayIndex">shuffleArrayIndex</a></li></ul>
+    <h2><a href="index.html">CineScape</a></h2><h3>Modules</h3><ul><li><a href="module-cinescape.html">cinescape</a></li><li><a href="module-cinescape_event.html">cinescape/event</a></li><li><a href="module-cinescape_level.html">cinescape/level</a></li><li><a href="module-cinescape_popup.html">cinescape/popup</a></li><li><a href="module-cinescape_puzzle.html">cinescape/puzzle</a></li><li><a href="module-cinescape_timer.html">cinescape/timer</a></li></ul><h3>Classes</h3><ul><li><a href="Challenge.html">Challenge</a></li><li><a href="CompleteLevelChallenge.html">CompleteLevelChallenge</a></li><li><a href="CompleteUnderSecondsChallenge.html">CompleteUnderSecondsChallenge</a></li><li><a href="PuzzleForm.html">PuzzleForm</a></li><li><a href="PuzzleFormAsk.html">PuzzleFormAsk</a></li><li><a href="PuzzleFormChoose.html">PuzzleFormChoose</a></li><li><a href="PuzzleFormRange.html">PuzzleFormRange</a></li><li><a href="PuzzleFormSelect.html">PuzzleFormSelect</a></li><li><a href="PuzzleFromDrag.html">PuzzleFromDrag</a></li><li><a href="SolvePuzzleChallenge.html">SolvePuzzleChallenge</a></li><li><a href="SolvePuzzleInLevelChanllenge.html">SolvePuzzleInLevelChanllenge</a></li><li><a href="User.html">User</a></li><li><a href="module-cinescape_event.BreakingPointModel.html">BreakingPointModel</a></li><li><a href="module-cinescape_event.EventModel.html">EventModel</a></li><li><a href="module-cinescape_level.Level.html">Level</a></li><li><a href="module-cinescape_popup.Popup.html">Popup</a></li><li><a href="module-cinescape_puzzle.Puzzle.html">Puzzle</a></li><li><a href="module-cinescape_puzzle.PuzzleAsk.html">PuzzleAsk</a></li><li><a href="module-cinescape_puzzle.PuzzleChoose.html">PuzzleChoose</a></li><li><a href="module-cinescape_puzzle.PuzzleDrag.html">PuzzleDrag</a></li><li><a href="module-cinescape_puzzle.PuzzleRange.html">PuzzleRange</a></li><li><a href="module-cinescape_puzzle.PuzzleSelect.html">PuzzleSelect</a></li><li><a href="module-cinescape_puzzle-PuzzleEventModel.html">PuzzleEventModel</a></li><li><a href="module-cinescape_timer.Timer.html">Timer</a></li></ul><h3>Interfaces</h3><ul><li><a href="PuzzleForm__createAnswers.html">_createAnswers</a></li><li><a href="PuzzleForm_correct.html">correct</a></li><li><a href="module-cinescape_puzzle.Puzzle_ask.html">ask</a></li></ul><h3>Events</h3><ul><li><a href="module-cinescape_timer.html#~event:BreakingPoint">BreakingPoint</a></li><li><a href="module-cinescape_puzzle.html#~event:MissEvent">MissEvent</a></li><li><a href="module-cinescape_timer.html#~event:PauseEvent">PauseEvent</a></li><li><a href="module-cinescape_timer.html#~event:ResetEvent">ResetEvent</a></li><li><a href="module-cinescape_puzzle.html#~event:SolveEvent">SolveEvent</a></li><li><a href="module-cinescape_timer.html#~event:StartEvent">StartEvent</a></li><li><a href="module-cinescape_timer.html#~event:StepEvent">StepEvent</a></li><li><a href="module-cinescape_timer.html#~event:StopEvent">StopEvent</a></li><li><a href="module-cinescape_puzzle.html#~event:UnsolveEvent">UnsolveEvent</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AutoSaver">AutoSaver</a></li><li><a href="global.html#admin">admin</a></li><li><a href="global.html#allChallenges">allChallenges</a></li><li><a href="global.html#cleanup">cleanup</a></li><li><a href="global.html#cloneArray">cloneArray</a></li><li><a href="global.html#createChallenge">createChallenge</a></li><li><a href="global.html#getLoggedUser">getLoggedUser</a></li><li><a href="global.html#loggedUser">loggedUser</a></li><li><a href="global.html#makeInstanceKey">makeInstanceKey</a></li><li><a href="global.html#makeKey">makeKey</a></li><li><a href="global.html#numberGenerator">numberGenerator</a></li><li><a href="global.html#restoreChallenge">restoreChallenge</a></li><li><a href="global.html#shuffleArray">shuffleArray</a></li><li><a href="global.html#shuffleArrayIndex">shuffleArrayIndex</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Fri Jun 16 2023 10:03:18 GMT+0100 (Western European Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon Jun 19 2023 02:31:03 GMT+0100 (Western European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

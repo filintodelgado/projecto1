@@ -5,7 +5,7 @@
  * @module cinescape/puzzle
  */
 
-import { PuzzleFormSelect, PuzzleFromDrag } from "./form.mjs";
+import { PuzzleFormRange, PuzzleFormSelect, PuzzleFromDrag } from "./form.mjs";
 import { popup } from "./popup.mjs";
 import { cleanup, numberGenerator } from "./utils.mjs";
 
@@ -632,6 +632,40 @@ extends PuzzleEventModel {
   }
 
   /** 
+   * The question of the puzzle found on the `puzzle-question` element.
+   * 
+   * @type {HTMLElement} 
+   */
+  question;
+  /** 
+   * The `puzzle-question` element itself.
+   * 
+   * @type {HTMLElement} 
+   */
+  questionElement;
+  /** 
+   * Error that is throw when there is no valid question element.
+   */
+  #QuestionElementError = this._createErrors("Question element invalid."); 
+  /** The tagname of the question element */
+  static questionTagName = "puzzle-question";
+
+  /**
+   * Stores the question element (`puzzle-question`) text content on 
+   * {@link question} and the element {@link questionElement}.
+   * 
+   * @throws QuestionElementError
+   */
+  _getQuestion() {
+    this.questionElement = this.querySelector(this.constructor.questionTagName);
+
+    if(!this.questionElement)
+      throw this.#QuestionElementError;
+
+    this.question = this.questionElement.textContent;
+  }
+
+  /** 
    * Makes some cleanups and configurations when the element 
    * is added to the DOM
    * 
@@ -643,6 +677,9 @@ extends PuzzleEventModel {
   connectedCallback() {
     // define a standart id if is not defined
     if(!this.id) this._setDefaultId();
+
+    // will get the question element
+    this._getQuestion();
     
     // removes the default elements
     this._removeDefaultElements();
@@ -692,39 +729,6 @@ extends PuzzleEventModel {
 export
 class PuzzleChoose
 extends Puzzle {
-  /** 
-   * The question of the puzzle found on the `puzzle-question` element.
-   * 
-   * @type {HTMLElement} 
-   */
-  question;
-  /** 
-   * The `puzzle-question` element itself.
-   * 
-   * @type {HTMLElement} 
-   */
-  questionElement;
-  /** 
-   * Error that is throw when there is no valid question element.
-   */
-  #QuestionElementError = this._createErrors("Question element invalid."); 
-  /** The tagname of the question element */
-  static questionTagName = "puzzle-question";
-
-  /**
-   * Stores the question element (`puzzle-question`) text content on 
-   * {@link question} and the element {@link questionElement}.
-   * 
-   * @throws QuestionElementError
-   */
-  _getQuestion() {
-    this.questionElement = this.querySelector(this.constructor.questionTagName);
-
-    if(!this.questionElement)
-      throw this.#QuestionElementError;
-
-    this.question = this.questionElement.textContent;
-  }
 
   /** 
    * All the {@link PuzzleFormSelect} answers elements.
@@ -760,22 +764,9 @@ extends Puzzle {
       this.answersElements.push(answersElements[i])
   }
 
-  /**
-   * Get the {@link answer} and the {@link question} and stores them.
-   * 
-   * @throws AnswersElementError
-   * @throws QuestionElementError
-   */
-  _getComponents() {
-    this._getQuestion();
-
-    // and them class the class method
-    this._getAnswers();
-  }
-
   connectedCallback() {
     // retrive the components
-    this._getComponents();
+    this._getAnswers();
 
     // call it last so it does not delete the elements before we use it
     super.connectedCallback();
@@ -851,13 +842,72 @@ extends PuzzleChoose {
 }
 
 export
-class PuzzleInput
+class PuzzleRange
 extends Puzzle {
+  /**
+   * The minimun value acceptable.
+   * 
+   * Needs to bre less than {@link max}.
+   */
+  min = 0;
+  /**
+   * The maximun value.
+   * 
+   * Needs to be greater than {@link min}.
+   */
+  max = 0;
+  /**
+   * The correct answer.
+   * 
+   * Needs to be a value between {@link min} and {@link max}.
+   */
+  correct = 0;
 
+  /**
+   * Gets the value of {@link min}, {@link max} and {@link correct} from the
+   * `HTML Attributes` and stores them.
+   */
+  _getValues() {
+    const min = parseInt(this.getAttribute("min"));
+    const max = parseInt(this.getAttribute("max"));
+    const correct = parseInt(this.getAttribute("correct"));
+
+    if(min == NaN || max == NaN || correct == NaN)
+      throw TypeError("puzzle-range: Attributes invalids.");
+
+    if(min > max) throw TypeError("puzzle-range: The 'min' can't greater than 'max'.")
+
+    if(correct < min || correct > max)
+      throw TypeError("puzzle-range: The correct value needs to be between the specified range.")
+
+    this.min = min;
+    this.max = max;
+    this.correct = correct;
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    // will get all the necessary values from the attributes
+    this._getValues();
+  }
+
+  static form = document.createElement("form", {is: "puzzle-form-range"})
+}
+
+export
+class PuzzleAsk
+extends Puzzle {
+  question;
+  questionElement;
+
+  static form = document.createElement("form", {is: "puzzle-form-ask"});
 }
 
 customElements.define("puzzle-select", PuzzleSelect);
-customElements.define("puzzle-drag", PuzzleDrag)
+customElements.define("puzzle-drag", PuzzleDrag);
+customElements.define("puzzle-range", PuzzleRange);
+customElements.define("puzzle-ask", PuzzleAsk);
 
 // Default export
 // import puzzle from "./puzzle.mjs"
