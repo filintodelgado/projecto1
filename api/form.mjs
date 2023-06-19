@@ -111,7 +111,6 @@ extends HTMLFormElement {
     this.hide();
 
     this.appendChild(this.questionElement);
-    this.appendChild(this.answersContainer);
 
     this.submitButton.type = "submit";
     this.appendChild(this.submitButton);
@@ -558,23 +557,32 @@ export
 class PuzzleFormAsk
 extends PuzzleForm {
   inputElement = document.createElement("input");
+  correctAnswer;
 
-  get inputAnswer() { return this.inputElement.textContent.trim().toLowerCase() };
+  get inputAnswer() { return this.inputElement.value.trim().toLowerCase() };
   get correct() { return this.correctAnswer === this.inputAnswer };
 
-  submitButton = document.createElement("button")
-
   _createAnswers() {
+    this.inputElement.remove();
     this.inputElement = document.createElement("input");
     this.inputElement.type = "text";
     this.inputElement.placeholder = "Escreva a resposta...";
+    this.appendChild(this.inputElement);
+
+    this.submitButton.remove();
+    this.appendChild(this.submitButton);
   }
 
   ask(puzzle) {
     super.ask(puzzle);
+
+    this.correctAnswer = puzzle.correctAnswer;
+
+    this._createAnswers();
   }
 }
 
 customElements.define("puzzle-form-select", PuzzleFormSelect, {extends: "form"});
 customElements.define("puzzle-form-drag", PuzzleFromDrag, {extends: "form"});
 customElements.define("puzzle-form-range", PuzzleFormRange, {extends: "form"});
+customElements.define("puzzle-form-ask", PuzzleFormAsk, {extends: "form"});

@@ -900,8 +900,17 @@ class PuzzleAsk
 extends Puzzle {
   question;
   questionElement;
+  correctAnswer;
+  correctAnswerElement;
 
   static form = document.createElement("form", {is: "puzzle-form-ask"});
+
+  connectedCallback() {
+    this.correctAnswerElement = this.querySelector("puzzle-answer");
+    this.correctAnswer = this.correctAnswerElement.textContent.trim().toLowerCase();
+
+    super.connectedCallback();
+  }
 }
 
 customElements.define("puzzle-select", PuzzleSelect);
