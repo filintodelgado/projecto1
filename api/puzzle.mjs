@@ -838,7 +838,7 @@ extends PuzzleChoose {
 export
 class PuzzleDrag
 extends PuzzleChoose {
-  static form = document.createElement("form", {is: "puzzle-form-drag"})
+  static form = document.createElement("form", {is: "puzzle-form-drag"});
 }
 
 export
@@ -983,7 +983,8 @@ function createPuzzleChoose(elementName, question, answers) {
 
   for(const answer of answers) {
     const element = document.createElement("puzzle-answer");
-    element.textContent = answer;
+    if(answer instanceof HTMLElement) element.appendChild(answer);
+    else element.textContent = answer;
     puzzle.appendChild(element);
   }
 
@@ -1001,6 +1002,7 @@ function createPuzzleDrag(question, answersImagePath) {
   for(const path of answersImagePath) {
     const image = document.createElement("img");
     image.src = path;
+    image.classList.add("image-drag")
 
     answersElements.push(image);
   }

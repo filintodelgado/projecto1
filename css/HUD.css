@@ -1,15 +1,24 @@
-.HUD {
+.HUD, .profile-container {
   display: block;
   position: fixed;
-  left: 20px;
   bottom: 20px;
   text-align: center;
 }
 
-.HUD p {
+.HUD *, .profile-container * {
   padding: 10px 20px;
   display: block;
   border: 2px black solid;
   background-color: white;
   border-radius: 15px;
+  margin-top: 20px;
+  margin-bottom: 0px;
+}
+
+.HUD {
+  left: 20px;
+}
+
+.profile-container {
+  right: 20px;
 }

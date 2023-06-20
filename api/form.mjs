@@ -470,6 +470,7 @@ extends PuzzleForm {
 
     // clone all the nodes so we don't accedentally change them
     for(let i = 0; i < 4; ++i) {
+      console.log(puzzle.answersElements[i].children)
       const element = puzzle.answersElements[i].children[0].cloneNode(true);
       // make them draggable
       element.setAttribute("draggable", "true");
@@ -482,6 +483,12 @@ extends PuzzleForm {
     this.answersElements = shuffleArray(cloneArray(answerElements));
 
     this._createAnswers();
+  }
+
+  constructor() {
+    super();
+
+    this.classList.add("puzzle-form-drag")
   }
 }
 

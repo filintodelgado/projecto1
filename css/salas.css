@@ -4,13 +4,27 @@
 
 body {
   height: 100vh;
+  background-color: gray !important;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-img {
+.img-fluid {
   width: 100%;
-  height: 100%;
+  height: auto;
 }
 
 area {
   cursor: pointer;
+}
+
+@media screen and (orientation: landscape) {
+  /* Styles to apply when the height is greater than the width */
+  /* For example, you can change the background color */
+  .img-fluid {
+    width: auto;
+    height: 100%;
+  }
 }

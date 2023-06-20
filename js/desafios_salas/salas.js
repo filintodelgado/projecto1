@@ -1,5 +1,4 @@
-import { Puzzle, createPuzzle, timer } from "../../api/main.mjs";
-import { applyHUD } from "../HUD.js";
+import { Puzzle, createPuzzle, currentLevel, popup, timer } from "../../api/main.mjs";
 
 timer.start();
 
@@ -51,3 +50,15 @@ function implementPuzzles(puzzles) {
         implementPuzzle(type, element, ...options);
     }
 }
+
+currentLevel.addEventListener("complete", () => {
+    timer.pause();
+})
+
+timer.addEventListener("stop", () => {
+    popup.display("Reiniciando em 5 segundos");
+
+    setTimeout(() => {
+        location.reload();
+    }, 10000);
+})

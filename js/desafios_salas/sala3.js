@@ -1,56 +1,42 @@
 import { currentLevel } from "../../api/level.mjs";
 import { loggedUser } from "../../api/user.mjs";
-import { applyHUD } from "../HUD";
+import { applyHUD } from "../HUD.js";
+import { implementPuzzles } from "./salas.js";
 
 // requires to complete the sala de cinema first
 if(loggedUser.levels["Sala de Cinema"].puzzlesUnsolved > 0) {
     location.href = "../html/s_cinema1.html"
 }
 
-const porta3 = document.getElementById('porta')
+const porta3 = document.querySelector('#porta')
 porta3.addEventListener('click', () => {
     if(currentLevel.completed) location.href = '../html/escapeRoom.html'; 
 });
 
-const filme = document.getElementById('verde1fila').addEventListener('click', function () {
+const projetor = document.querySelector("#projetor");
+const book = document.querySelector("#verde1fila");
+const mesa = document.querySelector("#mesa");
 
-    // Seleciona elementos do DOM
-    //var openModalBtn = document.getElementById('openModalBtn');
-    var modal = document.getElementById('modal');
-    var closeBtn = document.getElementsByClassName('close')[0];
-    var iframeContainer = document.getElementById('iframeContainer');
-
-    // URL do iframe
-    var iframeURL = '../html/desafios/nome_filme.html';
-
-    // Função para carregar o iframe
-    function loadIframe() {
-        var iframe = document.createElement('iframe');
-        iframe.src = iframeURL;
-        iframe.width = '100%';
-        iframe.height = '100%';
-        iframe.frameborder = '0';
-        iframeContainer.appendChild(iframe);
+const puzzles = [{ 
+        element: projetor, 
+        type: "puzzleSelect", 
+        question: "Quais desses filmes é sobre a máfia?", 
+        answers: ["Goodfellas", "Pulp Fiction", "Jurassic Park", "Forrest Gump"]
+    }, {
+        element: book, 
+        type: "puzzleAsk", 
+        question: "Qual o nome do primeiro filme longa metragem de animatação totalmente feito em computador?", 
+        answers: "Toy Story"
+    }, {
+        element: mesa,
+        type: "puzzleRange", 
+        question: "Quantos filmes de Jurassic Park foram lançados nos anos 90'?", 
+        correct: 2,
+        min: 1,
+        max: 10
     }
+];
 
-    // Abre o modal quando o botão é clicado e carrega o iframe
-    modal.style.display = 'block';
-    loadIframe();
-
-
-    // Fecha o modal quando o botão de fechar é clicado
-    closeBtn.addEventListener('click', function () {
-        modal.style.display = 'none';
-        iframeContainer.innerHTML = ''; // Limpa o contêiner do iframe ao fechar
-    });
-
-    // Fecha o modal quando o usuário clica fora dele
-    window.addEventListener('click', function (event) {
-        if (event.target == modal) {
-            modal.style.display = 'none';
-            iframeContainer.innerHTML = ''; // Limpa o contêiner do iframe ao fechar
-        }
-    });
-});
+implementPuzzles(puzzles);
 
 applyHUD();

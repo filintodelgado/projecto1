@@ -1,6 +1,7 @@
 import { currentLevel } from "../api/level.mjs";
 import { Puzzle } from "../api/puzzle.mjs";
 import { timer } from "../api/timer.mjs";
+import { loggedUser } from "../api/user.mjs";
 
 const container = document.createElement("div");
 container.classList.add("HUD");
@@ -12,7 +13,6 @@ container.appendChild(createRow(`${currentLevel.name}`))
 const puzzles = createRow(`Puzzles: ${currentLevel.numberOfPuzzlesSolved} de ${currentLevel.puzzles.length}`)
 puzzles.classList.add("puzzles");
 Puzzle.addEventListener("solve", () => {
-  console.log("solve")
   puzzles.textContent = `Puzzles: ${currentLevel.numberOfPuzzlesSolved} de ${currentLevel.puzzles.length}`
 })
 container.appendChild(puzzles);
@@ -32,11 +32,24 @@ function createRow(text) {
   return row;
 }
 
+const profileContainer = document.createElement("div");
+profileContainer.classList.add("profile-container");
+
+const goHome = document.createElement("a");
+goHome.setAttribute("href", "./escapeRoom.html")
+goHome.textContent = "Pagina Inicial";
+
+const profileLink = document.createElement("a");
+profileLink.setAttribute("href", "./profile.html");
+profileLink.textContent = loggedUser.name.full;
+
+profileContainer.appendChild(goHome);
+profileContainer.appendChild(profileLink);
+
 export
 function applyHUD() {
   document.body.appendChild(container);
-
-  document.head.appendChild(style);
+  document.body.appendChild(profileContainer)
 
   puzzles.textContent = `Puzzles: ${currentLevel.numberOfPuzzlesSolved} de ${currentLevel.puzzles.length}`
 }

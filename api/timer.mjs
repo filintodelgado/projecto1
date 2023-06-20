@@ -5,6 +5,7 @@
  */
 
 import { BreakingPointModel } from "./event.mjs";
+import { popup } from "./popup.mjs";
 
 /**
  * A integer number that represent the time in seconds
@@ -530,4 +531,15 @@ function setTime(time, autostart=true) {
 export
 function stop() {
   timer.stop();
+}
+
+if(timer) {
+  timer.addEventListener("step", () => {
+    if(timer.remainingTime == 15)
+      popup.display("Restam apenas 15 segundos.");
+  })
+
+  timer.addEventListener("stop", () => {
+    popup.display("Tempo esgotado.")
+  })
 }

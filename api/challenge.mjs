@@ -477,6 +477,13 @@ extends EventModel{
     // return a new challenge with the data restored
     return createChallenge(restored.type, restored.goal, restored.level);
   }
+
+  static get readableTeplate() {}
+
+  /**
+   * A redable string that represents the challenge.
+   */
+  get readable() {}
 }
 
 /**

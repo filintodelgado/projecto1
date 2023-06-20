@@ -33,7 +33,8 @@ const puzzles = [{
         correct: 1997,
         min: 1990,
         max: 1999
-    }];
+    }
+];
 
 implementPuzzles(puzzles);
 

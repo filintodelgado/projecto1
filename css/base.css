@@ -28,8 +28,6 @@ html {
   gap: 20px;
   background-color: white;
   position: fixed;
-  max-width: 700px;
-  margin: 0 auto;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -97,6 +95,23 @@ html {
 
 .puzzle-form-range puzzle-answers {
   display: block;
+}
+
+.puzzle-form-drag .image-drag {
+  width: 100px;
+  border-radius: 20px;
+}
+
+.puzzle-form-drag puzzle-answers {
+  display: flex;
+  justify-content: center;
+}
+
+.puzzle-form-drag puzzle-answer {
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .hide {
