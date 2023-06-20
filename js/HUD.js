@@ -41,7 +41,7 @@ goHome.textContent = "Pagina Inicial";
 
 const profileLink = document.createElement("a");
 profileLink.setAttribute("href", "./profile.html");
-profileLink.textContent = loggedUser.name.full;
+profileLink.textContent = "Perfil";
 
 profileContainer.appendChild(goHome);
 profileContainer.appendChild(profileLink);

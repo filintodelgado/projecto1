@@ -3,6 +3,16 @@ import { User, loggedUser } from "../api/user.mjs";
 
 const table = document.querySelector("table");
 const tbody = table.querySelector("tbody");
+const challengeLink = document.querySelector("#atividades");
+const backLink = document.querySelector("#voltar");
+
+backLink.addEventListener("click", () => {
+  location.href = "../"
+})
+
+challengeLink.addEventListener("click", () => {
+  location.href = "./atividadespanel.html";
+})
 
 for(const user of User.instances) createUserRow(user);
 

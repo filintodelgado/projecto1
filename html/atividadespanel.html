@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="../css/admin.css">
 
   <script src="../js/onlyAdmin.js" type="module"></script>
-  <script src="../js/admin.js" type="module" defer></script>
+  <script src="../js/atividadesAdmin.js" type="module" defer></script>
 </head>
 <body>
   <div class="body-container">
@@ -16,10 +16,10 @@
         <div class="button" id="voltar">
             <h2>Voltar</h2>
         </div>
-        <div class="button active">
+        <div class="button" id="utilizadores">
             <h2>Utilizadores</h2>
         </div>
-        <div class="button" id="atividades">
+        <div class="button active">
             <h2>Atividades</h2>
         </div>
     </div>
@@ -28,9 +28,9 @@
           <div class="table-frame">
               <table id="data-table">
                 <thead>
-                  <th>Email</th>
-                  <th>Nome</th>
-                  <th colspan="2">Ações</th>
+                  <th>Id</th>
+                  <th>Discrição</th>
+                  <th>Ações</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -40,29 +40,20 @@
           <div class="info-frame">
             <div class="info-user">
               <div class="info-row">
-                <label for="nome">Nome:</label>
-                <input type="text" id="nome" name="nome">
+                <label for="tipo">Tipo:</label>
+                <select name="tipo" id="tipo">
+                  <option value="solvePuzzle">Resolver puzzles</option>
+                  <option value="completeUnderSeconds">Completar dentro do tempo</option>
+                </select>
               </div>
               <div class="info-row">
-                <label for="email">Email:</label>
-                <input type="text" id="email" name="email">
-              </div>
-              <div class="info-row">
-                <label for="data">Data de Nascimento:</label>
-                <input type="date" id="data" name="data" class="data">
-              </div>
-              <div class="info-row">
-                <label for="local">Localidade:</label>
-                <input type="text" id="local" name="local">
-              </div>
-              <div class="info-row">
-                <label for="sexo">Sexo:</label>
-                <input type="text" id="sexo" name="sexo">
+                <label for="discription">Discrição:</label>
+                <p id="discription">Cria uma atividade</p>
               </div>
             </div>
             <div class="action-user">
-              <button class="action-button"><p>Registrar</p></button>
-              <button class="action-button"><p>Limpar</p></button>
+              <button class="action-button" id="criar"><p>Criar</p></button>
+              <button class="action-button" id="limpar"><p>Limpar</p></button>
             </div>
           </div>
         </div>

@@ -78,7 +78,8 @@ h2{
 
 .table-frame{
     width: 90%;
-    height: 60%;
+    min-height: 60%;
+    max-height: 100%;
     margin: 2%;
     overflow-x: hidden;
     overflow-y: scroll;
@@ -147,7 +148,16 @@ tr{
     align-items: flex-end;
     flex-direction: row;
     justify-content: flex-start;
-    margin: 5px;
+    margin: 10px;
+}
+
+#discription {
+    font-size: .9em;
+}
+
+#goalInput {
+    display: inline;
+    width: auto;
 }
 
 label{
@@ -161,6 +171,11 @@ input{
     border-bottom: 2px solid var(--primary);
     background-color: var(--secondary);
     color: var(--primary);
+}
+
+.info-row p {
+    color: var(--primary);
+    margin: 0;
 }
 
 .data{

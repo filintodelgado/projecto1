@@ -1,7 +1,7 @@
 import { EventModel } from "./event.mjs";
 import { loggedUser } from "./user.mjs";
 import { AutoSaver, makeKey } from "./utils.mjs";
-import { Puzzle, PuzzleChoose, PuzzleSelect, PuzzleDrag } from "./puzzle.mjs";
+import { Puzzle } from "./puzzle.mjs";
 import { currentLevel } from "./level.mjs";
 import { Timer } from "./timer.mjs";
 
@@ -277,7 +277,7 @@ extends EventModel{
    * 
    * Contains all the keys that will be stored.
    */
-  static schema = ["type", "id", "key", "goal"];
+  static schema = ["type", "id", "key", "goal", "readable"];
 
   /**
    * Adds new {@link keys | key(s)} to the {@link schema} that will be include when
@@ -378,8 +378,9 @@ extends EventModel{
     this.goal = goal;
     // the user can provide a process if the challange as been started before
     this.progress = progress;
-    // if the challange as been completed completed can also be provided
-    this.completed = completed;
+    if(completed)
+      // if the challange as been completed completed can also be provided
+      this.completed = true;
     // the id is normally autoseted but it can be provided it the challange is been restored
     this.id = id;
     if(!id) this.id = Challenge.getId();
@@ -398,12 +399,12 @@ extends EventModel{
     }
   }
 
-  #removed = false;
-  get removed() { return this.#removed };
+  _removed = false;
+  get removed() { return this._removed };
   set removed(value) {
     // only accepts boolean values
     if(typeof(value) != "boolean"
-    || value == this.#removed) return;
+    || value == this._removed) return;
 
 
   }
@@ -420,7 +421,7 @@ extends EventModel{
    */
   add() {
     Challenge.add(this.id);
-    this.#removed = false;
+    this._removed = false;
   }
   
   /**
@@ -429,7 +430,7 @@ extends EventModel{
    */
   static remove(id) {
     id = parseInt(id);
-    this.all = this.all.filter((value) => value != id);
+    this.all = this.all.filter((value) => parseInt(value) != id);
   }
 
   /**
@@ -437,14 +438,15 @@ extends EventModel{
    */
   remove() {
     Challenge.remove(this.id);
-    this.#removed = true;
+    this._removed = true;
+    localStorage.removeItem(this.key)
   }
 
   /**
    * Save the challenge to the localStorage using the property {@link key} as the key.
    */
   save() {
-    if(!this.#removed) this.add();
+    if(!this._removed) this.add();
     Challenge.save(this);
   }
 
@@ -475,15 +477,20 @@ extends EventModel{
     restored = JSON.parse(restored);
 
     // return a new challenge with the data restored
-    return createChallenge(restored.type, restored.goal, restored.level);
+    return createChallenge(restored.type, restored.goal, restored.progress, restored.completed, restored.id);
   }
 
-  static get readableTeplate() {}
+  /**
+   * The template that will be used to make the {@link readable} property.
+   * 
+   * The `%goal%` will be replaced with {@link goal}.
+   */
+  static readableTeplate = "";
 
   /**
    * A redable string that represents the challenge.
    */
-  get readable() {}
+  get readable() { return this.constructor.readableTeplate.replace("%goal%", this.goal) }
 }
 
 /**
@@ -493,6 +500,8 @@ extends EventModel{
 export
 class SolvePuzzleChallenge
 extends Challenge {
+  static readableTeplate = "Resolva %goal% puzzles";
+
   constructor(goal, progress=0, completed=false, id=null) {
     super(goal, progress, completed, id);
 
@@ -525,6 +534,8 @@ extends Challenge {
 export
 class CompleteLevelChallenge
 extends Challenge {
+  static readableTeplate = "Complete a sala %goal%";
+
   constructor(goal, progress=0, completed=false, id=null) {
     super(goal, progress, completed, id);
 
@@ -551,6 +562,10 @@ extends Challenge {
 export
 class SolvePuzzleInLevelChanllenge
 extends Challenge {
+  static readableTeplate = "Resolva %goal% puzzles na sala %level%";
+
+  get readable() { return super.readable.replace("%level%", this.level) }
+
   /** @typedef { Challenge & {level: String} } ChallengeObject */
 
   /** 
@@ -594,6 +609,8 @@ extends Challenge {
 export
 class CompleteUnderSecondsChallenge
 extends Challenge {
+  static readableTeplate = "Complete o nivel em %goal% segundos";
+
   // the complete works different here
   // it will be completed if the progress is below the goal
   get completed() { return this.progress < this.goal }

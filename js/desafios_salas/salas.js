@@ -1,4 +1,4 @@
-import { Puzzle, createPuzzle, currentLevel, popup, timer } from "../../api/main.mjs";
+import { Challenge, Puzzle, createPuzzle, currentLevel, popup, timer } from "../../api/main.mjs";
 
 timer.start();
 
@@ -61,4 +61,8 @@ timer.addEventListener("stop", () => {
     setTimeout(() => {
         location.reload();
     }, 10000);
+})
+
+Challenge.addEventListener("complete", (event) => {
+    popup.display(`Desafio: "${event.readable}" completado.`);
 })
