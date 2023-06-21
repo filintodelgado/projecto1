@@ -25,7 +25,7 @@ const puzzles = [{
     }, {
         element: book, 
         type: "puzzleAsk", 
-        question: "Qual o nome do primeiro filme longa metragem de animatação totalmente feito em computador?", 
+        question: "Qual o nome do primeiro filme longa metragem de animação 3D totalmente feito em computador?", 
         answers: "Toy Story"
     }, {
         element: mesa,
