@@ -1,7 +1,24 @@
-let at1 = document.getElementById("at1")
-let at2 = document.getElementById("at2")
-let at3 = document.getElementById("at3")
-let at4 = document.getElementById("at4")
-let at5 = document.getElementById("at5")
+import { Challenge } from "../api/challenge.mjs";
 
-at2.classList.toggle("at-done")
+const container = document.querySelector(".main-content");
+
+function createField(labelText, checked) {
+  const fieldContainer = document.createElement("div");
+  fieldContainer.className = "field";
+
+  const input = document.createElement("input");
+  input.type = "radio";
+  input.className = "radio at-done";
+  input.checked = checked;
+
+  const label = document.createElement("label");
+  label.textContent = labelText;
+
+  fieldContainer.appendChild(input);
+  fieldContainer.appendChild(label);
+
+  container.appendChild(fieldContainer);
+}
+
+for(const challange of Challenge.allInstances)
+  createField(challange.readable, challange.completed);

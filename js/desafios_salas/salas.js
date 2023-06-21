@@ -1,4 +1,4 @@
-import { Challenge, Puzzle, createPuzzle, currentLevel, popup, timer } from "../../api/main.mjs";
+import { Challenge, CompleteUnderSecondsChallenge, Puzzle, SolvePuzzleChallenge, SolvePuzzleInLevelChanllenge, createPuzzle, currentLevel, popup, timer } from "../../api/main.mjs";
 
 timer.start();
 
@@ -63,6 +63,13 @@ timer.addEventListener("stop", () => {
     }, 10000);
 })
 
-Challenge.addEventListener("complete", (event) => {
-    popup.display(`Desafio: "${event.readable}" completado.`);
-})
+const challengesClasses = [
+    SolvePuzzleChallenge,
+    SolvePuzzleInLevelChanllenge,
+    CompleteUnderSecondsChallenge,
+]
+
+for(const challengeClass of challengesClasses)
+    challengeClass.addEventListener("complete", (event) => {
+        popup.display(`Desafio: "${event.readable}" completado.`);
+    })

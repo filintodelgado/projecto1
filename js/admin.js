@@ -16,12 +16,6 @@ challengeLink.addEventListener("click", () => {
 
 for(const user of User.instances) createUserRow(user);
 
-const logoutButton = document.querySelector("#sair");
-logoutButton.addEventListener("click", () => {
-  loggedUser.logout();
-  location.reload();
-})
-
 function createUserRow(user) {
   const row = document.createElement("tr");
 
@@ -70,3 +64,4 @@ function createUserRow(user) {
 
   tbody.appendChild(row);
 }
+

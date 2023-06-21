@@ -1,6 +1,9 @@
+import { CompleteUnderSecondsChallenge, SolvePuzzleChallenge } from "./challenge.mjs";
 import { EventModel } from "./event.mjs";
 import { Level, currentLevel } from "./level.mjs";
-import { AutoSaver, cleanup, makeInstanceKey, makeKey } from "./utils.mjs";
+import { Puzzle } from "./puzzle.mjs";
+import { Timer, timer } from "./timer.mjs";
+import { AutoSaver, cleanup, makeKey } from "./utils.mjs";
 
 // Defining some alias
 /** @typedef {import("./level.mjs").LevelObject} LevelObject */
@@ -27,7 +30,10 @@ import { AutoSaver, cleanup, makeInstanceKey, makeKey } from "./utils.mjs";
  * "local": String,
  * "gender": String,
  * "levels": Levels,
- * "admin": boolean
+ * "admin": boolean,
+ * "timePlayed": number,
+ * "puzzlesSolved": number,
+ * "challengeCompleted": number
  * }} UserObject
  */
 
@@ -156,6 +162,10 @@ extends EventModel {
 
   admin;
 
+  puzzlesSolved = 0;
+  timePlayed = 0;
+  challengeCompleted = 0;
+
   /**
    * Creates a new User and saves it to the store. If the user already exists the
    * data is overwrite.
@@ -198,8 +208,10 @@ extends EventModel {
       password = data.password;
       borndate = data.borndate;
       local = data.local;
-      gender = data.gender
-      admin = data.admin
+      gender = data.gender;
+      admin = data.admin;
+      if(data.puzzlesSolved) this.puzzlesSolved = data.puzzlesSolved;
+      if(data.timePlayed) this.timePlayed = data.timePlayed;
     }
 
     this.email = email;
@@ -208,7 +220,27 @@ extends EventModel {
     this.borndate = borndate;
     this.local = local;
     this.gender = gender;
-    this.admin = admin
+    this.admin = admin;
+
+    Puzzle.addEventListener("solve", () => {
+      this.puzzlesSolved++;
+      this.save();
+    });
+
+    Timer.addEventListener("step", () => {
+      this.timePlayed++;
+      this.save();
+    });
+
+    SolvePuzzleChallenge.addEventListener("complete", () => {
+      this.challengeCompleted++;
+      this.save();
+    });
+
+    CompleteUnderSecondsChallenge.addEventListener("complete", () => {
+      this.challengeCompleted++;
+      this.save();
+    })
 
     this.register();
 
@@ -281,7 +313,9 @@ extends EventModel {
       "local": this.local,
       "gender": this.gender.value,
       "levels": this.levels,
-      "admin": this.admin
+      "admin": this.admin,
+      "timePlayed": this.timePlayed,
+      "puzzlesSolved": this.puzzlesSolved
     }
   };
 
