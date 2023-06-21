@@ -7,6 +7,10 @@ techonlogies like:
 - **JavaScript** as the programming language to use in order to make the
 the interations in the page.
 
+## Live play
+
+The scape room can be played without having to download anything via the [github pages](https://filintodelgado.github.io/projecto1).
+
 ## Theme
 
 The theme of our project is **Cinema** in the **90'** years. 
@@ -24,3 +28,16 @@ There is also a documentation showing generated usign
 [JSDoc](https://jsdoc.app/). If you are usign a modern editor you will 
 see useful information navigating the code.
 ![Puzzle tooltip on Visual Studio Code](./screenshots/popup-tooltip-puzzle.png)
+
+## Admin account
+> Email: admin@admin.com
+
+> Password: 12345678
+
+## Walkthrough
+
+![Walkthrough gif](./img/walkthrough.gif)
+
+1. Signup or login usign the [admin account](#admin-account);
+1. You will be redirected to the logged home page;
+1. Click the play button to start the first room.
